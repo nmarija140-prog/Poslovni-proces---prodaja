@@ -1,0 +1,188 @@
+object Form5: TForm5
+  Left = 0
+  Top = 0
+  Caption = 'Form5'
+  ClientHeight = 536
+  ClientWidth = 324
+  Fill.Color = claLightgray
+  Fill.Kind = Solid
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object MapView1: TMapView
+    Position.X = 72.000000000000000000
+    Position.Y = 24.000000000000000000
+    Size.Width = 185.000000000000000000
+    Size.Height = 129.000000000000000000
+    Size.PlatformDefault = False
+    object Text1: TText
+      Position.X = 64.000000000000000000
+      Position.Y = 40.000000000000000000
+      Text = '*mapa*'
+    end
+  end
+  object Text2: TText
+    Position.X = 24.000000000000000000
+    Position.Y = 216.000000000000000000
+    Size.Width = 113.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Slobodnih vozila:'
+    TextSettings.Font.Size = 13.000000000000000000
+    TextSettings.Font.StyleExt = {00070000000000000004000000}
+    TextSettings.FontColor = claDarkblue
+    object Text3: TText
+      Position.X = 152.000000000000000000
+      Size.Width = 129.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Vozila u voznji:'
+      TextSettings.Font.Size = 13.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      TextSettings.FontColor = claDarkblue
+      object Text4: TText
+        Position.X = -152.000000000000000000
+        Position.Y = 112.000000000000000000
+        Size.Width = 113.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Vozila na utovaru:'
+        TextSettings.Font.Size = 13.000000000000000000
+        TextSettings.Font.StyleExt = {00070000000000000004000000}
+        TextSettings.FontColor = claDarkblue
+      end
+      object Text5: TText
+        Position.X = -8.000000000000000000
+        Position.Y = 112.000000000000000000
+        Size.Width = 137.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Vozila sa problemima:'
+        TextSettings.Font.Size = 13.000000000000000000
+        TextSettings.Font.StyleExt = {00070000000000000004000000}
+        TextSettings.FontColor = claDarkblue
+      end
+    end
+    object txtSlobodnaVozila: TText
+      Position.Y = 38.000000000000000000
+      Size.Width = 113.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      Text = '0'
+      TextSettings.Font.Size = 20.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      TextSettings.FontColor = claOrangered
+      object txtVozilaUVoznji: TText
+        Position.X = 152.000000000000000000
+        Size.Width = 129.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        Text = '0'
+        TextSettings.Font.Size = 20.000000000000000000
+        TextSettings.Font.StyleExt = {00070000000000000004000000}
+        TextSettings.FontColor = claOrangered
+        object txtVozilaNaUtovaru: TText
+          Position.X = -152.000000000000000000
+          Position.Y = 116.000000000000000000
+          Size.Width = 113.000000000000000000
+          Size.Height = 50.000000000000000000
+          Size.PlatformDefault = False
+          Text = '0'
+          TextSettings.Font.Size = 20.000000000000000000
+          TextSettings.Font.StyleExt = {00070000000000000004000000}
+          TextSettings.FontColor = claOrangered
+        end
+        object txtVozilaSaProblemima: TText
+          Position.X = -8.000000000000000000
+          Position.Y = 116.000000000000000000
+          Size.Width = 137.000000000000000000
+          Size.Height = 50.000000000000000000
+          Size.PlatformDefault = False
+          Text = '0'
+          TextSettings.Font.Size = 20.000000000000000000
+          TextSettings.Font.StyleExt = {00070000000000000004000000}
+          TextSettings.FontColor = claOrangered
+        end
+      end
+    end
+  end
+  object hambDugme: TSpeedButton
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = -16.000000000000000000
+    Position.Y = -8.000000000000000000
+    Size.Width = 80.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    Text = #8801
+    TextSettings.Font.Size = 35.000000000000000000
+    TextSettings.Trimming = None
+    OnClick = hambDugmeClick
+  end
+  object hambPanel: TPanel
+    Align = Left
+    Size.Width = 160.000000000000000000
+    Size.Height = 536.000000000000000000
+    Size.PlatformDefault = False
+    Visible = False
+    TabOrder = 3
+    object operativaDugme: TButton
+      Position.X = 8.000000000000000000
+      Position.Y = 120.000000000000000000
+      Size.Width = 96.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Text = #55357#56986' Operativa'
+      TextSettings.Trimming = None
+    end
+    object ProdajaTuraDugme: TButton
+      Position.X = 8.000000000000000000
+      Position.Y = 169.000000000000000000
+      Size.Width = 96.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = #55357#56550' Prodaja tura'
+      TextSettings.Trimming = None
+      OnClick = ProdajaTuraDugmeClick
+    end
+    object ChatDugme: TButton
+      Position.X = 8.000000000000000000
+      Position.Y = 216.000000000000000000
+      Size.Width = 96.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = #55357#56492' Chat'
+      TextSettings.Trimming = None
+      object IzvestajiDugme: TButton
+        Position.Y = 50.000000000000000000
+        Size.Width = 96.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = #55357#56522' Izvestaji'
+        TextSettings.Trimming = None
+        object MojProfilDugme: TButton
+          Position.Y = 56.000000000000000000
+          Size.Width = 96.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Text = #55357#56420' Moj profil'
+          TextSettings.Trimming = None
+          object OdjavaDugme: TButton
+            Position.Y = 50.000000000000000000
+            Size.Width = 96.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 0
+            Text = #55357#57002' Odjava'
+            TextSettings.Trimming = None
+          end
+        end
+      end
+    end
+  end
+end

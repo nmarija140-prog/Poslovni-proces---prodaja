@@ -73,7 +73,7 @@ procedure TForm3.FormCreate(Sender: TObject);
 begin
 ADOConnection1.ConnectionString :=
     'Provider=Microsoft.Jet.OLEDB.4.0;' +
-    'Data Source=' + ExtractFilePath(ParamStr(0)) + 'mpmtransport.mdb;';
+    'Data Source=' + ExtractFilePath(ParamStr(0)) + 'mpmBaza.mdb;';
   ADOConnection1.LoginPrompt := False;
   ADOConnection1.Connected := True;
   PopuniComboKorisnike;

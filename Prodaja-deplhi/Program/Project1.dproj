@@ -144,7 +144,7 @@
             <Form>Form4</Form>
             <FormType>fmx</FormType>
         </DCCReference>
-        <DCCReference Include="Unit5.pas">
+        <DCCReference Include="disp.pas">
             <Form>Form5</Form>
             <FormType>fmx</FormType>
         </DCCReference>
@@ -154,6 +154,10 @@
         </DCCReference>
         <DCCReference Include="Vozac.pas">
             <Form>Form7</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
+        <DCCReference Include="ProdajaTura.pas">
+            <Form>Form8</Form>
             <FormType>fmx</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">

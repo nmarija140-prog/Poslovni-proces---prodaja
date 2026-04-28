@@ -42,14 +42,14 @@ implementation
 
 {$R *.fmx}
 
-uses Menadzer, Admin, Unit5,Klijent, Vozac;
+uses Menadzer, Admin, disp,Klijent, Vozac;
 
 procedure TForm2.FormCreate(Sender: TObject);
     var
   dbPath: string;
 begin
   // Lokacija baze
-  dbPath := ExtractFilePath(ParamStr(0)) + 'mpmtransport.mdb';
+  dbPath := ExtractFilePath(ParamStr(0)) + 'mpmBaza.mdb';
 
   // Provera da li fajl baze postoji
   if not FileExists(dbPath) then

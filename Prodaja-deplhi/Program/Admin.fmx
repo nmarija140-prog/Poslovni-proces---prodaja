@@ -80,7 +80,7 @@ object Form4: TForm4
     TabOrder = 3
     object DugmeUdjiAdmin: TButton
       Position.X = 120.000000000000000000
-      TabOrder = 86
+      TabOrder = 85
       Text = 'Udji na profil'
       TextSettings.Trimming = None
       OnClick = DugmeUdjiAdminClick

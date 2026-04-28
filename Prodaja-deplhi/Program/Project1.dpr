@@ -7,9 +7,10 @@ uses
   UnosPodataka in 'UnosPodataka.pas' {Form2},
   Menadzer in 'Menadzer.pas' {Form3},
   Admin in 'Admin.pas' {Form4},
-  Unit5 in 'Unit5.pas' {Form5},
+  disp in 'disp.pas' {Form5},
   Klijent in 'Klijent.pas' {Form6},
-  Vozac in 'Vozac.pas' {Form7};
+  Vozac in 'Vozac.pas' {Form7},
+  ProdajaTura in 'ProdajaTura.pas' {Form8};
 
 {$R *.res}
 
@@ -22,5 +23,6 @@ begin
   Application.CreateForm(TForm5, Form5);
   Application.CreateForm(TForm6, Form6);
   Application.CreateForm(TForm7, Form7);
+  Application.CreateForm(TForm8, Form8);
   Application.Run;
 end.
