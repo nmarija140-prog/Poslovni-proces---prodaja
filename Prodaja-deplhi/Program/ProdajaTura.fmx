@@ -21,90 +21,50 @@ object Form8: TForm8
     TextSettings.Trimming = None
     OnClick = HambMeni2Click
   end
-  object PanelProdaja: TPanel
-    Align = Left
-    Size.Width = 145.000000000000000000
-    Size.Height = 536.000000000000000000
+  object PoslateKartica: TRectangle
+    Position.X = 33.000000000000000000
+    Position.Y = 256.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 100.000000000000000000
     Size.PlatformDefault = False
-    Visible = False
-    TabOrder = 1
-    object Button1: TButton
-      Position.X = 8.000000000000000000
-      Position.Y = 112.000000000000000000
-      Size.Width = 96.000000000000000000
-      Size.Height = 22.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 0
-      Text = #55357#56986' Operativa'
-      TextSettings.Trimming = None
+    object RectAnimation1: TRectAnimation
+      Duration = 0.200000002980232200
     end
-    object Button2: TButton
-      Position.X = 8.000000000000000000
-      Position.Y = 160.000000000000000000
-      Size.Width = 96.000000000000000000
-      Size.Height = 22.000000000000000000
+    object Text4: TText
+      Position.X = -1.000000000000000000
+      Size.Width = 121.000000000000000000
+      Size.Height = 50.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 5
-      Text = #55357#56492' Chat'
-      TextSettings.Trimming = None
-    end
-    object Button3: TButton
-      Position.X = 8.000000000000000000
-      Position.Y = 208.000000000000000000
-      Size.Width = 96.000000000000000000
-      Size.Height = 22.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 4
-      Text = #55357#56522' Izvestaji'
-      TextSettings.Trimming = None
-    end
-    object Button4: TButton
-      Position.X = 8.000000000000000000
-      Position.Y = 256.000000000000000000
-      Size.Width = 96.000000000000000000
-      Size.Height = 22.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 3
-      Text = #55357#56420' Moj profil'
-      TextSettings.Trimming = None
-    end
-    object Button5: TButton
-      Position.X = 8.000000000000000000
-      Position.Y = 302.000000000000000000
-      Size.Width = 96.000000000000000000
-      Size.Height = 22.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 2
-      Text = #55357#56550' Prodaja tura'
-      TextSettings.Trimming = None
-    end
-    object Button6: TButton
-      Position.X = 8.000000000000000000
-      Position.Y = 352.000000000000000000
-      Size.Width = 96.000000000000000000
-      Size.Height = 22.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 1
-      Text = #55357#57002' Odjava'
-      TextSettings.Trimming = None
+      Text = #55357#57314' Prihvacene ponude'
+      TextSettings.Font.Size = 15.000000000000000000
     end
   end
-  object Layout1: TLayout
-    Align = Top
-    Size.Width = 324.000000000000000000
-    Size.Height = 400.000000000000000000
+  object Rectangle1: TRectangle
+    Position.X = 172.000000000000000000
+    Position.Y = 256.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 100.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 2
-    object PoslateKartica: TRectangle
-      Position.X = 176.000000000000000000
-      Position.Y = 124.000000000000000000
+    object RectAnimation2: TRectAnimation
+      Duration = 0.200000002980232200
+    end
+    object Text1: TText
+      Position.X = -1.000000000000000000
+      Size.Width = 121.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      Text = #55357#56628' Odbijene ponude'
+      TextSettings.Font.Size = 15.000000000000000000
+    end
+    object Rectangle2: TRectangle
+      Position.Y = -128.000000000000000000
       Size.Width = 120.000000000000000000
       Size.Height = 100.000000000000000000
       Size.PlatformDefault = False
-      object RectAnimation1: TRectAnimation
+      object RectAnimation3: TRectAnimation
         Duration = 0.200000002980232200
       end
-      object Text4: TText
+      object Text2: TText
         Position.X = -1.000000000000000000
         Size.Width = 121.000000000000000000
         Size.Height = 50.000000000000000000
@@ -112,71 +72,185 @@ object Form8: TForm8
         Text = #55357#56629' Poslate ponude'
         TextSettings.Font.Size = 15.000000000000000000
       end
-    end
-    object RectAnimation2: TRectAnimation
-      Duration = 0.200000002980232200
-    end
-    object PrihvaceneKartica: TRectangle
-      Position.X = 24.000000000000000000
-      Position.Y = 248.000000000000000000
-      Size.Width = 120.000000000000000000
-      Size.Height = 100.000000000000000000
-      Size.PlatformDefault = False
-      object RectAnimation3: TRectAnimation
-        Duration = 0.200000002980232200
-      end
-      object NoviZahteviKartica: TRectangle
-        Position.Y = -124.000000000000000000
+      object Rectangle3: TRectangle
+        Position.X = -140.000000000000000000
+        Position.Y = 1.000000000000000000
         Size.Width = 120.000000000000000000
         Size.Height = 100.000000000000000000
         Size.PlatformDefault = False
         object RectAnimation4: TRectAnimation
           Duration = 0.200000002980232200
         end
-        object OdbijeneKartica: TRectangle
-          Position.X = 152.000000000000000000
-          Position.Y = 128.000000000000000000
-          Size.Width = 120.000000000000000000
-          Size.Height = 100.000000000000000000
-          Size.PlatformDefault = False
-          object RectAnimation5: TRectAnimation
-            Duration = 0.200000002980232200
-          end
-          object Text3: TText
-            Position.X = -1.000000000000000000
-            Size.Width = 121.000000000000000000
-            Size.Height = 50.000000000000000000
-            Size.PlatformDefault = False
-            Text = #55357#56628' Odbijene ponude'
-            TextSettings.Font.Size = 15.000000000000000000
-          end
-        end
-        object Text1: TText
-          Position.X = -1.000000000000000000
-          Size.Width = 122.000000000000000000
+        object Text3: TText
+          Size.Width = 121.000000000000000000
           Size.Height = 50.000000000000000000
           Size.PlatformDefault = False
           Text = #55357#57313' Novi zahtevi'
           TextSettings.Font.Size = 15.000000000000000000
         end
       end
-      object Text2: TText
-        Size.Width = 121.000000000000000000
-        Size.Height = 50.000000000000000000
+    end
+  end
+  object SpeedButton1: TSpeedButton
+    StyledSettings = [Family, Style, FontColor]
+    Position.Y = 64.000000000000000000
+    Size.Width = 145.000000000000000000
+    Size.Height = 49.000000000000000000
+    Size.PlatformDefault = False
+    Text = #10133' Novi zahtev'
+    TextSettings.Font.Size = 18.000000000000000000
+    TextSettings.Trimming = None
+  end
+  object KarticaZahtevi: TRectangle
+    Position.X = 32.000000000000000000
+    Position.Y = 376.000000000000000000
+    Size.Width = 177.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    OnClick = KarticaZahteviClick
+    object Text5: TText
+      HitTest = False
+      Size.Width = 177.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Zahtevi                                 '#8595
+      TextSettings.Font.Size = 13.000000000000000000
+    end
+  end
+  object ZahteviLista: TVertScrollBox
+    Position.X = 32.000000000000000000
+    Position.Y = 400.000000000000000000
+    Size.Width = 177.000000000000000000
+    Size.Height = 97.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    Visible = False
+    Viewport.Width = 161.000000000000000000
+    Viewport.Height = 97.000000000000000000
+    object Prihvacen: TRectangle
+      Position.Y = 1.000000000000000000
+      Size.Width = 177.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      object Text7: TText
+        Position.Y = -1.000000000000000000
+        Size.Width = 176.000000000000000000
+        Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
-        Text = #55357#57314' Prihvacene ponude'
-        TextSettings.Font.Size = 15.000000000000000000
+        Text = #55357#57314' Transport bm'
+        TextSettings.HorzAlign = Leading
       end
     end
-    object noviZahtevDugme: TSpeedButton
-      StyledSettings = [Family, Style, FontColor]
-      Position.X = 8.000000000000000000
-      Position.Y = 64.000000000000000000
-      Size.Width = 129.000000000000000000
-      Size.Height = 33.000000000000000000
+    object Poslato: TRectangle
+      Position.Y = 26.000000000000000000
+      Size.Width = 177.000000000000000000
+      Size.Height = 25.000000000000000000
       Size.PlatformDefault = False
-      Text = #10133' Novi zahtev'
-      TextSettings.Font.Size = 17.000000000000000000
+      object Text8: TText
+        Position.X = 1.000000000000000000
+        Position.Y = -1.000000000000000000
+        Size.Width = 176.000000000000000000
+        Size.Height = 26.000000000000000000
+        Size.PlatformDefault = False
+        Text = #55357#56629' Transport drd'
+        TextSettings.HorzAlign = Leading
+      end
+    end
+    object Odbijeno: TRectangle
+      Position.Y = 75.000000000000000000
+      Size.Width = 177.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      object Text9: TText
+        Position.X = 1.000000000000000000
+        Position.Y = -1.000000000000000000
+        Size.Width = 176.000000000000000000
+        Size.Height = 26.000000000000000000
+        Size.PlatformDefault = False
+        Text = #55357#56629' Transport drd'
+        TextSettings.HorzAlign = Leading
+      end
+    end
+    object Novo: TRectangle
+      Position.Y = 51.000000000000000000
+      Size.Width = 177.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      object Text6: TText
+        Position.Y = 1.000000000000000000
+        Size.Width = 176.000000000000000000
+        Size.Height = 26.000000000000000000
+        Size.PlatformDefault = False
+        Text = #55357#57313' Nelt doo'
+        TextSettings.HorzAlign = Leading
+      end
+    end
+  end
+  object PanelProdaja: TPanel
+    Align = Left
+    Size.Width = 160.000000000000000000
+    Size.Height = 536.000000000000000000
+    Size.PlatformDefault = False
+    Visible = False
+    TabOrder = 6
+    object operativaDugme: TButton
+      Position.X = 8.000000000000000000
+      Position.Y = 120.000000000000000000
+      Size.Width = 96.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 5
+      Text = #55357#56986' Operativa'
+      TextSettings.Trimming = None
+    end
+    object ProdajaTuraDugme: TButton
+      Position.X = 8.000000000000000000
+      Position.Y = 169.000000000000000000
+      Size.Width = 96.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 4
+      Text = #55357#56550' Prodaja tura'
+      TextSettings.Trimming = None
+    end
+    object ChatDugme: TButton
+      Position.X = 8.000000000000000000
+      Position.Y = 216.000000000000000000
+      Size.Width = 96.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      Text = #55357#56492' Chat'
+      TextSettings.Trimming = None
+    end
+    object IzvestajiDugme: TButton
+      Position.X = 8.000000000000000000
+      Position.Y = 264.000000000000000000
+      Size.Width = 96.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Text = #55357#56522' Izvestaji'
+      TextSettings.Trimming = None
+    end
+    object MojProfilDugme: TButton
+      Position.X = 8.000000000000000000
+      Position.Y = 314.000000000000000000
+      Size.Width = 96.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = #55357#56420' Moj profil'
+      TextSettings.Trimming = None
+    end
+    object OdjavaDugme: TButton
+      Position.X = 8.000000000000000000
+      Position.Y = 364.000000000000000000
+      Size.Width = 96.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = #55357#57002' Odjava'
       TextSettings.Trimming = None
     end
   end

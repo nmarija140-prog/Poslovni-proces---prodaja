@@ -132,7 +132,7 @@ object Form5: TForm5
       Size.Width = 96.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 2
+      TabOrder = 5
       Text = #55357#56986' Operativa'
       TextSettings.Trimming = None
     end
@@ -142,7 +142,7 @@ object Form5: TForm5
       Size.Width = 96.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 1
+      TabOrder = 4
       Text = #55357#56550' Prodaja tura'
       TextSettings.Trimming = None
       OnClick = ProdajaTuraDugmeClick
@@ -153,36 +153,39 @@ object Form5: TForm5
       Size.Width = 96.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 0
+      TabOrder = 3
       Text = #55357#56492' Chat'
       TextSettings.Trimming = None
-      object IzvestajiDugme: TButton
-        Position.Y = 50.000000000000000000
-        Size.Width = 96.000000000000000000
-        Size.Height = 22.000000000000000000
-        Size.PlatformDefault = False
-        TabOrder = 0
-        Text = #55357#56522' Izvestaji'
-        TextSettings.Trimming = None
-        object MojProfilDugme: TButton
-          Position.Y = 56.000000000000000000
-          Size.Width = 96.000000000000000000
-          Size.Height = 22.000000000000000000
-          Size.PlatformDefault = False
-          TabOrder = 0
-          Text = #55357#56420' Moj profil'
-          TextSettings.Trimming = None
-          object OdjavaDugme: TButton
-            Position.Y = 50.000000000000000000
-            Size.Width = 96.000000000000000000
-            Size.Height = 22.000000000000000000
-            Size.PlatformDefault = False
-            TabOrder = 0
-            Text = #55357#57002' Odjava'
-            TextSettings.Trimming = None
-          end
-        end
-      end
+    end
+    object IzvestajiDugme: TButton
+      Position.X = 8.000000000000000000
+      Position.Y = 268.000000000000000000
+      Size.Width = 96.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Text = #55357#56522' Izvestaji'
+      TextSettings.Trimming = None
+    end
+    object MojProfilDugme: TButton
+      Position.X = 8.000000000000000000
+      Position.Y = 312.000000000000000000
+      Size.Width = 96.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = #55357#56420' Moj profil'
+      TextSettings.Trimming = None
+    end
+    object OdjavaDugme: TButton
+      Position.X = 8.000000000000000000
+      Position.Y = 356.000000000000000000
+      Size.Width = 96.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = #55357#57002' Odjava'
+      TextSettings.Trimming = None
     end
   end
 end

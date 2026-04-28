@@ -10,29 +10,39 @@ uses
 type
   TForm8 = class(TForm)
     HambMeni2: TSpeedButton;
-    PanelProdaja: TPanel;
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
-    Button4: TButton;
-    Button5: TButton;
-    Button6: TButton;
-    Layout1: TLayout;
     PoslateKartica: TRectangle;
     RectAnimation1: TRectAnimation;
-    RectAnimation2: TRectAnimation;
-    PrihvaceneKartica: TRectangle;
-    RectAnimation3: TRectAnimation;
-    NoviZahteviKartica: TRectangle;
-    RectAnimation4: TRectAnimation;
-    OdbijeneKartica: TRectangle;
-    RectAnimation5: TRectAnimation;
-    Text1: TText;
-    Text2: TText;
-    Text3: TText;
     Text4: TText;
-    noviZahtevDugme: TSpeedButton;
+    Rectangle1: TRectangle;
+    RectAnimation2: TRectAnimation;
+    Text1: TText;
+    Rectangle2: TRectangle;
+    RectAnimation3: TRectAnimation;
+    Text2: TText;
+    Rectangle3: TRectangle;
+    RectAnimation4: TRectAnimation;
+    Text3: TText;
+    SpeedButton1: TSpeedButton;
+    KarticaZahtevi: TRectangle;
+    Text5: TText;
+    ZahteviLista: TVertScrollBox;
+    Prihvacen: TRectangle;
+    Poslato: TRectangle;
+    Odbijeno: TRectangle;
+    Novo: TRectangle;
+    Text6: TText;
+    Text7: TText;
+    Text8: TText;
+    Text9: TText;
+    PanelProdaja: TPanel;
+    operativaDugme: TButton;
+    ProdajaTuraDugme: TButton;
+    ChatDugme: TButton;
+    IzvestajiDugme: TButton;
+    MojProfilDugme: TButton;
+    OdjavaDugme: TButton;
     procedure HambMeni2Click(Sender: TObject);
+    procedure KarticaZahteviClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -51,5 +61,13 @@ begin
 PanelProdaja.Visible := not PanelProdaja.Visible;
 HambMeni2.BringToFront;
 end;
+
+procedure TForm8.KarticaZahteviClick(Sender: TObject);
+begin
+ZahteviLista.Visible := not ZahteviLista.Visible;
+  ZahteviLista.BringToFront;
+  KarticaZahtevi.BringToFront;
+end;
+
 
 end.
