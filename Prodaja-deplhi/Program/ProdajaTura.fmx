@@ -21,12 +21,13 @@ object Form8: TForm8
     TextSettings.Trimming = None
     OnClick = HambMeni2Click
   end
-  object PoslateKartica: TRectangle
+  object KarticaPrihvacenePonude: TRectangle
     Position.X = 33.000000000000000000
     Position.Y = 256.000000000000000000
     Size.Width = 120.000000000000000000
     Size.Height = 100.000000000000000000
     Size.PlatformDefault = False
+    OnClick = KarticaPrihvacenePonudeClick
     object RectAnimation1: TRectAnimation
       Duration = 0.200000002980232200
     end
@@ -39,12 +40,13 @@ object Form8: TForm8
       TextSettings.Font.Size = 15.000000000000000000
     end
   end
-  object Rectangle1: TRectangle
+  object KarticaOdbijenePonude: TRectangle
     Position.X = 172.000000000000000000
     Position.Y = 256.000000000000000000
     Size.Width = 120.000000000000000000
     Size.Height = 100.000000000000000000
     Size.PlatformDefault = False
+    OnClick = KarticaOdbijenePonudeClick
     object RectAnimation2: TRectAnimation
       Duration = 0.200000002980232200
     end
@@ -56,11 +58,12 @@ object Form8: TForm8
       Text = #55357#56628' Odbijene ponude'
       TextSettings.Font.Size = 15.000000000000000000
     end
-    object Rectangle2: TRectangle
+    object KarticaPoslatePonude: TRectangle
       Position.Y = -128.000000000000000000
       Size.Width = 120.000000000000000000
       Size.Height = 100.000000000000000000
       Size.PlatformDefault = False
+      OnClick = KarticaPoslatePonudeClick
       object RectAnimation3: TRectAnimation
         Duration = 0.200000002980232200
       end
@@ -72,12 +75,13 @@ object Form8: TForm8
         Text = #55357#56629' Poslate ponude'
         TextSettings.Font.Size = 15.000000000000000000
       end
-      object Rectangle3: TRectangle
+      object KarticaNoviZahtevi: TRectangle
         Position.X = -140.000000000000000000
         Position.Y = 1.000000000000000000
         Size.Width = 120.000000000000000000
         Size.Height = 100.000000000000000000
         Size.PlatformDefault = False
+        OnClick = KarticaNoviZahteviClick
         object RectAnimation4: TRectAnimation
           Duration = 0.200000002980232200
         end
@@ -128,8 +132,9 @@ object Form8: TForm8
     Viewport.Width = 161.000000000000000000
     Viewport.Height = 97.000000000000000000
     object Prihvacen: TRectangle
-      Position.Y = 1.000000000000000000
-      Size.Width = 177.000000000000000000
+      Align = Top
+      Position.Y = 25.000000000000000000
+      Size.Width = 161.000000000000000000
       Size.Height = 25.000000000000000000
       Size.PlatformDefault = False
       object Text7: TText
@@ -142,8 +147,9 @@ object Form8: TForm8
       end
     end
     object Poslato: TRectangle
-      Position.Y = 26.000000000000000000
-      Size.Width = 177.000000000000000000
+      Align = Top
+      Position.Y = 75.000000000000000000
+      Size.Width = 161.000000000000000000
       Size.Height = 25.000000000000000000
       Size.PlatformDefault = False
       object Text8: TText
@@ -157,8 +163,9 @@ object Form8: TForm8
       end
     end
     object Odbijeno: TRectangle
-      Position.Y = 75.000000000000000000
-      Size.Width = 177.000000000000000000
+      Align = Top
+      Position.Y = 50.000000000000000000
+      Size.Width = 161.000000000000000000
       Size.Height = 25.000000000000000000
       Size.PlatformDefault = False
       object Text9: TText
@@ -167,13 +174,13 @@ object Form8: TForm8
         Size.Width = 176.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
-        Text = #55357#56629' Transport drd'
+        Text = #55357#56628' Delta transport'
         TextSettings.HorzAlign = Leading
       end
     end
     object Novo: TRectangle
-      Position.Y = 51.000000000000000000
-      Size.Width = 177.000000000000000000
+      Align = Top
+      Size.Width = 161.000000000000000000
       Size.Height = 25.000000000000000000
       Size.PlatformDefault = False
       object Text6: TText
@@ -253,5 +260,15 @@ object Form8: TForm8
       Text = #55357#57002' Odjava'
       TextSettings.Trimming = None
     end
+  end
+  object ADOConnection1: TADOConnection
+    Left = 232
+    Top = 440
+  end
+  object ADOQuery1: TADOQuery
+    Connection = ADOConnection1
+    Parameters = <>
+    Left = 120
+    Top = 464
   end
 end
