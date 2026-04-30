@@ -10,7 +10,7 @@ uses
   FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
   FireDAC.Phys, FireDAC.FMXUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
-  FireDAC.Comp.Client, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef, Data.Win.ADODB;
+  FireDAC.Comp.Client, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef, Data.Win.ADODB, System.Hash;
 
 type
   TForm2 = class(TForm)
@@ -25,10 +25,12 @@ type
     DataSource1: TDataSource;
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
+    HashDugme: TButton;
     procedure PrijavaBtnClick(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure SpeedButton3Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure HashDugmeClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -73,6 +75,41 @@ begin
   end;
 end;
 
+procedure TForm2.HashDugmeClick(Sender: TObject);
+var
+  username, plainPass, hashedPass: string;
+begin
+  ADOQuery1.Close;
+  ADOQuery1.SQL.Text := 'SELECT korisnickoime, sifra FROM login';
+  ADOQuery1.Open;
+
+  while not ADOQuery1.Eof do
+  begin
+    username := ADOQuery1.FieldByName('korisnickoime').AsString;
+    plainPass := ADOQuery1.FieldByName('sifra').AsString;
+
+    hashedPass := THashSHA2.GetHashString(plainPass);
+
+    with TADOQuery.Create(nil) do
+    try
+      Connection := ADOConnection1;
+      SQL.Text :=
+        'UPDATE login SET sifra = :sifra ' +
+        'WHERE korisnickoime = :korisnickoime';
+
+      Parameters.ParamByName('sifra').Value := hashedPass;
+      Parameters.ParamByName('korisnickoime').Value := username;
+
+      ExecSQL;
+    finally
+      Free;
+    end;
+
+    ADOQuery1.Next;
+  end;
+
+  ShowMessage('Sve šifre su hashirane.');
+end;
 procedure TForm2.PrijavaBtnClick(Sender: TObject);
     var
   role: string;
@@ -88,7 +125,7 @@ begin
   ADOQuery1.Parameters.ParamByName('u').Value :=
     Trim(txtbKorisnickoime.Text);
   ADOQuery1.Parameters.ParamByName('p').Value :=
-    Trim(txtbSifra.Text);
+  THashSHA2.GetHashString(Trim(txtbSifra.Text));
 
   ADOQuery1.Open;
 
