@@ -34,7 +34,7 @@ object Form2: TForm2
   end
   object txtbKorisnickoime: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 20
+    TabOrder = 21
     TextSettings.Font.Size = 15.000000000000000000
     TextSettings.Font.StyleExt = {00070000000000000004000000}
     TextSettings.FontColor = claDarkgray
@@ -48,7 +48,7 @@ object Form2: TForm2
   end
   object txtbSifra: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 19
+    TabOrder = 20
     Password = True
     TextSettings.Font.Size = 15.000000000000000000
     TextSettings.Font.StyleExt = {00070000000000000004000000}
@@ -1835,14 +1835,6 @@ object Form2: TForm2
     TextSettings.Font.Size = 20.000000000000000000
     TextSettings.Trimming = None
     OnClick = SpeedButton3Click
-  end
-  object HashDugme: TButton
-    Position.X = 200.000000000000000000
-    Position.Y = 496.000000000000000000
-    TabOrder = 27
-    Text = 'HashDugme'
-    TextSettings.Trimming = None
-    OnClick = HashDugmeClick
   end
   object ADOConnection1: TADOConnection
     ConnectionString = 

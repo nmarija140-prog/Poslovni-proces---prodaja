@@ -25,12 +25,10 @@ type
     DataSource1: TDataSource;
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
-    HashDugme: TButton;
     procedure PrijavaBtnClick(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure SpeedButton3Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure HashDugmeClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -75,7 +73,7 @@ begin
   end;
 end;
 
-procedure TForm2.HashDugmeClick(Sender: TObject);
+{procedure TForm2.HashDugmeClick(Sender: TObject);
 var
   username, plainPass, hashedPass: string;
 begin
@@ -109,7 +107,7 @@ begin
   end;
 
   ShowMessage('Sve šifre su hashirane.');
-end;
+end;                       }
 procedure TForm2.PrijavaBtnClick(Sender: TObject);
     var
   role: string;
