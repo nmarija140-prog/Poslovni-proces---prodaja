@@ -63,11 +63,11 @@ object Form10: TForm10
   object ADOQuery1: TADOQuery
     Connection = ADOConnection1
     Parameters = <>
-    Left = 240
-    Top = 480
+    Left = 112
+    Top = 464
   end
   object ADOConnection1: TADOConnection
-    Left = 104
-    Top = 464
+    Left = 256
+    Top = 456
   end
 end

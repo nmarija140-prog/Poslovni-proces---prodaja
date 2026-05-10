@@ -5,7 +5,8 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
-  FMX.Controls.Presentation, FMX.StdCtrls, FMX.Edit, Data.DB, Data.Win.ADODB;
+  FMX.Controls.Presentation, FMX.StdCtrls, FMX.Edit,
+  Data.DB, Data.Win.ADODB;
 
 type
   TForm10 = class(TForm)
@@ -16,14 +17,13 @@ type
     kontaktOsoba: TEdit;
     nazivKlijenta: TEdit;
     adresa: TEdit;
-    ADOQuery1: TADOQuery;
     ADOConnection1: TADOConnection;
-    procedure sacuvajKlijentaDugmeClick(Sender: TObject);
+    ADOQuery1: TADOQuery;
+
     procedure FormCreate(Sender: TObject);
+    procedure sacuvajKlijentaDugmeClick(Sender: TObject);
   private
-    { Private declarations }
   public
-    { Public declarations }
   end;
 
 var
@@ -32,27 +32,29 @@ var
 implementation
 
 {$R *.fmx}
+
 procedure TForm10.FormCreate(Sender: TObject);
-    var
+var
   dbPath: string;
 begin
-  dbPath := ExtractFilePath(ParamStr(0)) + 'mpmBaza.mdb';
-  if not FileExists(dbPath) then
-  begin
-    ShowMessage('Baza ne postoji na lokaciji: ' + dbPath);
-    Exit;
-  end;
   try
+    dbPath := ExtractFilePath(ParamStr(0)) + 'mpmBaza.mdb';
+
+    ADOConnection1.LoginPrompt := False;
+    ADOConnection1.Connected := False;
+
     ADOConnection1.ConnectionString :=
-      'Provider=Microsoft.Jet.OLEDB.4.0;'+
-      'Data Source=' + dbPath + ';';
+      'Provider=Microsoft.ACE.OLEDB.4.0;' +
+      'Data Source=' + dbPath + ';' +
+      'Persist Security Info=False;';
+
     ADOConnection1.Connected := True;
+
+    ADOQuery1.Connection := ADOConnection1;
+
   except
     on E: Exception do
-    begin
-      ShowMessage('Greška pri konekciji sa bazom: ' + E.Message);
-      Exit;
-    end;
+      ShowMessage('Greška konekcije: ' + E.Message);
   end;
 end;
 
@@ -64,24 +66,31 @@ begin
     Exit;
   end;
 
-  ADOQuery1.Close;
-  ADOQuery1.SQL.Text :=
-    'INSERT INTO klijenti (nazivKlijenta, adresa, kontaktOsoba, email, brojTelefona) ' +
-    'VALUES (:naziv, :adresa, :kontakt, :email, :telefon)';
-
-  ADOQuery1.Parameters.ParamByName('naziv').Value := nazivKlijenta.Text;
-  ADOQuery1.Parameters.ParamByName('adresa').Value := adresa.Text;
-  ADOQuery1.Parameters.ParamByName('kontakt').Value := kontaktOsoba.Text;
-  ADOQuery1.Parameters.ParamByName('email').Value := email.Text;
-  ADOQuery1.Parameters.ParamByName('telefon').Value := telefon.Text;
-
   try
+    ADOQuery1.Close;
+    ADOQuery1.SQL.Clear;
+
+    ADOQuery1.SQL.Text :=
+      'INSERT INTO Klijenti ' +
+      '(nazivKlijenta, kontaktOsoba, telefon, email, adresa) ' +
+      'VALUES ' +
+      '(:nazivKlijenta, :kontaktOsoba, :telefon, :email, :adresa)';
+
+    ADOQuery1.Parameters.ParamByName('nazivKlijenta').Value := nazivKlijenta.Text;
+    ADOQuery1.Parameters.ParamByName('kontaktOsoba').Value := kontaktOsoba.Text;
+    ADOQuery1.Parameters.ParamByName('telefon').Value := telefon.Text;
+    ADOQuery1.Parameters.ParamByName('email').Value := email.Text;
+    ADOQuery1.Parameters.ParamByName('adresa').Value := adresa.Text;
+
     ADOQuery1.ExecSQL;
-    ShowMessage('Klijent uspešno dodat');
+
+    ShowMessage('Klijent uspešno sa?uvan');
     ModalResult := mrOk;
+
   except
     on E: Exception do
       ShowMessage('Greška: ' + E.Message);
   end;
 end;
+
 end.
