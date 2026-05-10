@@ -30,7 +30,7 @@ uses UnosPodataka, disp;
 
 procedure TForm1.PrijavaBtnClick(Sender: TObject);
 begin
-            Form2.Show;
+            Form5.Show;
             Hide;
 end;
 

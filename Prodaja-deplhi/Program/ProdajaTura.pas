@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects, FMX.Ani, FMX.Layouts,
-  Data.DB, Data.Win.ADODB;
+  Data.DB, Data.Win.ADODB, NoviZahtev;
 
 type
   TForm8 = class(TForm)
@@ -52,6 +52,7 @@ type
     procedure KarticaPoslatePonudeClick(Sender: TObject);
     procedure KarticaPrihvacenePonudeClick(Sender: TObject);
     procedure KarticaOdbijenePonudeClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
   private
     procedure Filtriranje(Status: string);
   public
@@ -126,6 +127,12 @@ ZahteviLista.Visible := not ZahteviLista.Visible;
   ZahteviLista.BringToFront;
   KarticaZahtevi.BringToFront;
 end;
+procedure TForm8.SpeedButton1Click(Sender: TObject);
+begin
+Form9.Show;
+Hide;;
+end;
+
 procedure TForm8.Filtriranje(Status: string);
 begin
   Novo.Visible := (Status = 'svi') or (Status = 'Novi zahtev');

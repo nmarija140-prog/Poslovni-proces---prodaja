@@ -104,6 +104,7 @@ object Form8: TForm8
     Text = #10133' Novi zahtev'
     TextSettings.Font.Size = 18.000000000000000000
     TextSettings.Trimming = None
+    OnClick = SpeedButton1Click
   end
   object KarticaZahtevi: TRectangle
     Position.X = 32.000000000000000000

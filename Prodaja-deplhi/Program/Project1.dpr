@@ -10,7 +10,9 @@ uses
   disp in 'disp.pas' {Form5},
   Klijent in 'Klijent.pas' {Form6},
   Vozac in 'Vozac.pas' {Form7},
-  ProdajaTura in 'ProdajaTura.pas' {Form8};
+  ProdajaTura in 'ProdajaTura.pas' {Form8},
+  NoviZahtev in 'NoviZahtev.pas' {Form9},
+  NovKlijent in 'NovKlijent.pas' {Form10};
 
 {$R *.res}
 
@@ -24,5 +26,7 @@ begin
   Application.CreateForm(TForm6, Form6);
   Application.CreateForm(TForm7, Form7);
   Application.CreateForm(TForm8, Form8);
+  Application.CreateForm(TForm9, Form9);
+  Application.CreateForm(TForm10, Form10);
   Application.Run;
 end.
