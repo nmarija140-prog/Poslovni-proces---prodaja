@@ -6,9 +6,11 @@ object Form8: TForm8
   ClientWidth = 324
   Fill.Color = claLightgray
   Fill.Kind = Solid
+  Position = Designed
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
   DesignerMasterStyle = 0
   object HambMeni2: TSpeedButton
     StyledSettings = [Family, Style, FontColor]

@@ -21,17 +21,18 @@ type
     MemoNapomena: TMemo;
     sacuvajZahtevDugme: TButton;
     otkaziDugme: TButton;
-    EditKlijent: TEdit;
-    ListKlijenti: TListBox;
     ADOQuery1: TADOQuery;
     ADOConnection1: TADOConnection;
-    procedure EditKlijentChange(Sender: TObject);
+    EditSearch: TEdit;
+    ListaKlijenata: TListBox;
      procedure FormCreate(Sender: TObject);
-  procedure FormClose(Sender: TObject; var Action: TCloseAction);
-  procedure ListKlijentiClick(Sender: TObject);
+     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure dodajKlijentaDugmeClick(Sender: TObject);
 procedure MemoNapomenaEnter(Sender: TObject);
 procedure MemoNapomenaExit(Sender: TObject);
+    procedure EditSearchChangeTracking(Sender: TObject);
+    procedure ListaKlijenataItemClick(const Sender: TCustomListBox;
+      const Item: TListBoxItem);
   private
     { Private declarations }
   public
@@ -45,30 +46,34 @@ implementation
 
 {$R *.fmx}
 
+
+
 procedure TForm9.FormCreate(Sender: TObject);
-var
+ var
   dbPath: string;
 begin
-  MemoNapomena.Text := 'Napomena';
+Position := TFormPosition.DefaultPosOnly;
+ListaKlijenata.Width := EditSearch.Width;
+ListaKlijenata.Height := 150;
 
-  ListKlijenti.Visible := False;
+ListaKlijenata.Position.X := EditSearch.Position.X;
 
+ListaKlijenata.Position.Y :=
+  EditSearch.Position.Y + EditSearch.Height;
+
+ListaKlijenata.BringToFront;
+ListaKlijenata.Visible := False;
   dbPath := ExtractFilePath(ParamStr(0)) + 'mpmBaza.mdb';
-
   if not FileExists(dbPath) then
   begin
     ShowMessage('Baza ne postoji na lokaciji: ' + dbPath);
     Exit;
   end;
-
   try
     ADOConnection1.ConnectionString :=
-      'Provider=Microsoft.ACE.OLEDB.12.0;' +
+      'Provider=Microsoft.Jet.OLEDB.4.0;'+
       'Data Source=' + dbPath + ';';
-
-    ADOConnection1.LoginPrompt := False;
     ADOConnection1.Connected := True;
-
   except
     on E: Exception do
     begin
@@ -77,12 +82,59 @@ begin
     end;
   end;
 end;
+procedure TForm9.ListaKlijenataItemClick(const Sender: TCustomListBox;
+  const Item: TListBoxItem);
+begin
+ EditSearch.Text := Item.Text;
 
+  ListaKlijenata.Visible := False;
+end;
+
+procedure TForm9.EditSearchChangeTracking(Sender: TObject);
+begin
+  if Trim(EditSearch.Text) = '' then
+  begin
+    ListaKlijenata.Visible := False;
+    Exit;
+  end;
+
+  ADOQuery1.Close;
+  ADOQuery1.SQL.Clear;
+  ADOQuery1.SQL.Text :=
+    'SELECT nazivKlijenta FROM Klijenti ' +
+    'WHERE nazivKlijenta LIKE :p ' +
+    'ORDER BY nazivKlijenta';
+  ADOQuery1.Parameters.ParamByName('p').Value :=
+    EditSearch.Text + '%';
+
+  ADOQuery1.Open;
+
+  ListaKlijenata.Clear;
+  while not ADOQuery1.Eof do
+  begin
+    ListaKlijenata.Items.Add(
+      ADOQuery1.FieldByName('nazivKlijenta').AsString
+    );
+
+    ADOQuery1.Next;
+  end;
+
+  ListaKlijenata.Visible := ListaKlijenata.Items.Count > 0;
+  ListaKlijenata.Height :=
+  ListaKlijenata.Items.Count * 35;
+  if ListaKlijenata.Height > 150 then
+  ListaKlijenata.Height := 150;
+   ListaKlijenata.BringToFront;
+end;
 procedure TForm9.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   try
-    ADOQuery1.Close;
-    ADOConnection1.Connected := False;
+    if ADOQuery1.Active then
+      ADOQuery1.Close;
+
+    if ADOConnection1.Connected then
+      ADOConnection1.Connected := False;
+
   except
   end;
 end;
@@ -91,51 +143,8 @@ begin
 Form10.Show;
 end;
 
-procedure TForm9.EditKlijentChange(Sender: TObject);
-begin
-  if Trim(EditKlijent.Text) = '' then
-  begin
-    ListKlijenti.Visible := False;
-    Exit;
-  end;
 
-  ADOQuery1.Close;
-  ADOQuery1.SQL.Text :=
-    'SELECT nazivKlijenta FROM klijenti ' +
-    'WHERE nazivKlijenta LIKE :naziv';
 
-  ADOQuery1.Parameters.ParamByName('naziv').Value :=
-    EditKlijent.Text + '%';
-
-  ADOQuery1.Open;
-
-  ListKlijenti.Clear;
-
-  if ADOQuery1.IsEmpty then
-  begin
-    ListKlijenti.Items.Add('Nema klijenta');
-    ListKlijenti.Visible := True;
-    Exit;
-  end;
-
-  while not ADOQuery1.Eof do
-  begin
-    ListKlijenti.Items.Add(
-      ADOQuery1.FieldByName('nazivKlijenta').AsString
-    );
-    ADOQuery1.Next;
-  end;
-
-  ListKlijenti.Visible := True;
-  ListKlijenti.BringToFront;
-end;
-procedure TForm9.ListKlijentiClick(Sender: TObject);
-begin
-  if ListKlijenti.ItemIndex < 0 then Exit;
-
-  EditKlijent.Text := ListKlijenti.Items[ListKlijenti.ItemIndex];
-  ListKlijenti.Visible := False;
-end;
 procedure TForm9.MemoNapomenaEnter(Sender: TObject);
 begin
   if MemoNapomena.Text = 'Napomena' then

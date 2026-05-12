@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects, FMX.Ani, FMX.Layouts,
-  Data.DB, Data.Win.ADODB, NoviZahtev;
+  Data.DB, Data.Win.ADODB, NoviZahtev, System.IniFiles, System.IOUtils;
 
 type
   TForm8 = class(TForm)
@@ -47,7 +47,6 @@ type
     procedure HambMeni2Click(Sender: TObject);
     procedure KarticaZahteviClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-
     procedure KarticaNoviZahteviClick(Sender: TObject);
     procedure KarticaPoslatePonudeClick(Sender: TObject);
     procedure KarticaPrihvacenePonudeClick(Sender: TObject);
@@ -66,26 +65,30 @@ implementation
 
 {$R *.fmx}
 procedure TForm8.FormCreate(Sender: TObject);
-    var
+var
   dbPath: string;
+
 begin
+
+
   dbPath := ExtractFilePath(ParamStr(0)) + 'mpmBaza.mdb';
+
   if not FileExists(dbPath) then
   begin
     ShowMessage('Baza ne postoji na lokaciji: ' + dbPath);
     Exit;
   end;
+
   try
     ADOConnection1.ConnectionString :=
-      'Provider=Microsoft.Jet.OLEDB.4.0;'+
+      'Provider=Microsoft.Jet.OLEDB.4.0;' +
       'Data Source=' + dbPath + ';';
+
     ADOConnection1.Connected := True;
+
   except
     on E: Exception do
-    begin
       ShowMessage('Greška pri konekciji sa bazom: ' + E.Message);
-      Exit;
-    end;
   end;
 end;
 
@@ -140,6 +143,7 @@ begin
   Prihvacen.Visible := (Status = 'svi') or (Status = 'Prihvacena ponuda');
   Odbijeno.Visible := (Status = 'svi') or (Status = 'Odbijena ponuda');
 end;
+
 
 
 

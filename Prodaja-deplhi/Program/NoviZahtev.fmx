@@ -6,9 +6,11 @@ object Form9: TForm9
   ClientWidth = 324
   Fill.Color = claLightgray
   Fill.Kind = Solid
+  Position = Designed
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
   DesignerMasterStyle = 0
   object dodajKlijentaDugme: TSpeedButton
     StyledSettings = [Family, Style, FontColor]
@@ -109,8 +111,8 @@ object Form9: TForm9
     TabOrder = 7
     OnEnter = MemoNapomenaEnter
     OnExit = MemoNapomenaExit
-    Viewport.Width = 130.000000000000000000
-    Viewport.Height = 59.000000000000000000
+    Viewport.Width = 126.000000000000000000
+    Viewport.Height = 55.000000000000000000
   end
   object sacuvajZahtevDugme: TButton
     StyledSettings = [Family, Style, FontColor]
@@ -136,29 +138,31 @@ object Form9: TForm9
     TextSettings.Font.Size = 15.000000000000000000
     TextSettings.Trimming = None
   end
-  object EditKlijent: TEdit
+  object EditSearch: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 10
-    Position.X = 16.000000000000000000
+    TabOrder = 12
+    Position.X = 17.000000000000000000
     Position.Y = 40.000000000000000000
-    Size.Width = 161.000000000000000000
+    Size.Width = 109.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
-    OnChange = EditKlijentChange
+    TextPrompt = 'Naziv klijenta'
+    OnChangeTracking = EditSearchChangeTracking
   end
-  object ListKlijenti: TListBox
-    Position.X = 16.000000000000000000
+  object ListaKlijenata: TListBox
+    Position.X = 17.000000000000000000
     Position.Y = 62.000000000000000000
-    Size.Width = 161.000000000000000000
+    Size.Width = 109.000000000000000000
     Size.Height = 200.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 11
+    TabOrder = 13
     Visible = False
     DisableFocusEffect = True
     DefaultItemStyles.ItemStyle = ''
     DefaultItemStyles.GroupHeaderStyle = ''
     DefaultItemStyles.GroupFooterStyle = ''
-    Viewport.Width = 157.000000000000000000
+    OnItemClick = ListaKlijenataItemClick
+    Viewport.Width = 105.000000000000000000
     Viewport.Height = 196.000000000000000000
   end
   object ADOQuery1: TADOQuery
