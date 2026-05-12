@@ -26,73 +26,73 @@ object Form9: TForm9
   object datUtovaraDugme: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 1
-    Text = 'Datum utovara'
     TextSettings.Font.Size = 13.000000000000000000
     Position.X = 16.000000000000000000
     Position.Y = 158.000000000000000000
     Size.Width = 110.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
+    TextPrompt = 'Datum utovara'
     StyledSettings = [Family, Style, FontColor]
   end
   object vrstaRobeDugme: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 2
-    Text = 'Vrsta robe'
     TextSettings.Font.Size = 13.000000000000000000
     Position.X = 16.000000000000000000
     Position.Y = 297.000000000000000000
     Size.Width = 110.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
+    TextPrompt = 'Vrsta robe'
     StyledSettings = [Family, Style, FontColor]
   end
   object kolicinaDugme: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 3
-    Text = 'Koli'#269'ina'
     TextSettings.Font.Size = 13.000000000000000000
     Position.X = 16.000000000000000000
     Position.Y = 343.000000000000000000
     Size.Width = 110.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
+    TextPrompt = 'Koli'#269'ina'
     StyledSettings = [Family, Style, FontColor]
   end
   object datIstovaraDugme: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 4
-    Text = 'Datum istovara'
     TextSettings.Font.Size = 13.000000000000000000
     Position.X = 16.000000000000000000
     Position.Y = 251.000000000000000000
     Size.Width = 110.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
+    TextPrompt = 'Datum istovara'
     StyledSettings = [Family, Style, FontColor]
   end
   object mestoIstovaraDugme: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 5
-    Text = 'Mesto istovara'
     TextSettings.Font.Size = 13.000000000000000000
     Position.X = 16.000000000000000000
     Position.Y = 204.000000000000000000
     Size.Width = 110.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
+    TextPrompt = 'Mesto istovara'
     StyledSettings = [Family, Style, FontColor]
   end
   object mestoUtovaraDugme: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 6
-    Text = 'Mesto utovara'
     TextSettings.Font.Size = 13.000000000000000000
     Position.X = 16.000000000000000000
     Position.Y = 112.000000000000000000
     Size.Width = 110.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
+    TextPrompt = 'Mesto utovara'
     StyledSettings = [Family, Style, FontColor]
   end
   object MemoNapomena: TMemo
@@ -105,7 +105,10 @@ object Form9: TForm9
     Size.Width = 130.000000000000000000
     Size.Height = 59.000000000000000000
     Size.PlatformDefault = False
+    StyleLookup = 'MemoNapomenaStyle1'
     TabOrder = 7
+    OnEnter = MemoNapomenaEnter
+    OnExit = MemoNapomenaExit
     Viewport.Width = 130.000000000000000000
     Viewport.Height = 59.000000000000000000
   end

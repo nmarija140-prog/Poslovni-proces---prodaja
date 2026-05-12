@@ -30,6 +30,8 @@ type
   procedure FormClose(Sender: TObject; var Action: TCloseAction);
   procedure ListKlijentiClick(Sender: TObject);
     procedure dodajKlijentaDugmeClick(Sender: TObject);
+procedure MemoNapomenaEnter(Sender: TObject);
+procedure MemoNapomenaExit(Sender: TObject);
   private
     { Private declarations }
   public
@@ -44,20 +46,29 @@ implementation
 {$R *.fmx}
 
 procedure TForm9.FormCreate(Sender: TObject);
-    var
+var
   dbPath: string;
 begin
+  MemoNapomena.Text := 'Napomena';
+
+  ListKlijenti.Visible := False;
+
   dbPath := ExtractFilePath(ParamStr(0)) + 'mpmBaza.mdb';
+
   if not FileExists(dbPath) then
   begin
     ShowMessage('Baza ne postoji na lokaciji: ' + dbPath);
     Exit;
   end;
+
   try
     ADOConnection1.ConnectionString :=
-      'Provider=Microsoft.Jet.OLEDB.4.0;'+
+      'Provider=Microsoft.ACE.OLEDB.12.0;' +
       'Data Source=' + dbPath + ';';
+
+    ADOConnection1.LoginPrompt := False;
     ADOConnection1.Connected := True;
+
   except
     on E: Exception do
     begin
@@ -125,4 +136,21 @@ begin
   EditKlijent.Text := ListKlijenti.Items[ListKlijenti.ItemIndex];
   ListKlijenti.Visible := False;
 end;
+procedure TForm9.MemoNapomenaEnter(Sender: TObject);
+begin
+  if MemoNapomena.Text = 'Napomena' then
+  begin
+    MemoNapomena.Text := '';
+  end;
+end;
+
+procedure TForm9.MemoNapomenaExit(Sender: TObject);
+begin
+  if Trim(MemoNapomena.Text) = '' then
+  begin
+    MemoNapomena.Text := 'Napomena';
+  end;
+end;
+
+
 end.
