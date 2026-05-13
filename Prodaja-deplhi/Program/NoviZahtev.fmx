@@ -102,6 +102,7 @@ object Form9: TForm9
     DataDetectorTypes = []
     Lines.Strings = (
       'Napomena')
+    Hint = 'Napomena'
     Position.X = 16.000000000000000000
     Position.Y = 390.000000000000000000
     Size.Width = 130.000000000000000000
@@ -109,8 +110,6 @@ object Form9: TForm9
     Size.PlatformDefault = False
     StyleLookup = 'MemoNapomenaStyle1'
     TabOrder = 7
-    OnEnter = MemoNapomenaEnter
-    OnExit = MemoNapomenaExit
     Viewport.Width = 126.000000000000000000
     Viewport.Height = 55.000000000000000000
   end

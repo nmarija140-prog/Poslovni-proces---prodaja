@@ -10,7 +10,6 @@ uses
 
 type
   TForm10 = class(TForm)
-    sacuvajKlijentaDugme: TButton;
     otkayiDugme2: TButton;
     telefon: TEdit;
     email: TEdit;
@@ -19,6 +18,7 @@ type
     adresa: TEdit;
     ADOConnection1: TADOConnection;
     ADOQuery1: TADOQuery;
+    sacuvajKlijentaDugme: TButton;
 
     procedure FormCreate(Sender: TObject);
     procedure sacuvajKlijentaDugmeClick(Sender: TObject);
@@ -37,60 +37,80 @@ procedure TForm10.FormCreate(Sender: TObject);
 var
   dbPath: string;
 begin
+  dbPath := ExtractFilePath(ParamStr(0)) + 'mpmBaza.mdb';
+  if not FileExists(dbPath) then
+  begin
+    ShowMessage('Baza ne postoji na lokaciji: ' + dbPath);
+    Exit;
+  end;
   try
-    dbPath := ExtractFilePath(ParamStr(0)) + 'mpmBaza.mdb';
-
-    ADOConnection1.LoginPrompt := False;
-    ADOConnection1.Connected := False;
-
     ADOConnection1.ConnectionString :=
-      'Provider=Microsoft.ACE.OLEDB.4.0;' +
-      'Data Source=' + dbPath + ';' +
-      'Persist Security Info=False;';
-
+      'Provider=Microsoft.Jet.OLEDB.4.0;'+
+      'Data Source=' + dbPath + ';';
     ADOConnection1.Connected := True;
-
-    ADOQuery1.Connection := ADOConnection1;
-
   except
     on E: Exception do
-      ShowMessage('Greška konekcije: ' + E.Message);
+    begin
+      ShowMessage('Greška pri konekciji sa bazom: ' + E.Message);
+      Exit;
+    end;
   end;
 end;
 
+
+
 procedure TForm10.sacuvajKlijentaDugmeClick(Sender: TObject);
 begin
-  if Trim(nazivKlijenta.Text) = '' then
-  begin
-    ShowMessage('Unesi naziv klijenta');
-    Exit;
-  end;
+if nazivKlijenta.Text.Trim = '' then
+begin
+  ShowMessage('Unesi naziv klijenta!');
+  Exit;
+end;
 
-  try
-    ADOQuery1.Close;
-    ADOQuery1.SQL.Clear;
+if adresa.Text.Trim = '' then
+begin
+  ShowMessage('Unesi adresu!');
+  Exit;
+end;
 
-    ADOQuery1.SQL.Text :=
-      'INSERT INTO Klijenti ' +
-      '(nazivKlijenta, kontaktOsoba, telefon, email, adresa) ' +
-      'VALUES ' +
-      '(:nazivKlijenta, :kontaktOsoba, :telefon, :email, :adresa)';
+if telefon.Text.Trim = '' then
+begin
+  ShowMessage('Unesi telefon!');
+  Exit;
+end;
 
-    ADOQuery1.Parameters.ParamByName('nazivKlijenta').Value := nazivKlijenta.Text;
-    ADOQuery1.Parameters.ParamByName('kontaktOsoba').Value := kontaktOsoba.Text;
-    ADOQuery1.Parameters.ParamByName('telefon').Value := telefon.Text;
-    ADOQuery1.Parameters.ParamByName('email').Value := email.Text;
-    ADOQuery1.Parameters.ParamByName('adresa').Value := adresa.Text;
+if email.Text.Trim = '' then
+begin
+  ShowMessage('Unesi email!');
+  Exit;
+end;
 
-    ADOQuery1.ExecSQL;
+if kontaktOsoba.Text.Trim = '' then
+begin
+  ShowMessage('Unesi kontakt osobu!');
+  Exit;
+end;
 
-    ShowMessage('Klijent uspešno sa?uvan');
-    ModalResult := mrOk;
+  ADOQuery1.Close;
+  ADOQuery1.SQL.Clear;
 
-  except
-    on E: Exception do
-      ShowMessage('Greška: ' + E.Message);
-  end;
+  ADOQuery1.SQL.Add(
+    'INSERT INTO Klijenti ' +
+    '(nazivKlijenta, adresa, telefon, email, kontaktOsoba) ' +
+    'VALUES (:nazivKlijenta, :adresa, :telefon, :email, :kontaktOsoba)'
+  );
+
+  ADOQuery1.Parameters.ParamByName('nazivKlijenta').Value := nazivKlijenta.Text;
+  ADOQuery1.Parameters.ParamByName('adresa').Value := adresa.Text;
+  ADOQuery1.Parameters.ParamByName('telefon').Value := telefon.Text;
+  ADOQuery1.Parameters.ParamByName('email').Value := email.Text;
+  ADOQuery1.Parameters.ParamByName('kontaktOsoba').Value := kontaktOsoba.Text;
+
+
+  ADOQuery1.ExecSQL;
+
+  ShowMessage('Klijent je uspešno sa?uvan!');
+  Close;
 end;
 
 end.

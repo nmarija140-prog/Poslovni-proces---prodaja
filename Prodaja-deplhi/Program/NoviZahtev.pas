@@ -28,8 +28,6 @@ type
      procedure FormCreate(Sender: TObject);
      procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure dodajKlijentaDugmeClick(Sender: TObject);
-procedure MemoNapomenaEnter(Sender: TObject);
-procedure MemoNapomenaExit(Sender: TObject);
     procedure EditSearchChangeTracking(Sender: TObject);
     procedure ListaKlijenataItemClick(const Sender: TCustomListBox;
       const Item: TListBoxItem);
@@ -52,6 +50,8 @@ procedure TForm9.FormCreate(Sender: TObject);
  var
   dbPath: string;
 begin
+MemoNapomena.ShowHint := True;
+MemoNapomena.Hint := 'Napomena';
 Position := TFormPosition.DefaultPosOnly;
 ListaKlijenata.Width := EditSearch.Width;
 ListaKlijenata.Height := 150;
@@ -142,24 +142,5 @@ procedure TForm9.dodajKlijentaDugmeClick(Sender: TObject);
 begin
 Form10.Show;
 end;
-
-
-
-procedure TForm9.MemoNapomenaEnter(Sender: TObject);
-begin
-  if MemoNapomena.Text = 'Napomena' then
-  begin
-    MemoNapomena.Text := '';
-  end;
-end;
-
-procedure TForm9.MemoNapomenaExit(Sender: TObject);
-begin
-  if Trim(MemoNapomena.Text) = '' then
-  begin
-    MemoNapomena.Text := 'Napomena';
-  end;
-end;
-
 
 end.
