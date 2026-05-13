@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects, FMX.Ani, FMX.Layouts,
-  Data.DB, Data.Win.ADODB, NoviZahtev, System.IniFiles, System.IOUtils;
+  Data.DB, Data.Win.ADODB, System.IniFiles, System.IOUtils;
 
 type
   TForm8 = class(TForm)
@@ -62,8 +62,7 @@ var
   Form8: TForm8;
 
 implementation
-
-{$R *.fmx}
+                uses NoviZahtev;
 procedure TForm8.FormCreate(Sender: TObject);
 var
   dbPath: string;
@@ -132,8 +131,9 @@ ZahteviLista.Visible := not ZahteviLista.Visible;
 end;
 procedure TForm8.SpeedButton1Click(Sender: TObject);
 begin
-Form9.Show;
-Hide;;
+  if not Assigned(Form9) then
+    Application.CreateForm(TForm9, Form9);
+  Form9.Show;
 end;
 
 procedure TForm8.Filtriranje(Status: string);

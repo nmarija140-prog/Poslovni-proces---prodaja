@@ -158,7 +158,9 @@ end;                end;
 
 procedure TForm2.SpeedButton1Click(Sender: TObject);
 begin
-            Form1.Show;
+            Application.CreateForm(TForm1, Form1);
+
+Form1.Show;
             Close;
 end;
 

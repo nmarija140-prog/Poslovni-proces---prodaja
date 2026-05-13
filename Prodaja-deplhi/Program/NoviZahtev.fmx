@@ -25,21 +25,9 @@ object Form9: TForm9
     TextSettings.Trimming = None
     OnClick = dodajKlijentaDugmeClick
   end
-  object datUtovaraDugme: TEdit
-    Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 1
-    TextSettings.Font.Size = 13.000000000000000000
-    Position.X = 16.000000000000000000
-    Position.Y = 158.000000000000000000
-    Size.Width = 110.000000000000000000
-    Size.Height = 22.000000000000000000
-    Size.PlatformDefault = False
-    TextPrompt = 'Datum utovara'
-    StyledSettings = [Family, Style, FontColor]
-  end
   object vrstaRobeDugme: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 2
+    TabOrder = 1
     TextSettings.Font.Size = 13.000000000000000000
     Position.X = 16.000000000000000000
     Position.Y = 297.000000000000000000
@@ -51,7 +39,7 @@ object Form9: TForm9
   end
   object kolicinaDugme: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 3
+    TabOrder = 2
     TextSettings.Font.Size = 13.000000000000000000
     Position.X = 16.000000000000000000
     Position.Y = 343.000000000000000000
@@ -61,21 +49,9 @@ object Form9: TForm9
     TextPrompt = 'Koli'#269'ina'
     StyledSettings = [Family, Style, FontColor]
   end
-  object datIstovaraDugme: TEdit
-    Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 4
-    TextSettings.Font.Size = 13.000000000000000000
-    Position.X = 16.000000000000000000
-    Position.Y = 251.000000000000000000
-    Size.Width = 110.000000000000000000
-    Size.Height = 22.000000000000000000
-    Size.PlatformDefault = False
-    TextPrompt = 'Datum istovara'
-    StyledSettings = [Family, Style, FontColor]
-  end
   object mestoIstovaraDugme: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 5
+    TabOrder = 3
     TextSettings.Font.Size = 13.000000000000000000
     Position.X = 16.000000000000000000
     Position.Y = 204.000000000000000000
@@ -87,7 +63,7 @@ object Form9: TForm9
   end
   object mestoUtovaraDugme: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 6
+    TabOrder = 4
     TextSettings.Font.Size = 13.000000000000000000
     Position.X = 16.000000000000000000
     Position.Y = 112.000000000000000000
@@ -101,7 +77,7 @@ object Form9: TForm9
     Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
     DataDetectorTypes = []
     Lines.Strings = (
-      'Napomena')
+      '')
     Hint = 'Napomena'
     Position.X = 16.000000000000000000
     Position.Y = 390.000000000000000000
@@ -109,9 +85,11 @@ object Form9: TForm9
     Size.Height = 59.000000000000000000
     Size.PlatformDefault = False
     StyleLookup = 'MemoNapomenaStyle1'
-    TabOrder = 7
-    Viewport.Width = 126.000000000000000000
-    Viewport.Height = 55.000000000000000000
+    TabOrder = 5
+    OnEnter = MemoNapomenaEnter
+    OnExit = MemoNapomenaExit
+    Viewport.Width = 130.000000000000000000
+    Viewport.Height = 59.000000000000000000
   end
   object sacuvajZahtevDugme: TButton
     StyledSettings = [Family, Style, FontColor]
@@ -120,10 +98,11 @@ object Form9: TForm9
     Size.Width = 130.000000000000000000
     Size.Height = 30.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 8
+    TabOrder = 6
     Text = 'Sa'#269'uvaj zahtev'
     TextSettings.Font.Size = 15.000000000000000000
     TextSettings.Trimming = None
+    OnClick = sacuvajZahtevDugmeClick
   end
   object otkaziDugme: TButton
     StyledSettings = [Family, Style, FontColor]
@@ -132,14 +111,14 @@ object Form9: TForm9
     Size.Width = 80.000000000000000000
     Size.Height = 30.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 9
+    TabOrder = 7
     Text = 'Otka'#382'i'
     TextSettings.Font.Size = 15.000000000000000000
     TextSettings.Trimming = None
   end
   object EditSearch: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 12
+    TabOrder = 10
     Position.X = 17.000000000000000000
     Position.Y = 40.000000000000000000
     Size.Width = 109.000000000000000000
@@ -154,7 +133,7 @@ object Form9: TForm9
     Size.Width = 109.000000000000000000
     Size.Height = 200.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 13
+    TabOrder = 11
     Visible = False
     DisableFocusEffect = True
     DefaultItemStyles.ItemStyle = ''
@@ -163,6 +142,24 @@ object Form9: TForm9
     OnItemClick = ListaKlijenataItemClick
     Viewport.Width = 105.000000000000000000
     Viewport.Height = 196.000000000000000000
+  end
+  object DatumUtovara: TDateEdit
+    Date = 46155.000000000000000000
+    Position.X = 17.000000000000000000
+    Position.Y = 160.000000000000000000
+    Size.Width = 109.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 14
+  end
+  object DatumIstovara: TDateEdit
+    Date = 46155.000000000000000000
+    Position.X = 17.000000000000000000
+    Position.Y = 248.000000000000000000
+    Size.Width = 109.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 15
   end
   object ADOQuery1: TADOQuery
     Connection = ADOConnection1

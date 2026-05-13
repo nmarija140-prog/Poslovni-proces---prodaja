@@ -26,11 +26,11 @@ implementation
 
 {$R *.fmx}
 
-uses UnosPodataka, disp;
+uses UnosPodataka, disp, NoviZahtev;
 
 procedure TForm1.PrijavaBtnClick(Sender: TObject);
-begin
-            Form5.Show;
+begin   Application.CreateForm(TForm9, Form9);
+            Form9.Show;
             Hide;
 end;
 
