@@ -5,7 +5,8 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
-  FMX.Controls.Presentation, FMX.StdCtrls, UnosPodataka, FMX.Objects, FMX.Maps, ProdajaTura, PozicijaForme;
+  FMX.Controls.Presentation, FMX.StdCtrls, UnosPodataka, FMX.Objects, FMX.Maps, ProdajaTura, PozicijaForme
+  , System.IniFiles;
 
 type
   TForm5 = class(TForm)
@@ -63,13 +64,26 @@ end;
 
 procedure TForm5.ProdajaTuraDugmeClick(Sender: TObject);
 begin
-Form8.show;
-Hide;
+  Form8.Left := Self.Left;
+  Form8.Top := Self.Top;
+
+  Form8.Width := Self.Width;
+  Form8.Height := Self.Height;
+
+  Form8.Show;
+  Self.Hide;
 end;
 procedure TForm5.FormClose(Sender: TObject; var Action: TCloseAction);
+var
+  Ini: TIniFile;
 begin
-  LastFormX := Left;
-  LastFormY := Top;
-end;
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + 'settings.ini');
+  try
+    Ini.WriteInteger('Pozicija', 'Left', Self.Left);
+    Ini.WriteInteger('Pozicija', 'Top', Self.Top);
+  finally
+    Ini.Free;
+  end;
 
+end;
 end.

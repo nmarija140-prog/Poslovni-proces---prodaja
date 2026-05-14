@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects, FMX.Ani, FMX.Layouts,
-  Data.DB, Data.Win.ADODB, System.IniFiles, System.IOUtils, PozicijaForme;
+  Data.DB, Data.Win.ADODB, System.IniFiles, System.IOUtils;
 
 type
   TForm8 = class(TForm)
@@ -53,7 +53,6 @@ type
     procedure KarticaOdbijenePonudeClick(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure FormShow(Sender: TObject);
   private
     procedure Filtriranje(Status: string);
   public
@@ -72,13 +71,6 @@ var
   dbPath: string;
 
 begin
- Position := TFormPosition.Designed;
-
-  if LastFormX <> -1 then
-  begin
-    Left := Round(LastFormX);
-    Top := Round(LastFormY);
-  end;
 
 
   dbPath := ExtractFilePath(ParamStr(0)) + 'mpmBaza.mdb';
@@ -100,12 +92,6 @@ begin
     on E: Exception do
       ShowMessage('Greška pri konekciji sa bazom: ' + E.Message);
   end;
-end;
-
-procedure TForm8.FormShow(Sender: TObject);
-begin
-  if LastFormX >= 0 then
-    SetBounds(Round(LastFormX), Round(LastFormY), Width, Height);
 end;
 
 procedure TForm8.HambMeni2Click(Sender: TObject);
@@ -148,8 +134,14 @@ ZahteviLista.Visible := not ZahteviLista.Visible;
 end;
 procedure TForm8.SpeedButton1Click(Sender: TObject);
 begin
-Hide;
-Form9.Show;
+Form9.Left := Self.Left;
+  Form9.Top := Self.Top;
+
+  Form9.Width := Self.Width;
+  Form9.Height := Self.Height;
+
+  Form9.Show;
+  Self.Hide;
 end;
 
 procedure TForm8.Filtriranje(Status: string);
@@ -161,10 +153,17 @@ begin
 end;
 
 procedure TForm8.FormClose(Sender: TObject; var Action: TCloseAction);
+var
+  Ini: TIniFile;
 begin
- LastFormX := Left;
-  LastFormY := Top;
-end;
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + 'settings.ini');
+  try
+    Ini.WriteInteger('Pozicija', 'Left', Self.Left);
+    Ini.WriteInteger('Pozicija', 'Top', Self.Top);
+  finally
+    Ini.Free;
+  end;
 
+end;
 
 end.

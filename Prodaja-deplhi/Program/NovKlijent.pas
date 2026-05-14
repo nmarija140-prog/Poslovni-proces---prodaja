@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Edit,
-  Data.DB, Data.Win.ADODB, PozicijaForme;
+  Data.DB, Data.Win.ADODB;
 
 type
   TForm10 = class(TForm)
@@ -19,7 +19,6 @@ type
     ADOConnection1: TADOConnection;
     ADOQuery1: TADOQuery;
     sacuvajKlijentaDugme: TButton;
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure sacuvajKlijentaDugmeClick(Sender: TObject);
   private
@@ -37,13 +36,6 @@ procedure TForm10.FormCreate(Sender: TObject);
 var
   dbPath: string;
 begin
- Position := TFormPosition.Designed;
-
-  if LastFormX <> -1 then
-  begin
-    Left := Round(LastFormX);
-    Top := Round(LastFormY);
-  end;
   dbPath := ExtractFilePath(ParamStr(0)) + 'mpmBaza.mdb';
   if not FileExists(dbPath) then
   begin
@@ -118,11 +110,6 @@ end;
 
   ShowMessage('Klijent je uspešno sa?uvan!');
   Close;
-end;
-procedure TForm10.FormClose(Sender: TObject; var Action: TCloseAction);
-begin
-  LastFormX := Left;
-  LastFormY := Top;
 end;
 
 end.

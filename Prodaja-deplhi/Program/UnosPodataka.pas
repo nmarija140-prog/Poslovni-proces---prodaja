@@ -10,7 +10,8 @@ uses
   FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
   FireDAC.Phys, FireDAC.FMXUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
-  FireDAC.Comp.Client, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef, Data.Win.ADODB, System.Hash, PozicijaForme;
+  FireDAC.Comp.Client, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef, Data.Win.ADODB, System.Hash,
+  System.IniFiles;
 
 type
   TForm2 = class(TForm)
@@ -49,13 +50,6 @@ procedure TForm2.FormCreate(Sender: TObject);
     var
   dbPath: string;
 begin
- Position := TFormPosition.Designed;
-
-  if LastFormX <> -1 then
-  begin
-    Left := Round(LastFormX);
-    Top := Round(LastFormY);
-  end;
   // Lokacija baze
   dbPath := ExtractFilePath(ParamStr(0)) + 'mpmBaza.mdb';
 
@@ -142,19 +136,39 @@ begin
     role := ADOQuery1.FieldByName('role').AsString;
 
     if SameText(role, 'menadzer') then
-      Form3.Show
-    else if SameText(role, 'administrator') then
-      Form4.Show
-      else if SameText(role, 'dispecer') then
-      Form5.Show
-      else if SameText(role, 'klijent') then
-      Form6.Show
-      else if SameText(role, 'vozac') then
-      Form7.Show
-    else
-      ShowMessage('Nepoznata uloga!');
+begin
+  Form3.Left := Self.Left;
+  Form3.Top := Self.Top;
+  Form3.Show;
+end
+else if SameText(role, 'administrator') then
+begin
+  Form4.Left := Self.Left;
+  Form4.Top := Self.Top;
+  Form4.Show;
+end
+else if SameText(role, 'dispecer') then
+begin
+  Form5.Left := Self.Left;
+  Form5.Top := Self.Top;
+  Form5.Show;
+end
+else if SameText(role, 'klijent') then
+begin
+  Form6.Left := Self.Left;
+  Form6.Top := Self.Top;
+  Form6.Show;
+end
+else if SameText(role, 'vozac') then
+begin
+  Form7.Left := Self.Left;
+  Form7.Top := Self.Top;
+  Form7.Show;
+end
+else
+  ShowMessage('Nepoznata uloga!');
 
-    Hide;
+Hide;
 end
   else
   begin
@@ -162,7 +176,8 @@ end
     txtbKorisnickoIme.Text := '';
     txtbSifra.Text := '';
 
-end;                end;
+end;
+end;
 
 procedure TForm2.SpeedButton1Click(Sender: TObject);
 begin
@@ -177,9 +192,17 @@ begin
 txtbSifra.Password:= not txtbSifra.Password;
 end;
 procedure TForm2.FormClose(Sender: TObject; var Action: TCloseAction);
+var
+  Ini: TIniFile;
 begin
-  LastFormX := Left;
-  LastFormY := Top;
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + 'settings.ini');
+  try
+    Ini.WriteInteger('Pozicija', 'Left', Self.Left);
+    Ini.WriteInteger('Pozicija', 'Top', Self.Top);
+  finally
+    Ini.Free;
+  end;
+
 end;
 
 end.

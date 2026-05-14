@@ -31,11 +31,11 @@ uses UnosPodataka, disp, NoviZahtev, System.IniFiles;
 
 procedure TForm1.PrijavaBtnClick(Sender: TObject);
 begin
-Form9.Left := Self.Left;
-  Form9.Top := Self.Top;
-  Form9.Width := Self.Width;
-  Form9.Height := Self.Height;
-            Form9.Show;
+Form2.Left := Self.Left;
+  Form2.Top := Self.Top;
+  Form2.Width := Self.Width;
+  Form2.Height := Self.Height;
+            Form2.Show;
             Self.Hide;
 end;
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);

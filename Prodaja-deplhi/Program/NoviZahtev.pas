@@ -35,6 +35,7 @@ type
     procedure MemoNapomenaExit(Sender: TObject);
     procedure sacuvajZahtevDugmeClick(Sender: TObject);
     procedure otkaziDugmeClick(Sender: TObject);
+    procedure OcistiPolja;
   private
       KlijentID: Integer;
   public
@@ -49,6 +50,19 @@ implementation
 {$R *.fmx}
 
        uses ProdajaTura;
+       procedure TForm9.OcistiPolja;
+begin
+  EditSearch.Text := '';
+  vrstaRobeDugme.Text := '';
+  kolicinaDugme.Text := '';
+  mestoIstovaraDugme.Text := '';
+  mestoUtovaraDugme.Text := '';
+  MemoNapomena.Text := 'Napomena';
+  DatumUtovara.Date := Date;
+  DatumIstovara.Date := Date;
+  KlijentID := -1;
+  ListaKlijenata.Visible := False;
+end;
 
 
 procedure TForm9.FormCreate(Sender: TObject);
@@ -198,8 +212,15 @@ ADOQuery1.SQL.Text :=
         ADOQuery1.Parameters.ParamByName('Napomena').Value := MemoNapomena.Text;
         ADOQuery1.ExecSQL;
          ShowMessage('Zahtev uspešno sačuvan!');
-         Form8.Show;
-   Close;
+         OcistiPolja;
+        Form8.Left := Self.Left;
+  Form8.Top := Self.Top;
+
+  Form8.Width := Self.Width;
+  Form8.Height := Self.Height;
+
+  Form8.Show;
+  Self.Hide;
 
   except
     on E: Exception do
@@ -251,20 +272,27 @@ begin
   ListaKlijenata.BringToFront;
 end;
 procedure TForm9.FormClose(Sender: TObject; var Action: TCloseAction);
+var
+  Ini: TIniFile;
 begin
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + 'settings.ini');
   try
-    if ADOQuery1.Active then
-      ADOQuery1.Close;
-
-    if ADOConnection1.Connected then
-      ADOConnection1.Connected := False;
-
-  except
+    Ini.WriteInteger('Pozicija', 'Left', Self.Left);
+    Ini.WriteInteger('Pozicija', 'Top', Self.Top);
+  finally
+    Ini.Free;
   end;
+
 end;
 procedure TForm9.dodajKlijentaDugmeClick(Sender: TObject);
 begin
-Form10.Show;
+Form10.Left := Self.Left;
+  Form10.Top := Self.Top;
+
+  Form10.Width := Self.Width;
+  Form10.Height := Self.Height;
+
+  Form10.Show;
 end;
 
 

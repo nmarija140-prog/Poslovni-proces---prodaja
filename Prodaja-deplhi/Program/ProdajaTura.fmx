@@ -11,7 +11,6 @@ object Form8: TForm8
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
-  OnShow = FormShow
   DesignerMasterStyle = 0
   object HambMeni2: TSpeedButton
     StyledSettings = [Family, Style, FontColor]
