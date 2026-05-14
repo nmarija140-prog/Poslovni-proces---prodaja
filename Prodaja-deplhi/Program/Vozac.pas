@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
-  FMX.Controls.Presentation, FMX.StdCtrls,UnosPodataka, FMX.Objects, FMX.Maps, Data.DB, Data.Win.ADODB, Menadzer;
+  FMX.Controls.Presentation, FMX.StdCtrls,UnosPodataka, FMX.Objects, FMX.Maps, Data.DB, Data.Win.ADODB,PozicijaForme, Menadzer;
 
 type
   TForm7 = class(TForm)
@@ -19,6 +19,7 @@ type
     ADOQuery1: TADOQuery;
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
   public
   end;
@@ -32,6 +33,13 @@ implementation
 
 procedure TForm7.FormCreate(Sender: TObject);
 begin
+ Position := TFormPosition.Designed;
+
+  if LastFormX <> -1 then
+  begin
+    Left := Round(LastFormX);
+    Top := Round(LastFormY);
+  end;
 ADOConnection1.ConnectionString :=
   'Provider=Microsoft.Jet.OLEDB.4.0;' +
   'Data Source=' + ExtractFilePath(ParamStr(0)) + 'mpmBaza.mdb;';
@@ -44,5 +52,9 @@ begin
 Form2.Show;
 Close;
 end;
-
+     procedure TForm7.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  LastFormX := Left;
+  LastFormY := Top;
+end;
 end.

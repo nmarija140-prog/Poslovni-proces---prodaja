@@ -5,6 +5,7 @@ object Form2: TForm2
   ClientWidth = 316
   Fill.Color = claLightgray
   Fill.Kind = Solid
+  Position = Designed
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
@@ -34,7 +35,7 @@ object Form2: TForm2
   end
   object txtbKorisnickoime: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 21
+    TabOrder = 23
     TextSettings.Font.Size = 15.000000000000000000
     TextSettings.Font.StyleExt = {00070000000000000004000000}
     TextSettings.FontColor = claDarkgray
@@ -48,7 +49,7 @@ object Form2: TForm2
   end
   object txtbSifra: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 20
+    TabOrder = 22
     Password = True
     TextSettings.Font.Size = 15.000000000000000000
     TextSettings.Font.StyleExt = {00070000000000000004000000}

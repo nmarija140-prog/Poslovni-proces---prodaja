@@ -6,6 +6,7 @@ object Form7: TForm7
   ClientWidth = 324
   Fill.Color = claLightgray
   Fill.Kind = Solid
+  Position = Designed
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]

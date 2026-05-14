@@ -6,6 +6,7 @@ object Form3: TForm3
   ClientWidth = 324
   Fill.Color = claLightgray
   Fill.Kind = Solid
+  Position = Designed
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
@@ -31,7 +32,7 @@ object Form3: TForm3
     Size.Height = 79.000000000000000000
     Size.PlatformDefault = False
     StyleLookup = 'PrijavaBtnStyle1'
-    TabOrder = 12
+    TabOrder = 13
     Text = 'Isporuke'
     TextSettings.Font.Size = 15.000000000000000000
     TextSettings.Font.StyleExt = {00070000000200000004000000}

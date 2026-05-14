@@ -115,6 +115,7 @@ object Form9: TForm9
     Text = 'Otka'#382'i'
     TextSettings.Font.Size = 15.000000000000000000
     TextSettings.Trimming = None
+    OnClick = otkaziDugmeClick
   end
   object EditSearch: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]

@@ -6,7 +6,7 @@ uses
     System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects, FMX.Maps,
-  UnosPodataka, Data.DB, Data.Win.ADODB, FMX.Edit, FMX.ListBox;
+  UnosPodataka, Data.DB, Data.Win.ADODB, FMX.Edit, FMX.ListBox, PozicijaForme;
   type
   TPrijavljeniKorisnik = record
     ID: Integer;
@@ -32,7 +32,7 @@ type
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure DugmeIzaberiKorisnikaClick(Sender: TObject);
-
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
  procedure PopuniComboKorisnike;
   public
@@ -71,6 +71,13 @@ end;
 
 procedure TForm3.FormCreate(Sender: TObject);
 begin
+ Position := TFormPosition.Designed;
+
+  if LastFormX <> -1 then
+  begin
+    Left := Round(LastFormX);
+    Top := Round(LastFormY);
+  end;
 ADOConnection1.ConnectionString :=
     'Provider=Microsoft.Jet.OLEDB.4.0;' +
     'Data Source=' + ExtractFilePath(ParamStr(0)) + 'mpmBaza.mdb;';
@@ -100,6 +107,11 @@ begin
     );
     ADOQuery1.Next;
   end;
+end;
+procedure TForm3.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  LastFormX := Left;
+  LastFormY := Top;
 end;
 
 end.

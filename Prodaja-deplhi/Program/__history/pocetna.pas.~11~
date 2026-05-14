@@ -1,0 +1,55 @@
+unit pocetna;
+
+interface
+
+uses
+  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
+  FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
+  FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects, PozicijaForme;
+
+type
+  TForm1 = class(TForm)
+    PrijavaBtn: TButton;
+    Text1: TText;
+    Image1: TImage;
+    procedure PrijavaBtnClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.fmx}
+
+uses UnosPodataka, disp, NoviZahtev;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+ Position := TFormPosition.Designed;
+
+  if LastFormX <> -1 then
+  begin
+    Left := Round(LastFormX);
+    Top := Round(LastFormY);
+  end;
+end;
+
+procedure TForm1.PrijavaBtnClick(Sender: TObject);
+begin
+            Form9.Show;
+            Hide;
+end;
+procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  LastFormX := Left;
+  LastFormY := Top;
+end;
+
+end.

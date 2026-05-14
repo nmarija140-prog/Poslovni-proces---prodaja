@@ -6,9 +6,11 @@ object Form6: TForm6
   ClientWidth = 324
   Fill.Color = claLightgray
   Fill.Kind = Solid
+  Position = Designed
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
   DesignerMasterStyle = 0
   object SpeedButton1: TSpeedButton
     Position.X = 8.000000000000000000

@@ -7,7 +7,7 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Memo.Types, FMX.ScrollBox,
   FMX.Memo, FMX.Edit, FMX.Layouts, FMX.ListBox, Data.DB, Data.Win.ADODB,
-  Data.FMTBcd, Data.SqlExpr, NovKlijent,DateUtils, FMX.DateTimeCtrls;
+  Data.FMTBcd, Data.SqlExpr, NovKlijent,DateUtils, FMX.DateTimeCtrls, System.IniFiles;
 
 type
   TForm9 = class(TForm)
@@ -34,6 +34,7 @@ type
     procedure MemoNapomenaEnter(Sender: TObject);
     procedure MemoNapomenaExit(Sender: TObject);
     procedure sacuvajZahtevDugmeClick(Sender: TObject);
+    procedure otkaziDugmeClick(Sender: TObject);
   private
       KlijentID: Integer;
   public
@@ -46,15 +47,22 @@ var
 implementation
 
 {$R *.fmx}
-uses ProdajaTura;
 
-
+       uses ProdajaTura;
 
 
 procedure TForm9.FormCreate(Sender: TObject);
  var
   dbPath: string;
+  Ini: TIniFile;
 begin
+Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + 'settings.ini');
+  try
+    Self.Left := Ini.ReadInteger('Pozicija', 'Left', 100);
+    Self.Top := Ini.ReadInteger('Pozicija', 'Top', 100);
+  finally
+    Ini.Free;
+  end;
 DatumUtovara.Date := Date;
 DatumIstovara.Date := Date;
 KlijentID := -1;
@@ -127,6 +135,12 @@ if Trim(MemoNapomena.Text) = '' then
   end;
 end;
 
+procedure TForm9.otkaziDugmeClick(Sender: TObject);
+begin
+Form8.Show;
+Close;
+end;
+
 procedure TForm9.sacuvajZahtevDugmeClick(Sender: TObject);
 begin
   if KlijentID = -1 then
@@ -181,14 +195,11 @@ ADOQuery1.SQL.Text :=
       ADOQuery1.Parameters.ParamByName('DatumIstovara').Value :=VarFromDateTime(DatumIstovara.Date);
       ADOQuery1.Parameters.ParamByName('VrstaRobe').Value := vrstaRobeDugme.Text;
        ADOQuery1.Parameters.ParamByName('Kolicina').Value := StrToFloatDef(kolicinaDugme.Text, 0);
-        ADOQuery1.Parameters.ParamByName('Napomena').Value := MemoNapomena.Text; ADOQuery1.ExecSQL;
+        ADOQuery1.Parameters.ParamByName('Napomena').Value := MemoNapomena.Text;
+        ADOQuery1.ExecSQL;
          ShowMessage('Zahtev uspešno sačuvan!');
-Self.Hide;
-
-if not Assigned(Form8) then
-  Application.CreateForm(TForm8, Form8);
-
-Form8.Show;
+         Form8.Show;
+   Close;
 
   except
     on E: Exception do
@@ -255,5 +266,6 @@ procedure TForm9.dodajKlijentaDugmeClick(Sender: TObject);
 begin
 Form10.Show;
 end;
+
 
 end.

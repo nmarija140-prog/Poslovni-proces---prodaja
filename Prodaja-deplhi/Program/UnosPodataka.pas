@@ -10,7 +10,7 @@ uses
   FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
   FireDAC.Phys, FireDAC.FMXUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
-  FireDAC.Comp.Client, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef, Data.Win.ADODB, System.Hash;
+  FireDAC.Comp.Client, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef, Data.Win.ADODB, System.Hash, PozicijaForme;
 
 type
   TForm2 = class(TForm)
@@ -29,6 +29,7 @@ type
     procedure SpeedButton1Click(Sender: TObject);
     procedure SpeedButton3Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
   public
@@ -48,6 +49,13 @@ procedure TForm2.FormCreate(Sender: TObject);
     var
   dbPath: string;
 begin
+ Position := TFormPosition.Designed;
+
+  if LastFormX <> -1 then
+  begin
+    Left := Round(LastFormX);
+    Top := Round(LastFormY);
+  end;
   // Lokacija baze
   dbPath := ExtractFilePath(ParamStr(0)) + 'mpmBaza.mdb';
 
@@ -158,7 +166,7 @@ end;                end;
 
 procedure TForm2.SpeedButton1Click(Sender: TObject);
 begin
-            Application.CreateForm(TForm1, Form1);
+
 
 Form1.Show;
             Close;
@@ -167,6 +175,11 @@ end;
 procedure TForm2.SpeedButton3Click(Sender: TObject);
 begin
 txtbSifra.Password:= not txtbSifra.Password;
+end;
+procedure TForm2.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  LastFormX := Left;
+  LastFormY := Top;
 end;
 
 end.

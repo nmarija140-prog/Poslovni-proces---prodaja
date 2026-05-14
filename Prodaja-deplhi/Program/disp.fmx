@@ -10,6 +10,7 @@ object Form5: TForm5
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
   DesignerMasterStyle = 0
   object MapView1: TMapView
     Position.X = 72.000000000000000000
