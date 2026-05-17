@@ -109,7 +109,7 @@ ListaKlijenata.Visible := False;
       ShowMessage('Greška pri konekciji sa bazom: ' + E.Message);
       Exit;
     end;
-  end;
+end;
 end;
 procedure TForm9.ListaKlijenataItemClick(
   const Sender: TCustomListBox;
@@ -242,8 +242,11 @@ begin
   ADOQuery1.SQL.Clear;
 
   ADOQuery1.SQL.Text :=
-    'SELECT IDKlijenta, nazivKlijenta FROM Klijenti ' + 'WHERE nazivKlijenta LIKE :p ' +
-    'ORDER BY nazivKlijenta';
+  'SELECT Klijenti.IDKlijenta, Klijenti.nazivKlijenta, Gradovi.Grad, Klijenti.PIB ' +
+  'FROM Klijenti ' +
+  'INNER JOIN Gradovi ON Klijenti.GradID = Gradovi.GradID ' +
+  'WHERE Klijenti.nazivKlijenta LIKE :p ' +
+  'ORDER BY Klijenti.nazivKlijenta';
 
   ADOQuery1.Parameters.ParamByName('p').Value :=
     EditSearch.Text + '%';
@@ -254,9 +257,10 @@ begin
 
   while not ADOQuery1.Eof do
   begin
-    ListaKlijenata.Items.Add(
-      ADOQuery1.FieldByName('nazivKlijenta').AsString
-    );
+   ListaKlijenata.Items.Add(
+  ADOQuery1.FieldByName('nazivKlijenta').AsString + '-'+
+  ADOQuery1.FieldByName('Grad').AsString
+);
 
     ADOQuery1.Next;
   end;

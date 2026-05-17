@@ -22,45 +22,97 @@ object Form10: TForm10
   object telefon: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 1
-    Position.X = 32.000000000000000000
-    Position.Y = 280.000000000000000000
+    Position.X = 24.000000000000000000
+    Position.Y = 320.000000000000000000
+    Size.Width = 113.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
     TextPrompt = 'Broj telefona'
   end
   object email: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 2
-    Position.X = 32.000000000000000000
-    Position.Y = 328.000000000000000000
+    Position.X = 24.000000000000000000
+    Position.Y = 368.000000000000000000
+    Size.Width = 113.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
     TextPrompt = 'Email adresa'
   end
   object kontaktOsoba: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 3
-    Position.X = 32.000000000000000000
-    Position.Y = 232.000000000000000000
+    Position.X = 24.000000000000000000
+    Position.Y = 272.000000000000000000
+    Size.Width = 113.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
     TextPrompt = 'Kontakt osoba'
   end
   object nazivKlijenta: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 4
-    Position.X = 32.000000000000000000
-    Position.Y = 144.000000000000000000
+    TabOrder = 5
+    Position.X = 24.000000000000000000
+    Position.Y = 88.000000000000000000
+    Size.Width = 113.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
     TextPrompt = 'Naziv klijenta'
   end
   object adresa: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 5
-    Position.X = 32.000000000000000000
-    Position.Y = 192.000000000000000000
+    TabOrder = 6
+    Position.X = 24.000000000000000000
+    Position.Y = 224.000000000000000000
+    Size.Width = 113.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
     TextPrompt = 'Adresa'
   end
   object sacuvajKlijentaDugme: TButton
     Position.X = 224.000000000000000000
     Position.Y = 328.000000000000000000
-    TabOrder = 8
+    TabOrder = 9
     Text = 'Sa'#269'uvaj klijenta'
     TextSettings.Trimming = None
     OnClick = sacuvajKlijentaDugmeClick
+  end
+  object PIB: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 4
+    Position.X = 24.000000000000000000
+    Position.Y = 134.000000000000000000
+    Size.Width = 113.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TextPrompt = 'PIB'
+  end
+  object Grad: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 12
+    Position.X = 24.000000000000000000
+    Position.Y = 180.000000000000000000
+    Size.Width = 113.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TextPrompt = 'Grad'
+    OnChangeTracking = GradChangeTracking
+  end
+  object ListaGradovi: TListBox
+    Position.X = 24.000000000000000000
+    Position.Y = 200.000000000000000000
+    Size.Width = 113.000000000000000000
+    Size.Height = 200.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 13
+    Visible = False
+    DisableFocusEffect = True
+    DefaultItemStyles.ItemStyle = ''
+    DefaultItemStyles.GroupHeaderStyle = ''
+    DefaultItemStyles.GroupFooterStyle = ''
+    OnItemClick = ListaGradoviItemClick
+    Viewport.Width = 109.000000000000000000
+    Viewport.Height = 196.000000000000000000
   end
   object ADOQuery1: TADOQuery
     Connection = ADOConnection1
