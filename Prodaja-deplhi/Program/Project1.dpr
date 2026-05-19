@@ -12,7 +12,8 @@ uses
   Vozac in 'Vozac.pas' {Form7},
   ProdajaTura in 'ProdajaTura.pas' {Form8},
   NoviZahtev in 'NoviZahtev.pas' {Form9},
-  NovKlijent in 'NovKlijent.pas' {Form10};
+  NovKlijent in 'NovKlijent.pas' {Form10},
+  Detalji in 'Detalji.pas' {Form11};
 
 {$R *.res}
 
@@ -28,5 +29,6 @@ begin
   Application.CreateForm(TForm8, Form8);
   Application.CreateForm(TForm9, Form9);
   Application.CreateForm(TForm10, Form10);
+  Application.CreateForm(TForm11, Form11);
   Application.Run;
 end.

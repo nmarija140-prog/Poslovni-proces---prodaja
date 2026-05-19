@@ -97,7 +97,7 @@ object Form8: TForm8
       end
     end
   end
-  object SpeedButton1: TSpeedButton
+  object NoviZahtevDugme: TSpeedButton
     StyledSettings = [Family, Style, FontColor]
     Position.Y = 64.000000000000000000
     Size.Width = 145.000000000000000000
@@ -106,95 +106,7 @@ object Form8: TForm8
     Text = #10133' Novi zahtev'
     TextSettings.Font.Size = 18.000000000000000000
     TextSettings.Trimming = None
-    OnClick = SpeedButton1Click
-  end
-  object KarticaZahtevi: TRectangle
-    Position.X = 32.000000000000000000
-    Position.Y = 376.000000000000000000
-    Size.Width = 177.000000000000000000
-    Size.Height = 25.000000000000000000
-    Size.PlatformDefault = False
-    OnClick = KarticaZahteviClick
-    object Text5: TText
-      HitTest = False
-      Size.Width = 177.000000000000000000
-      Size.Height = 25.000000000000000000
-      Size.PlatformDefault = False
-      Text = 'Zahtevi                                 '#8595
-      TextSettings.Font.Size = 13.000000000000000000
-    end
-  end
-  object ZahteviLista: TVertScrollBox
-    Position.X = 32.000000000000000000
-    Position.Y = 400.000000000000000000
-    Size.Width = 177.000000000000000000
-    Size.Height = 97.000000000000000000
-    Size.PlatformDefault = False
-    TabOrder = 5
-    Visible = False
-    Viewport.Width = 161.000000000000000000
-    Viewport.Height = 97.000000000000000000
-    object Prihvacen: TRectangle
-      Align = Top
-      Position.Y = 25.000000000000000000
-      Size.Width = 161.000000000000000000
-      Size.Height = 25.000000000000000000
-      Size.PlatformDefault = False
-      object Text7: TText
-        Position.Y = -1.000000000000000000
-        Size.Width = 176.000000000000000000
-        Size.Height = 26.000000000000000000
-        Size.PlatformDefault = False
-        Text = #55357#57314' Transport bm'
-        TextSettings.HorzAlign = Leading
-      end
-    end
-    object Poslato: TRectangle
-      Align = Top
-      Position.Y = 75.000000000000000000
-      Size.Width = 161.000000000000000000
-      Size.Height = 25.000000000000000000
-      Size.PlatformDefault = False
-      object Text8: TText
-        Position.X = 1.000000000000000000
-        Position.Y = -1.000000000000000000
-        Size.Width = 176.000000000000000000
-        Size.Height = 26.000000000000000000
-        Size.PlatformDefault = False
-        Text = #55357#56629' Transport drd'
-        TextSettings.HorzAlign = Leading
-      end
-    end
-    object Odbijeno: TRectangle
-      Align = Top
-      Position.Y = 50.000000000000000000
-      Size.Width = 161.000000000000000000
-      Size.Height = 25.000000000000000000
-      Size.PlatformDefault = False
-      object Text9: TText
-        Position.X = 1.000000000000000000
-        Position.Y = -1.000000000000000000
-        Size.Width = 176.000000000000000000
-        Size.Height = 26.000000000000000000
-        Size.PlatformDefault = False
-        Text = #55357#56628' Delta transport'
-        TextSettings.HorzAlign = Leading
-      end
-    end
-    object Novo: TRectangle
-      Align = Top
-      Size.Width = 161.000000000000000000
-      Size.Height = 25.000000000000000000
-      Size.PlatformDefault = False
-      object Text6: TText
-        Position.Y = 1.000000000000000000
-        Size.Width = 176.000000000000000000
-        Size.Height = 26.000000000000000000
-        Size.PlatformDefault = False
-        Text = #55357#57313' Nelt doo'
-        TextSettings.HorzAlign = Leading
-      end
-    end
+    OnClick = NoviZahtevDugmeClick
   end
   object PanelProdaja: TPanel
     Align = Left
@@ -202,7 +114,7 @@ object Form8: TForm8
     Size.Height = 536.000000000000000000
     Size.PlatformDefault = False
     Visible = False
-    TabOrder = 6
+    TabOrder = 4
     object operativaDugme: TButton
       Position.X = 8.000000000000000000
       Position.Y = 120.000000000000000000
@@ -263,6 +175,20 @@ object Form8: TForm8
       Text = #55357#57002' Odjava'
       TextSettings.Trimming = None
     end
+  end
+  object ListaZahtevi: TListView
+    ItemAppearanceClassName = 'TListItemAppearance'
+    ItemEditAppearanceClassName = 'TListItemShowCheckAppearance'
+    HeaderAppearanceClassName = 'TListHeaderObjects'
+    FooterAppearanceClassName = 'TListHeaderObjects'
+    AlternatingColors = True
+    Position.X = 32.000000000000000000
+    Position.Y = 384.000000000000000000
+    Size.Width = 185.000000000000000000
+    Size.Height = 73.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 7
+    OnItemClick = ListaZahteviItemClick
   end
   object ADOConnection1: TADOConnection
     Left = 232
