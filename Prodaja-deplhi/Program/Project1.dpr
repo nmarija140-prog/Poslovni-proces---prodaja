@@ -13,7 +13,8 @@ uses
   ProdajaTura in 'ProdajaTura.pas' {Form8},
   NoviZahtev in 'NoviZahtev.pas' {Form9},
   NovKlijent in 'NovKlijent.pas' {Form10},
-  Detalji in 'Detalji.pas' {Form11};
+  Detalji in 'Detalji.pas' {MestoUtovara},
+  KreiranjePonude in 'KreiranjePonude.pas' {LabelKlijent};
 
 {$R *.res}
 
@@ -30,5 +31,6 @@ begin
   Application.CreateForm(TForm9, Form9);
   Application.CreateForm(TForm10, Form10);
   Application.CreateForm(TForm11, Form11);
+  Application.CreateForm(TForm12, Form12);
   Application.Run;
 end.

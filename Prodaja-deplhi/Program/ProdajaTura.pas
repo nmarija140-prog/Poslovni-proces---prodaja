@@ -22,7 +22,6 @@ type
     KarticaPoslatePonude: TRectangle;
     RectAnimation3: TRectAnimation;
     Text2: TText;
-    KarticaNoviZahtevi: TRectangle;
     RectAnimation4: TRectAnimation;
     Text3: TText;
     NoviZahtevDugme: TSpeedButton;
@@ -45,8 +44,8 @@ type
     procedure NoviZahtevDugmeClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure ListaZahteviItemClick(const Sender: TObject; const AItem: TListViewItem);
-  private
     procedure PopuniListuZahteva(AStatusID: Integer; PocetniPrikaz: Boolean = False);
+  private
   public
   end;
 
@@ -124,7 +123,6 @@ begin
 
     if PocetniPrikaz then
     begin
-
       ADOQuery1.SQL.Text :=
         'SELECT z.[ID Zahteva], z.StatusID, k.nazivKlijenta, g.Grad ' +
         'FROM (Zahtevi z ' +
@@ -134,7 +132,6 @@ begin
     end
     else
     begin
-
       ADOQuery1.SQL.Text :=
         'SELECT z.[ID Zahteva], z.StatusID, k.nazivKlijenta, g.Grad ' +
         'FROM (Zahtevi z ' +
@@ -155,7 +152,6 @@ begin
                      ' (' + ADOQuery1.FieldByName('Grad').AsString + ')';
 
       Stavka.Tag := ADOQuery1.FieldByName('ID Zahteva').AsInteger;
-
       Stavka.Detail := ADOQuery1.FieldByName('StatusID').AsString;
 
       ADOQuery1.Next;
@@ -167,6 +163,7 @@ end;
 
 procedure TForm8.ListaZahteviItemClick(const Sender: TObject; const AItem: TListViewItem);
 begin
+
   Form11.IzabraniID := AItem.Tag;
   Form11.IzabraniStatusID := StrToInt(AItem.Detail);
 

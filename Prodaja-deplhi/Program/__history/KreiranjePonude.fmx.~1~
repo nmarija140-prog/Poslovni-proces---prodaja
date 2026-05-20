@@ -1,0 +1,56 @@
+object Form12: TForm12
+  Left = 0
+  Top = 0
+  Caption = 'Form11'
+  ClientHeight = 536
+  ClientWidth = 324
+  Fill.Color = claLightgray
+  Fill.Kind = Solid
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Label1: TLabel
+    Position.X = 56.000000000000000000
+    Position.Y = 88.000000000000000000
+    Text = 'Label1'
+    TabOrder = 0
+  end
+  object LabelRuta: TLabel
+    Position.X = 80.000000000000000000
+    Position.Y = 144.000000000000000000
+    Text = 'LabelRuta'
+    TabOrder = 1
+  end
+  object LabelDatum: TLabel
+    Position.X = 72.000000000000000000
+    Position.Y = 200.000000000000000000
+    Text = 'LabelDatum'
+    TabOrder = 2
+  end
+  object EditCena: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 3
+    Position.X = 72.000000000000000000
+    Position.Y = 296.000000000000000000
+  end
+  object EditRokPlacanja: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 4
+    Position.X = 112.000000000000000000
+    Position.Y = 352.000000000000000000
+  end
+  object EditNapomena: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 5
+    Position.X = 88.000000000000000000
+    Position.Y = 408.000000000000000000
+  end
+  object DugmeSacuvajPonudu: TButton
+    Position.X = 160.000000000000000000
+    Position.Y = 472.000000000000000000
+    TabOrder = 6
+    Text = 'DugmeSacuvajPonudu'
+    TextSettings.Trimming = None
+  end
+end

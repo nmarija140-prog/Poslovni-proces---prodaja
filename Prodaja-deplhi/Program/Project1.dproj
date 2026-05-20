@@ -169,7 +169,11 @@
             <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="Detalji.pas">
-            <Form>Form11</Form>
+            <Form>MestoUtovara</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
+        <DCCReference Include="KreiranjePonude.pas">
+            <Form>LabelKlijent</Form>
             <FormType>fmx</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">

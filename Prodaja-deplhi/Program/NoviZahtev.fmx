@@ -88,8 +88,8 @@ object Form9: TForm9
     TabOrder = 5
     OnEnter = MemoNapomenaEnter
     OnExit = MemoNapomenaExit
-    Viewport.Width = 126.000000000000000000
-    Viewport.Height = 55.000000000000000000
+    Viewport.Width = 130.000000000000000000
+    Viewport.Height = 59.000000000000000000
   end
   object sacuvajZahtevDugme: TButton
     StyledSettings = [Family, Style, FontColor]

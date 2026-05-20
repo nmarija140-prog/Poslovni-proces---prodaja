@@ -247,12 +247,13 @@ begin
     ADOQuery1.Parameters.ParamByName('MestoIstovara').Value := mestoIstovaraDugme.Text;
     ADOQuery1.Parameters.ParamByName('DatumIstovara').Value := VarFromDateTime(DatumIstovara.Date);
     ADOQuery1.Parameters.ParamByName('VrstaRobe').Value := vrstaRobeDugme.Text;
-    ADOQuery1.Parameters.ParamByName('Kolicina').Value := StrToFloatDef(kolicinaDugme.Text, 0);
+    ADOQuery1.Parameters.ParamByName('Kolicina').Value := kolicinaDugme.Text;
     ADOQuery1.Parameters.ParamByName('Napomena').Value := MemoNapomena.Text;
     ADOQuery1.Parameters.ParamByName('StatusID').Value := 1;
 
     ADOQuery1.ExecSQL;
     ShowMessage('Zahtev uspešno sačuvan!');
+    Form8.PopuniListuZahteva(1, False);
     OcistiPolja;
 
     Form8.Left := Self.Left;
