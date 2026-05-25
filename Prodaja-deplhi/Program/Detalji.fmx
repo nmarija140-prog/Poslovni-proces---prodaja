@@ -11,7 +11,7 @@ object Form11: TForm11
   FormFactor.Devices = [Desktop]
   OnShow = FormShow
   DesignerMasterStyle = 0
-  object DugmeKreirajPonudu: TButton
+  object DugmePonuda: TButton
     StyledSettings = [Family, FontColor]
     Position.X = 96.000000000000000000
     Position.Y = 410.000000000000000000
@@ -19,11 +19,11 @@ object Form11: TForm11
     Size.Height = 39.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
-    Text = 'Kreiraj ponudu'
+    Text = 'Ponuda'
     TextSettings.Font.Size = 14.000000000000000000
     TextSettings.Font.StyleExt = {00060000000000000004000000}
     TextSettings.Trimming = None
-    OnClick = DugmeKreirajPonuduClick
+    OnClick = DugmePonudaClick
   end
   object DugmeKreirajRezervaciju: TButton
     Position.X = 128.000000000000000000

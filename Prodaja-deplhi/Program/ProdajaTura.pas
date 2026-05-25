@@ -169,17 +169,17 @@ begin
 
   if Form11.IzabraniStatusID = 1 then
   begin
-    Form11.DugmeKreirajPonudu.Visible := True;
+    Form11.DugmePonuda.Visible := True;
     Form11.DugmeKreirajRezervaciju.Visible := False;
   end
   else if Form11.IzabraniStatusID = 4 then
   begin
-    Form11.DugmeKreirajPonudu.Visible := False;
+    Form11.DugmePonuda.Visible := False;
     Form11.DugmeKreirajRezervaciju.Visible := True;
   end
   else
   begin
-    Form11.DugmeKreirajPonudu.Visible := False;
+    Form11.DugmePonuda.Visible := False;
     Form11.DugmeKreirajRezervaciju.Visible := False;
   end;
 

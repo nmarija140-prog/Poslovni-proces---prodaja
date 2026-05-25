@@ -46,19 +46,18 @@ object Form12: TForm12
     Position.Y = 240.000000000000000000
     TextPrompt = 'Cena'
   end
-  object EditRokPlacanja: TEdit
-    Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 4
-    Position.X = 24.000000000000000000
-    Position.Y = 288.000000000000000000
-    TextPrompt = 'Rok placanja'
-  end
   object DugmeSacuvajPonudu: TButton
-    Position.X = 160.000000000000000000
-    Position.Y = 472.000000000000000000
-    TabOrder = 5
-    Text = 'DugmeSacuvajPonudu'
+    StyledSettings = [Family, FontColor]
+    Position.X = 104.000000000000000000
+    Position.Y = 424.000000000000000000
+    Size.Width = 121.000000000000000000
+    Size.Height = 30.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    Text = 'Sacuvaj ponudu'
+    TextSettings.Font.Size = 15.000000000000000000
     TextSettings.Trimming = None
+    OnClick = DugmeSacuvajPonuduClick
   end
   object MemoNapomena: TMemo
     Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
@@ -69,15 +68,69 @@ object Form12: TForm12
     Size.Width = 121.000000000000000000
     Size.Height = 65.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 7
+    TabOrder = 6
     OnEnter = MemoNapomenaEnter
     OnExit = MemoNapomenaExit
-    Viewport.Width = 117.000000000000000000
-    Viewport.Height = 61.000000000000000000
+    Viewport.Width = 121.000000000000000000
+    Viewport.Height = 65.000000000000000000
+  end
+  object ComboValuta: TComboBox
+    Items.Strings = (
+      'EUR'
+      'USD'
+      'RSD')
+    Position.X = 148.000000000000000000
+    Position.Y = 240.000000000000000000
+    Size.Width = 61.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 8
+  end
+  object SpinRokPlacanja: TSpinBox
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 9
+    Cursor = crIBeam
+    Position.X = 24.000000000000000000
+    Position.Y = 292.000000000000000000
+    Size.Width = 73.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object Text1: TText
+    Position.X = 8.000000000000000000
+    Position.Y = 270.000000000000000000
+    Size.Width = 129.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Rok placanja (dani)'
+  end
+  object DugmePosaljiPonudu: TButton
+    Enabled = False
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 104.000000000000000000
+    Position.Y = 472.000000000000000000
+    Size.Width = 121.000000000000000000
+    Size.Height = 30.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 11
+    Text = 'Posalji ponudu'
+    TextSettings.Font.Size = 15.000000000000000000
+    TextSettings.Trimming = None
+    OnClick = DugmePosaljiPonuduClick
+  end
+  object SpeedButton1: TSpeedButton
+    Position.Y = 8.000000000000000000
+    Size.Width = 41.000000000000000000
+    Size.Height = 30.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'arrowlefttoolbutton'
+    Text = 'SpeedButton1'
+    TextSettings.Trimming = None
+    OnClick = SpeedButton1Click
   end
   object ADOQuery1: TADOQuery
     Parameters = <>
-    Left = 192
-    Top = 384
+    Left = 264
+    Top = 32
   end
 end
