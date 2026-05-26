@@ -42,7 +42,7 @@ uses ProdajaTura, KreiranjePonude;
 
 procedure TForm11.DugmePonudaClick(Sender: TObject);
 begin
-  // Samo prosleđujemo ID zahteva, Form12 će u svom FormShow proveriti bazu
+
   Form12.IDZahtevaZaPonudu := IzabraniID;
 
   if PonudaPostoji then

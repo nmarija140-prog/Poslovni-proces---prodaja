@@ -3,6 +3,7 @@ program Project1;
 uses
   System.StartUpCopy,
   FMX.Forms,
+  FMX.Skia,
   pocetna in 'pocetna.pas' {Form1},
   UnosPodataka in 'UnosPodataka.pas' {Form2},
   Menadzer in 'Menadzer.pas' {Form3},
@@ -19,6 +20,7 @@ uses
 {$R *.res}
 
 begin
+  GlobalUseSkia := True;
   Application.Initialize;
   Application.CreateForm(TForm1, Form1);
   Application.CreateForm(TForm2, Form2);
