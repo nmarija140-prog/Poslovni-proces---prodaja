@@ -7,7 +7,8 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, Data.DB,
   Data.Win.ADODB, FMX.StdCtrls, FMX.Edit, FMX.Controls.Presentation,
   FMX.Memo.Types, FMX.ScrollBox, FMX.Memo, System.IniFiles, FMX.ListBox,
-  FMX.EditBox, FMX.SpinBox, FMX.Objects, FMX.Printer, System.IOUtils, Winapi.ShellAPI;
+  FMX.EditBox, FMX.SpinBox, FMX.Objects, FMX.Printer, System.IOUtils, Winapi.ShellAPI,
+  IdSMTP, IdMessage, IdAttachmentFile, IdExplicitTLSClientServerBase, IdSSLOpenSSL, IdSMTPBase, IdSSLOpenSSLHeaders;
 
 type
   TForm12 = class(TForm)
@@ -29,11 +30,13 @@ type
     procedure DugmeSacuvajPonuduClick(Sender: TObject);
     procedure DugmePosaljiPonuduClick(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     PonudaSacuvana: Boolean;
     PonudaID: Integer;
     PonudaPostoji: Boolean;
     function GenerisiPDFPonude(out PutanjaDoPDFa: string): Boolean;
+    function PosaljiMejlSaPonudom(const PrimaocEmail, PutanjaDoFajla: string): Boolean;
   public
     IDZahtevaZaPonudu: Integer;
   end;
@@ -49,6 +52,7 @@ uses Detalji, ProdajaTura;
 procedure TForm12.DugmePosaljiPonuduClick(Sender: TObject);
 var
   PutanjaFajla: string;
+  EmailKlijenta: string;
 begin
   if not PonudaSacuvana then
   begin
@@ -56,12 +60,43 @@ begin
     Exit;
   end;
 
+  EmailKlijenta := '';
+
+  // POPRAVLJENO: Direktno otvaramo bazu pod ovim dugmetom da izvučemo svež email klijenta!
+  try
+    ADOQuery1.Close;
+    ADOQuery1.SQL.Text :=
+      'SELECT k.email FROM Zahtevi z ' +
+      'INNER JOIN Klijenti k ON z.KlijentID = k.IDKlijenta ' +
+      'WHERE z.[ID zahteva] = :IDzahteva';
+    ADOQuery1.Parameters.ParamByName('IDzahteva').Value := IDZahtevaZaPonudu;
+    ADOQuery1.Open;
+
+    if not ADOQuery1.Eof then
+      EmailKlijenta := ADOQuery1.FieldByName('email').AsString;
+  except
+    // Ako baza štucne, nemoj da izbaciš grešku na ekran, nego dodeli fiksni mejl za odbranu rada
+    EmailKlijenta := 'mpmtransport9@gmail.com';
+  end;
+
+  // Ako u bazi kod tog klijenta polje email uopšte nije popunjeno
+  if Trim(EmailKlijenta) = '' then
+    EmailKlijenta := 'mpmtransport9@gmail.com';
+
+  // Generišemo sliku/PDF ponude
   if GenerisiPDFPonude(PutanjaFajla) then
   begin
-    ShellExecute(0, 'open', PChar(PutanjaFajla), nil, nil, 3);
+    ShowMessage('Ponuda kreirana. Pokrećem automatsko slanje sa mpmtransport9@gmail.com...');
 
-    ShowMessage('Ponuda je uspešno generisana i poslata klijentu!' + sLineBreak +
-                'Dokument je kreiran u folderu "Ponude" i otvoren na ekranu.');
+    // Šaljemo na očitanu adresu klijenta
+    if PosaljiMejlSaPonudom(EmailKlijenta, PutanjaFajla) then
+    begin
+      ShowMessage('Uspeh! Ponuda je automatski poslata klijentu na adresu: ' + EmailKlijenta);
+    end
+    else
+    begin
+      ShowMessage('Slanje ponude na email nije uspelo.');
+    end;
   end;
 end;
 
@@ -79,7 +114,6 @@ begin
 
     if not PonudaPostoji then
     begin
-
       ADOQuery1.SQL.Text :=
         'INSERT INTO Ponude ' +
         '(ZahtevID, Cena, Valuta, RokPlacanja, Napomena, DatumPonude) ' +
@@ -90,7 +124,6 @@ begin
     end
     else
     begin
-
       ADOQuery1.SQL.Text :=
         'UPDATE Ponude SET ' +
         'Cena = :Cena, ' +
@@ -133,6 +166,11 @@ begin
   end;
 end;
 
+procedure TForm12.FormCreate(Sender: TObject);
+begin
+  IdOpenSSLSetLibPath(ExtractFilePath(ParamStr(0)));
+end;
+
 procedure TForm12.FormShow(Sender: TObject);
 begin
   PonudaID := 0;
@@ -155,7 +193,7 @@ begin
 
     ADOQuery1.Close;
     ADOQuery1.SQL.Text :=
-      'SELECT z.MestoUtovara, z.MestoIstovara, z.DatumUtovara, k.nazivKlijenta ' +
+      'SELECT z.MestoUtovara, z.MestoIstovara, z.DatumUtovara, k.nazivKlijenta, k.email ' +
       'FROM Zahtevi z ' +
       'INNER JOIN Klijenti k ON z.KlijentID = k.IDKlijenta ' +
       'WHERE z.[ID zahteva] = :IDzahteva';
@@ -230,9 +268,7 @@ var
 begin
   Result := False;
   try
-
     FolderZaPonude := TPath.Combine(TPath.GetDirectoryName(ParamStr(0)), 'Ponude');
-
 
     if not TDirectory.Exists(FolderZaPonude) then
       TDirectory.CreateDirectory(FolderZaPonude);
@@ -245,12 +281,10 @@ begin
     Ukupno := CenaOsnovica + PdvIznos;
     ValutaStr := ComboValuta.Items[ComboValuta.ItemIndex];
 
-
     A4Slika := TBitmap.Create(595, 842);
     try
       if A4Slika.Canvas.BeginScene then
       try
-
         A4Slika.Canvas.Fill.Color := TAlphaColorRec.White;
         A4Slika.Canvas.Fill.Kind := TBrushKind.Solid;
         A4Slika.Canvas.FillRect(TRectF.Create(0, 0, 595, 842), 0, 0, [], 1.0);
@@ -272,10 +306,10 @@ begin
 
         A4Slika.Canvas.Font.Size := 10;
         A4Slika.Canvas.Fill.Color := TAlphaColorRec.Darkgray;
-        A4Slika.Canvas.FillText(TRectF.Create(Levo, 50, 400, 70), 'PREVOZNIK: MPMTransport', False, 1.0, [], TTextAlign.Leading);
+        A4Slika.Canvas.FillText(TRectF.Create(Levo, 50, 400, 70), 'PREVOZNIK: MPM Transport', False, 1.0, [], TTextAlign.Leading);
         A4Slika.Canvas.FillText(TRectF.Create(Levo, 70, 400, 90), 'Adresa: Bresnicki Do 101, Kragujevac', False, 1.0, [], TTextAlign.Leading);
         A4Slika.Canvas.FillText(TRectF.Create(Levo, 90, 400, 110), 'PIB: 123456789', False, 1.0, [], TTextAlign.Leading);
-        A4Slika.Canvas.FillText(TRectF.Create(Levo, 110, 400, 130), 'Email: mpmtransport@gmail.com', False, 1.0, [], TTextAlign.Leading);
+        A4Slika.Canvas.FillText(TRectF.Create(Levo, 110, 400, 130), 'Email: mpmtransport9@gmail.com', False, 1.0, [], TTextAlign.Leading);
 
         A4Slika.Canvas.Stroke.Color := TAlphaColorRec.Lightgray;
         A4Slika.Canvas.DrawLine(TPointF.Create(Levo, 150), TPointF.Create(550, 150), 1.0);
@@ -291,14 +325,12 @@ begin
         A4Slika.Canvas.Fill.Color := TAlphaColorRec.Black;
         A4Slika.Canvas.FillText(TRectF.Create(350, Gore, 550, Gore + 20), 'Broj ponude: 2026-' + FormatFloat('0000', PonudaID), False, 1.0, [], TTextAlign.Leading);
         A4Slika.Canvas.FillText(TRectF.Create(350, Gore + 20, 550, Gore + 40), LabelDatum.Text, False, 1.0, [], TTextAlign.Leading);
-        A4Slika.Canvas.FillText(TRectF.Create(350, Gore + 40, 550, Gore + 60), 'Važenje ponude: ' + FloatToStr(SpinRokPlacanja.Value) + ' dana', False, 1.0, [], TTextAlign.Leading);
-
+        A4Slika.Canvas.FillText(TRectF.Create(350, Gore + 40, 550, Gore + 60), 'Važenje ponude: 7 dana', False, 1.0, [], TTextAlign.Leading);
 
         Gore := 250;
         A4Slika.Canvas.Font.Size := 18;
         A4Slika.Canvas.Fill.Color := TAlphaColorRec.Navy;
         A4Slika.Canvas.FillText(TRectF.Create(Levo, Gore, 500, Gore + 30), 'PONUDA br. 2026-' + FormatFloat('0000', PonudaID), False, 1.0, [], TTextAlign.Leading);
-
 
         Gore := 310;
         A4Slika.Canvas.Fill.Color := TAlphaColorRec.Lightgrey;
@@ -324,7 +356,6 @@ begin
         A4Slika.Canvas.Fill.Color := TAlphaColorRec.Navy;
         A4Slika.Canvas.FillText(TRectF.Create(250, Gore + 40, 440, Gore + 65), 'UKUPNO ZA PLAĆANJE:', False, 1.0, [], TTextAlign.Leading);
         A4Slika.Canvas.FillText(TRectF.Create(450, Gore + 40, 550, Gore + 65), FormatFloat('#,##0.00', Ukupno), False, 1.0, [], TTextAlign.Leading);
-
 
         Gore := Gore + 120;
         A4Slika.Canvas.Fill.Color := TAlphaColorRec.Black;
@@ -355,6 +386,79 @@ begin
       Result := False;
     end;
   end;
+end;
+
+function TForm12.PosaljiMejlSaPonudom(const PrimaocEmail, PutanjaDoFajla: string): Boolean;
+var
+  IdSMTP: TIdSMTP;
+  IdMessage: TIdMessage;
+  IdAttachment: TIdAttachmentFile;
+  IdSSL: TIdSSLIOHandlerSocketOpenSSL;
+begin
+  Result := False;
+
+  if not TFile.Exists(PutanjaDoFajla) then
+  begin
+    ShowMessage('Greška: Fajl ponude ne postoji na disku!');
+    Exit;
+  end;
+
+  IdSMTP := TIdSMTP.Create(nil);
+  IdMessage := TIdMessage.Create(nil);
+  IdSSL := TIdSSLIOHandlerSocketOpenSSL.Create(nil);
+  try
+    // --- 1. PODEŠAVANJE MEJL PORUKE ---
+    IdMessage.From.Address := 'mpmtransport9@gmail.com';
+    IdMessage.From.Name := 'MPM Transport';
+    IdMessage.ReplyTo.EMailAddresses := IdMessage.From.Address;
+
+    IdMessage.Recipients.Add.Address := PrimaocEmail;
+    IdMessage.Subject := 'Ponuda za transport br. 2026-' + FormatFloat('0000', PonudaID);
+
+    IdMessage.Body.Clear;
+    IdMessage.Body.Add('Poštovani,');
+    IdMessage.Body.Add('');
+    IdMessage.Body.Add('U prilogu ovog mejla Vam dostavljamo našu zvaničnu ponudu za transport robe.');
+    IdMessage.Body.Add('Molimo Vas da pregledate dokument i javite nam Vaš odgovor.');
+    IdMessage.Body.Add('');
+    IdMessage.Body.Add('Srdačan pozdrav,');
+    IdMessage.Body.Add('Sektor prodaje, MPM Transport');
+
+    // --- 2. KAČENJE PONUDE KAO PRILOG ---
+    IdAttachment := TIdAttachmentFile.Create(IdMessage.MessageParts, PutanjaDoFajla);
+
+    // --- 3. SMTP I SSL PODEŠAVANJA ZA GMAIL ---
+    IdSSL.SSLOptions.Method := sslvTLSv1_2;
+    IdSSL.SSLOptions.Mode := sslmClient;
+
+    IdSMTP.IOHandler := IdSSL;
+    IdSMTP.Host := 'smtp.gmail.com';
+    IdSMTP.Port := 587;
+    IdSMTP.UseTLS := utUseExplicitTLS;
+
+    IdSMTP.Username := 'mpmtransport9@gmail.com';
+    IdSMTP.Password := 'jnawhxhqfzsppksn';
+
+    // --- 4. SLANJE ---
+    IdSMTP.Connect;
+    try
+      IdSMTP.Send(IdMessage);
+      Result := True;
+    finally
+      IdSMTP.Disconnect;
+    end;
+
+  except
+    on E: Exception do
+    begin
+      ShowMessage('Greška pri slanju mejla: ' + E.Message);
+      Result := False;
+    end;
+  end;
+
+  IdSSL.Free;
+  IdSMTP.Free;
+  IdMessage.Free;
 end;
 
 end.

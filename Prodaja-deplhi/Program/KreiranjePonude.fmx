@@ -9,6 +9,7 @@ object Form12: TForm12
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
   OnShow = FormShow
   DesignerMasterStyle = 0
   object LabelKlijent: TLabel
@@ -71,8 +72,8 @@ object Form12: TForm12
     TabOrder = 6
     OnEnter = MemoNapomenaEnter
     OnExit = MemoNapomenaExit
-    Viewport.Width = 121.000000000000000000
-    Viewport.Height = 65.000000000000000000
+    Viewport.Width = 117.000000000000000000
+    Viewport.Height = 61.000000000000000000
   end
   object ComboValuta: TComboBox
     Items.Strings = (
