@@ -7,7 +7,7 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, Data.DB,
   Data.Win.ADODB, FMX.StdCtrls, FMX.Edit, FMX.Controls.Presentation,
   FMX.Memo.Types, FMX.ScrollBox, FMX.Memo, System.IniFiles, FMX.ListBox,
-  FMX.EditBox, FMX.SpinBox, FMX.Objects, FMX.Printer, System.IOUtils, Winapi.ShellAPI,
+  FMX.EditBox, FMX.SpinBox, FMX.Objects, System.IOUtils, Winapi.ShellAPI, Winapi.Windows,
   IdSMTP, IdMessage, IdAttachmentFile, IdExplicitTLSClientServerBase, IdSSLOpenSSL, IdSMTPBase, IdSSLOpenSSLHeaders;
 
 type
@@ -35,7 +35,8 @@ type
     PonudaSacuvana: Boolean;
     PonudaID: Integer;
     PonudaPostoji: Boolean;
-    function GenerisiPDFPonude(out PutanjaDoPDFa: string): Boolean;
+    KlijentEmail: string;
+    function GenerisiPDFAutomatski(out PutanjaDoPDFa: string): Boolean;
     function PosaljiMejlSaPonudom(const PrimaocEmail, PutanjaDoFajla: string): Boolean;
   public
     IDZahtevaZaPonudu: Integer;
@@ -51,52 +52,27 @@ uses Detalji, ProdajaTura;
 
 procedure TForm12.DugmePosaljiPonuduClick(Sender: TObject);
 var
-  PutanjaFajla: string;
-  EmailKlijenta: string;
+  PutanjaDoPDFa: string;
 begin
-  if not PonudaSacuvana then
+  if Trim(KlijentEmail) = '' then
   begin
-    ShowMessage('Prvo sačuvajte ponudu.');
+    ShowMessage('Greška: Email klijenta nije pronađen u bazi!');
     Exit;
   end;
 
-  EmailKlijenta := '';
+  ShowMessage('1. Generišem PDF ponudu automatski u pozadini (bez pitanja)...');
 
-  // POPRAVLJENO: Direktno otvaramo bazu pod ovim dugmetom da izvučemo svež email klijenta!
-  try
-    ADOQuery1.Close;
-    ADOQuery1.SQL.Text :=
-      'SELECT k.email FROM Zahtevi z ' +
-      'INNER JOIN Klijenti k ON z.KlijentID = k.IDKlijenta ' +
-      'WHERE z.[ID zahteva] = :IDzahteva';
-    ADOQuery1.Parameters.ParamByName('IDzahteva').Value := IDZahtevaZaPonudu;
-    ADOQuery1.Open;
-
-    if not ADOQuery1.Eof then
-      EmailKlijenta := ADOQuery1.FieldByName('email').AsString;
-  except
-    // Ako baza štucne, nemoj da izbaciš grešku na ekran, nego dodeli fiksni mejl za odbranu rada
-    EmailKlijenta := 'mpmtransport9@gmail.com';
-  end;
-
-  // Ako u bazi kod tog klijenta polje email uopšte nije popunjeno
-  if Trim(EmailKlijenta) = '' then
-    EmailKlijenta := 'mpmtransport9@gmail.com';
-
-  // Generišemo sliku/PDF ponude
-  if GenerisiPDFPonude(PutanjaFajla) then
+  if GenerisiPDFAutomatski(PutanjaDoPDFa) then
   begin
-    ShowMessage('Ponuda kreirana. Pokrećem automatsko slanje sa mpmtransport9@gmail.com...');
-
-    // Šaljemo na očitanu adresu klijenta
-    if PosaljiMejlSaPonudom(EmailKlijenta, PutanjaFajla) then
-    begin
-      ShowMessage('Uspeh! Ponuda je automatski poslata klijentu na adresu: ' + EmailKlijenta);
-    end
+    ShowMessage('2. PDF uspešno kreiran pod brojem ' + IntToStr(PonudaID) + '! Šaljem na mejl...');
+    if PosaljiMejlSaPonudom(KlijentEmail, PutanjaDoPDFa) then
+      ShowMessage('3. Uspeh! Prava PDF ponuda je poslata klijentu na mejl!')
     else
-    begin
-      ShowMessage('Slanje ponude na email nije uspelo.');
-    end;
+      ShowMessage('Greška: PDF je napravljen, teleskopsko slanje nije uspelo.');
+  end
+  else
+  begin
+    ShowMessage('Greška: Windows je blokirao automatsko generisanje PDF-a.');
   end;
 end;
 
@@ -177,6 +153,7 @@ begin
   PonudaPostoji := False;
   PonudaSacuvana := False;
   DugmePosaljiPonudu.Enabled := False;
+  KlijentEmail := '';
 
   ComboValuta.Items.Clear;
   ComboValuta.Items.Add('EUR');
@@ -207,6 +184,7 @@ begin
       LabelRuta.Text := 'Ruta: ' + ADOQuery1.FieldByName('MestoUtovara').AsString +
                         ' -> ' + ADOQuery1.FieldByName('MestoIstovara').AsString;
       LabelDatum.Text := 'Datum utovara: ' + ADOQuery1.FieldByName('DatumUtovara').AsString;
+      KlijentEmail := ADOQuery1.FieldByName('email').AsString;
     end;
 
     ADOQuery1.Close;
@@ -257,134 +235,119 @@ begin
   Self.Hide;
 end;
 
-function TForm12.GenerisiPDFPonude(out PutanjaDoPDFa: string): Boolean;
+function TForm12.GenerisiPDFAutomatski(out PutanjaDoPDFa: string): Boolean;
 var
-  FolderZaPonude, PutanjaDoLoga: string;
+  FolderZaPonude, PutanjaDoHTMLa, NaredbaArgs: string;
+  HTMLSadrzaj: TStringList;
   CenaOsnovica, PdvIznos, Ukupno: Double;
-  ValutaStr: string;
-  Levo, Gore: Single;
-  A4Slika: TBitmap;
-  LogoSlika: TBitmap;
+  ValutaStr, NapomenaTekst: string;
+  StartupInfo: TStartupInfo;
+  ProcessInfo: TProcessInformation;
 begin
   Result := False;
+
+  FolderZaPonude := TPath.Combine(TPath.GetDirectoryName(ParamStr(0)), 'Ponude');
+  if not TDirectory.Exists(FolderZaPonude) then
+    TDirectory.CreateDirectory(FolderZaPonude);
+
+  PutanjaDoPDFa := TPath.Combine(FolderZaPonude, 'Ponuda_' + IntToStr(PonudaID) + '.pdf');
+
+  // Privremeni HTML stavljamo u osnovni C:\ koren da izbegnemo razmake u putanjama korisnika
+  PutanjaDoHTMLa := 'C:\temp_ponuda.html';
+
+  CenaOsnovica := StrToFloatDef(EditCena.Text, 0);
+  PdvIznos := CenaOsnovica * 0.20;
+  Ukupno := CenaOsnovica + PdvIznos;
+  ValutaStr := ComboValuta.Items[ComboValuta.ItemIndex];
+
+  if (MemoNapomena.Text <> '') and (MemoNapomena.Text <> 'Napomena') then
+    NapomenaTekst := MemoNapomena.Text
+  else
+    NapomenaTekst := '/';
+
+  HTMLSadrzaj := TStringList.Create;
   try
-    FolderZaPonude := TPath.Combine(TPath.GetDirectoryName(ParamStr(0)), 'Ponude');
+    HTMLSadrzaj.Add('<!DOCTYPE html><html><head><meta charset="UTF-8">');
+    HTMLSadrzaj.Add('<style type="text/css">');
+    HTMLSadrzaj.Add('body { font-family: Arial, sans-serif; color: #333; margin: 40px; line-height: 1.5; }');
+    HTMLSadrzaj.Add('.header { width: 100%; border-bottom: 3px solid #1a5276; padding-bottom: 15px; margin-bottom: 25px; }');
+    HTMLSadrzaj.Add('.company-name { font-size: 22px; font-weight: bold; color: #1a5276; }');
+    HTMLSadrzaj.Add('.title { font-size: 26px; color: #2c3e50; font-weight: bold; margin-top: 20px; text-transform: uppercase; text-align: center; }');
+    HTMLSadrzaj.Add('.info-table { width: 100%; margin-bottom: 35px; border-collapse: collapse; }');
+    HTMLSadrzaj.Add('.info-table td { padding: 6px; vertical-align: top; font-size: 14px; }');
+    HTMLSadrzaj.Add('.data-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }');
+    HTMLSadrzaj.Add('.data-table th { background-color: #1a5276; color: white; border: 1px solid #1a5276; padding: 12px; text-align: left; font-size: 14px; }');
+    HTMLSadrzaj.Add('.data-table td { border: 1px solid #d5dbdb; padding: 12px; font-size: 14px; }');
+    HTMLSadrzaj.Add('.fin-table { float: right; width: 320px; margin-bottom: 40px; border-collapse: collapse; }');
+    HTMLSadrzaj.Add('.fin-table td { padding: 8px; font-size: 14px; }');
+    HTMLSadrzaj.Add('.total-row { font-weight: bold; font-size: 18px; color: white; background-color: #2c3e50; }');
+    HTMLSadrzaj.Add('.footer { position: fixed; bottom: 20px; left: 40px; font-size: 11px; color: #7f8c8d; }');
+    HTMLSadrzaj.Add('</style></head><body>');
 
-    if not TDirectory.Exists(FolderZaPonude) then
-      TDirectory.CreateDirectory(FolderZaPonude);
+    HTMLSadrzaj.Add('<div class="header">');
+    HTMLSadrzaj.Add('  <span class="company-name">MPM Transport d.o.o.</span><br>');
+    HTMLSadrzaj.Add('  <span style="font-size:13px; color:#555;">Sektor prodaje i logistike | Adresa: Bresnički Do 101, Kragujevac<br>PIB: 123456789 | Email: mpmtransport9@gmail.com</span>');
+    HTMLSadrzaj.Add('</div>');
 
-    PutanjaDoPDFa := TPath.Combine(FolderZaPonude, 'Ponuda_' + IntToStr(PonudaID) + '.png');
-    PutanjaDoLoga := TPath.Combine(TPath.GetDirectoryName(ParamStr(0)), 'logo.png');
+    HTMLSadrzaj.Add('<table class="info-table"><tr>');
+    HTMLSadrzaj.Add('  <td width="60%"><strong>PRIMALAC PONUDE / KLIJENT:</strong><br><span style="color:#1a5276; font-size:16px; font-weight:bold;">' + LabelKlijent.Text + '</span></td>');
+    HTMLSadrzaj.Add('  <td width="40%" align="right">');
+    HTMLSadrzaj.Add('     <span style="font-size:14px; color:#555;"><strong>Ponuda br:</strong> 2026-' + FormatFloat('0000', PonudaID) + '</span><br>');
+    HTMLSadrzaj.Add('     <strong>' + LabelDatum.Text + '</strong><br>');
+    HTMLSadrzaj.Add('     <strong>Rok važenja:</strong> 7 dana od izdavanja');
+    HTMLSadrzaj.Add('  </td>');
+    HTMLSadrzaj.Add('</tr></table>');
 
-    CenaOsnovica := StrToFloatDef(EditCena.Text, 0);
-    PdvIznos := CenaOsnovica * 0.20;
-    Ukupno := CenaOsnovica + PdvIznos;
-    ValutaStr := ComboValuta.Items[ComboValuta.ItemIndex];
+    HTMLSadrzaj.Add('<div class="title">Zvanična ponuda za vršenje usluge transporta</div><br><br>');
 
-    A4Slika := TBitmap.Create(595, 842);
-    try
-      if A4Slika.Canvas.BeginScene then
-      try
-        A4Slika.Canvas.Fill.Color := TAlphaColorRec.White;
-        A4Slika.Canvas.Fill.Kind := TBrushKind.Solid;
-        A4Slika.Canvas.FillRect(TRectF.Create(0, 0, 595, 842), 0, 0, [], 1.0);
+    HTMLSadrzaj.Add('<table class="data-table">');
+    HTMLSadrzaj.Add('  <tr><th>Opis transportne rute i relacije</th><th width="180" align="right">Cena bez PDV-a (' + ValutaStr + ')</th></tr>');
+    HTMLSadrzaj.Add('  <tr><td>' + LabelRuta.Text + '</td><td align="right"><strong>' + FormatFloat('#,##0.00', CenaOsnovica) + '</strong></td></tr>');
+    HTMLSadrzaj.Add('</table>');
 
-        Levo := 50;
+    HTMLSadrzaj.Add('<table class="fin-table">');
+    HTMLSadrzaj.Add('  <tr><td>Neto osnovica:</td><td align="right">' + FormatFloat('#,##0.00', CenaOsnovica) + ' ' + ValutaStr + '</td></tr>');
+    HTMLSadrzaj.Add('  <tr><td>PDV (20%):</td><td align="right">' + FormatFloat('#,##0.00', PdvIznos) + ' ' + ValutaStr + '</td></tr>');
+    HTMLSadrzaj.Add('  <tr class="total-row"><td><strong>UKUPNO ZA PLAĆANJE:</strong></td><td align="right"><strong>' + FormatFloat('#,##0.00', Ukupno) + ' ' + ValutaStr + '</strong></td></tr>');
+    HTMLSadrzaj.Add('</table>');
+    HTMLSadrzaj.Add('<div style="clear:both;"></div>');
 
-        if TFile.Exists(PutanjaDoLoga) then
-        begin
-          LogoSlika := TBitmap.Create;
-          try
-            LogoSlika.LoadFromFile(PutanjaDoLoga);
-            A4Slika.Canvas.DrawBitmap(LogoSlika,
-              TRectF.Create(0, 0, LogoSlika.Width, LogoSlika.Height),
-              TRectF.Create(430, 50, 550, 130), 1.0);
-          finally
-            LogoSlika.Free;
-          end;
-        end;
+    HTMLSadrzaj.Add('<br><p style="font-size:14px; background-color:#f9f9f9; padding:15px; border-left:4px solid #1a5276;">');
+    HTMLSadrzaj.Add('<strong>Uslovi realizacije i plaćanja:</strong><br>');
+    HTMLSadrzaj.Add('• Rok plaćanja izvršene usluge iznosi <strong>' + FloatToStr(SpinRokPlacanja.Value) + ' dana</strong> od završetka transporta.<br>');
+    HTMLSadrzaj.Add('• Posebne napomene naloga: ' + NapomenaTekst + '</p>');
 
-        A4Slika.Canvas.Font.Size := 10;
-        A4Slika.Canvas.Fill.Color := TAlphaColorRec.Darkgray;
-        A4Slika.Canvas.FillText(TRectF.Create(Levo, 50, 400, 70), 'PREVOZNIK: MPM Transport', False, 1.0, [], TTextAlign.Leading);
-        A4Slika.Canvas.FillText(TRectF.Create(Levo, 70, 400, 90), 'Adresa: Bresnicki Do 101, Kragujevac', False, 1.0, [], TTextAlign.Leading);
-        A4Slika.Canvas.FillText(TRectF.Create(Levo, 90, 400, 110), 'PIB: 123456789', False, 1.0, [], TTextAlign.Leading);
-        A4Slika.Canvas.FillText(TRectF.Create(Levo, 110, 400, 130), 'Email: mpmtransport9@gmail.com', False, 1.0, [], TTextAlign.Leading);
+    HTMLSadrzaj.Add('<div class="footer">Ovaj dokument je kompjuterski generisan iz MPM informacionog sistema i punovažan je bez pečata i potpisa.</div>');
+    HTMLSadrzaj.Add('</body></html>');
 
-        A4Slika.Canvas.Stroke.Color := TAlphaColorRec.Lightgray;
-        A4Slika.Canvas.DrawLine(TPointF.Create(Levo, 150), TPointF.Create(550, 150), 1.0);
+    HTMLSadrzaj.SaveToFile(PutanjaDoHTMLa, TEncoding.UTF8);
 
-        Gore := 170;
-        A4Slika.Canvas.Fill.Color := TAlphaColorRec.Black;
-        A4Slika.Canvas.Font.Size := 11;
-        A4Slika.Canvas.FillText(TRectF.Create(Levo, Gore, 300, Gore + 20), 'Naručilac / Klijent:', False, 1.0, [], TTextAlign.Leading);
+    // Pretvaramo lokacije u format koji pretraživač savršeno razume
+    var PretraziHTML := PutanjaDoHTMLa.Replace('\', '/');
 
-        A4Slika.Canvas.Fill.Color := TAlphaColorRec.Darkblue;
-        A4Slika.Canvas.FillText(TRectF.Create(Levo, Gore + 20, 300, Gore + 40), LabelKlijent.Text, False, 1.0, [], TTextAlign.Leading);
+    // Pokrećemo zvanični proces Windows komandne linije koji ne otvara prozore već sve radi u mraku
+    NaredbaArgs := '"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --headless --disable-gpu --print-to-pdf="' + PutanjaDoPDFa + '" "file:///' + PretraziHTML + '"';
 
-        A4Slika.Canvas.Fill.Color := TAlphaColorRec.Black;
-        A4Slika.Canvas.FillText(TRectF.Create(350, Gore, 550, Gore + 20), 'Broj ponude: 2026-' + FormatFloat('0000', PonudaID), False, 1.0, [], TTextAlign.Leading);
-        A4Slika.Canvas.FillText(TRectF.Create(350, Gore + 20, 550, Gore + 40), LabelDatum.Text, False, 1.0, [], TTextAlign.Leading);
-        A4Slika.Canvas.FillText(TRectF.Create(350, Gore + 40, 550, Gore + 60), 'Važenje ponude: 7 dana', False, 1.0, [], TTextAlign.Leading);
+    FillChar(StartupInfo, SizeOf(TStartupInfo), 0);
+    StartupInfo.dwFlags := STARTF_USESHOWWINDOW;
+    StartupInfo.wShowWindow := SW_HIDE; // Sakrij prozor potpuno!
 
-        Gore := 250;
-        A4Slika.Canvas.Font.Size := 18;
-        A4Slika.Canvas.Fill.Color := TAlphaColorRec.Navy;
-        A4Slika.Canvas.FillText(TRectF.Create(Levo, Gore, 500, Gore + 30), 'PONUDA br. 2026-' + FormatFloat('0000', PonudaID), False, 1.0, [], TTextAlign.Leading);
-
-        Gore := 310;
-        A4Slika.Canvas.Fill.Color := TAlphaColorRec.Lightgrey;
-        A4Slika.Canvas.FillRect(TRectF.Create(Levo, Gore, 550, Gore + 25), 0, 0, [], 1.0);
-
-        A4Slika.Canvas.Fill.Color := TAlphaColorRec.Black;
-        A4Slika.Canvas.Font.Size := 10;
-        A4Slika.Canvas.FillText(TRectF.Create(Levo + 10, Gore + 5, 300, Gore + 25), 'Naziv usluge / Opis rute', False, 1.0, [], TTextAlign.Leading);
-        A4Slika.Canvas.FillText(TRectF.Create(450, Gore + 5, 550, Gore + 25), 'Ukupno (' + ValutaStr + ')', False, 1.0, [], TTextAlign.Leading);
-
-        Gore := Gore + 30;
-        A4Slika.Canvas.FillText(TRectF.Create(Levo + 10, Gore, 300, Gore + 20), LabelRuta.Text, False, 1.0, [], TTextAlign.Leading);
-        A4Slika.Canvas.FillText(TRectF.Create(450, Gore, 550, Gore + 20), FormatFloat('#,##0.00', CenaOsnovica), False, 1.0, [], TTextAlign.Leading);
-
-        Gore := Gore + 50;
-        A4Slika.Canvas.FillText(TRectF.Create(300, Gore, 440, Gore + 20), 'Osnovica:', False, 1.0, [], TTextAlign.Leading);
-        A4Slika.Canvas.FillText(TRectF.Create(450, Gore, 550, Gore + 20), FormatFloat('#,##0.00', CenaOsnovica), False, 1.0, [], TTextAlign.Leading);
-
-        A4Slika.Canvas.FillText(TRectF.Create(300, Gore + 15, 440, Gore + 35), 'PDV (20%):', False, 1.0, [], TTextAlign.Leading);
-        A4Slika.Canvas.FillText(TRectF.Create(450, Gore + 15, 550, Gore + 35), FormatFloat('#,##0.00', PdvIznos), False, 1.0, [], TTextAlign.Leading);
-
-        A4Slika.Canvas.Font.Size := 12;
-        A4Slika.Canvas.Fill.Color := TAlphaColorRec.Navy;
-        A4Slika.Canvas.FillText(TRectF.Create(250, Gore + 40, 440, Gore + 65), 'UKUPNO ZA PLAĆANJE:', False, 1.0, [], TTextAlign.Leading);
-        A4Slika.Canvas.FillText(TRectF.Create(450, Gore + 40, 550, Gore + 65), FormatFloat('#,##0.00', Ukupno), False, 1.0, [], TTextAlign.Leading);
-
-        Gore := Gore + 120;
-        A4Slika.Canvas.Fill.Color := TAlphaColorRec.Black;
-        A4Slika.Canvas.Font.Size := 11;
-        A4Slika.Canvas.FillText(TRectF.Create(Levo, Gore, 500, Gore + 20), 'Uslovi poslovanja:', False, 1.0, [], TTextAlign.Leading);
-
-        A4Slika.Canvas.Font.Size := 9;
-        A4Slika.Canvas.Fill.Color := TAlphaColorRec.Darkgray;
-        A4Slika.Canvas.FillText(TRectF.Create(Levo, Gore + 20, 500, Gore + 40), '• Rok transporta: Prema dogovorenom datumu utovara.', False, 1.0, [], TTextAlign.Leading);
-        A4Slika.Canvas.FillText(TRectF.Create(Levo, Gore + 35, 500, Gore + 55), '• Valuta plaćanja: ' + FloatToStr(SpinRokPlacanja.Value) + ' dana od završetka usluge.', False, 1.0, [], TTextAlign.Leading);
-
-        A4Slika.Canvas.Font.Size := 8;
-        A4Slika.Canvas.FillText(TRectF.Create(Levo, 750, 500, 770), 'Dokument je punovažan bez pečata i potpisa. Generisano automatski.', False, 1.0, [], TTextAlign.Leading);
-
-      finally
-        A4Slika.Canvas.EndScene;
-      end;
-
-      A4Slika.SaveToFile(PutanjaDoPDFa);
-      Result := TFile.Exists(PutanjaDoPDFa);
-    finally
-      A4Slika.Free;
-    end;
-  except
-    on E: Exception do
+    // Kreiramo sistemski proces direktno kroz Windows API (nema presretanja od strane Worda)
+    if CreateProcess(nil, PChar(NaredbaArgs), nil, nil, False, 0, nil, nil, StartupInfo, ProcessInfo) then
     begin
-      ShowMessage('Greška pri kreiranju: ' + E.Message);
-      Result := False;
+      WaitForSingleObject(ProcessInfo.hProcess, 6000); // Čekamo 6 sekundi da se fajl nečujno završi
+      CloseHandle(ProcessInfo.hProcess);
+      CloseHandle(ProcessInfo.hThread);
     end;
+
+    // Čistimo privremeni HTML sa C diska
+    if TFile.Exists(PutanjaDoHTMLa) then
+      TFile.Delete(PutanjaDoHTMLa);
+
+    // Funkcija vraća True samo ako tvoj NOVI PDF sada uspešno leži u folderu 'Ponude'
+    Result := TFile.Exists(PutanjaDoPDFa);
+  finally
+    HTMLSadrzaj.Free;
   end;
 end;
 
@@ -397,37 +360,28 @@ var
 begin
   Result := False;
 
-  if not TFile.Exists(PutanjaDoFajla) then
-  begin
-    ShowMessage('Greška: Fajl ponude ne postoji na disku!');
-    Exit;
-  end;
-
   IdSMTP := TIdSMTP.Create(nil);
   IdMessage := TIdMessage.Create(nil);
   IdSSL := TIdSSLIOHandlerSocketOpenSSL.Create(nil);
   try
-    // --- 1. PODEŠAVANJE MEJL PORUKE ---
     IdMessage.From.Address := 'mpmtransport9@gmail.com';
     IdMessage.From.Name := 'MPM Transport';
     IdMessage.ReplyTo.EMailAddresses := IdMessage.From.Address;
 
     IdMessage.Recipients.Add.Address := PrimaocEmail;
-    IdMessage.Subject := 'Ponuda za transport br. 2026-' + FormatFloat('0000', PonudaID);
+    IdMessage.Subject := 'Zvanična ponuda za transport br. 2026-' + FormatFloat('0000', PonudaID);
 
     IdMessage.Body.Clear;
     IdMessage.Body.Add('Poštovani,');
     IdMessage.Body.Add('');
-    IdMessage.Body.Add('U prilogu ovog mejla Vam dostavljamo našu zvaničnu ponudu za transport robe.');
-    IdMessage.Body.Add('Molimo Vas da pregledate dokument i javite nam Vaš odgovor.');
+    IdMessage.Body.Add('U prilogu ovog mejla Vam dostavljamo našu zvaničnu ponudu za transport robe generisanu kroz MPM sistem.');
+    IdMessage.Body.Add('Molimo Vas da pregledate priloženi PDF dokument i javite nam Vaš odgovor.');
     IdMessage.Body.Add('');
     IdMessage.Body.Add('Srdačan pozdrav,');
-    IdMessage.Body.Add('Sektor prodaje, MPM Transport');
+    IdMessage.Body.Add('Sektor prodaje, MPM Transport d.o.o.');
 
-    // --- 2. KAČENJE PONUDE KAO PRILOG ---
     IdAttachment := TIdAttachmentFile.Create(IdMessage.MessageParts, PutanjaDoFajla);
 
-    // --- 3. SMTP I SSL PODEŠAVANJA ZA GMAIL ---
     IdSSL.SSLOptions.Method := sslvTLSv1_2;
     IdSSL.SSLOptions.Mode := sslmClient;
 
@@ -437,9 +391,8 @@ begin
     IdSMTP.UseTLS := utUseExplicitTLS;
 
     IdSMTP.Username := 'mpmtransport9@gmail.com';
-    IdSMTP.Password := 'jnawhxhqfzsppksn';
+    IdSMTP.Password := 'ymfnudftsybjadjh';
 
-    // --- 4. SLANJE ---
     IdSMTP.Connect;
     try
       IdSMTP.Send(IdMessage);
