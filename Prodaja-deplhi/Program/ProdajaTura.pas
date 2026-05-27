@@ -8,7 +8,7 @@ uses
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects, FMX.Ani, FMX.Layouts,
   Data.DB, Data.Win.ADODB, System.IniFiles, System.IOUtils, FMX.Edit,
   FMX.ListView.Types, FMX.ListView.Appearances, FMX.ListView.Adapters.Base,
-  FMX.ListView;
+  FMX.ListView, KreiranjePonude;
 
 type
   TForm8 = class(TForm)
@@ -35,6 +35,7 @@ type
     ADOConnection1: TADOConnection;
     ADOQuery1: TADOQuery;
     ListaZahtevi: TListView;
+    Text5: TText;
     procedure HambMeni2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure KarticaNoviZahteviClick(Sender: TObject);
@@ -162,34 +163,54 @@ begin
 end;
 
 procedure TForm8.ListaZahteviItemClick(const Sender: TObject; const AItem: TListViewItem);
+var
+  KliknutiStatusID: Integer;
 begin
+  KliknutiStatusID := StrToInt(AItem.Detail);
 
-  Form11.IzabraniID := AItem.Tag;
-  Form11.IzabraniStatusID := StrToInt(AItem.Detail);
 
-  if Form11.IzabraniStatusID = 1 then
+  if KliknutiStatusID = 3 then
   begin
-    Form11.DugmePonuda.Visible := True;
-    Form11.DugmeKreirajRezervaciju.Visible := False;
+    Form12.IDZahtevaZaPonudu := AItem.Tag;
+
+    Form12.Left := Self.Left;
+    Form12.Top := Self.Top;
+    Form12.Width := Self.Width;
+    Form12.Height := Self.Height;
+
+    Form12.Show;
+    Self.Hide;
   end
-  else if Form11.IzabraniStatusID = 4 then
-  begin
-    Form11.DugmePonuda.Visible := False;
-    Form11.DugmeKreirajRezervaciju.Visible := True;
-  end
+
   else
   begin
-    Form11.DugmePonuda.Visible := False;
-    Form11.DugmeKreirajRezervaciju.Visible := False;
+    Form11.IzabraniID := AItem.Tag;
+    Form11.IzabraniStatusID := KliknutiStatusID;
+
+    if Form11.IzabraniStatusID = 1 then
+    begin
+      Form11.DugmePonuda.Visible := True;
+      Form11.DugmeKreirajRezervaciju.Visible := False;
+    end
+    else if Form11.IzabraniStatusID = 4 then
+    begin
+      Form11.DugmePonuda.Visible := False;
+      Form11.DugmeKreirajRezervaciju.Visible := True;
+    end
+    else
+    begin
+      Form11.DugmePonuda.Visible := False;
+      Form11.DugmeKreirajRezervaciju.Visible := False;
+    end;
+
+    Form11.Left := Self.Left;
+    Form11.Top := Self.Top;
+    Form11.Width := Self.Width;
+    Form11.Height := Self.Height;
+
+    Form11.Show;
+    Self.Hide;
   end;
-
-  Form11.Left := Self.Left;
-  Form11.Top := Self.Top;
-  Form11.Width := Self.Width;
-  Form11.Height := Self.Height;
-
-  Form11.Show;
-  Self.Hide;
 end;
 
 procedure TForm8.NoviZahtevDugmeClick(Sender: TObject);

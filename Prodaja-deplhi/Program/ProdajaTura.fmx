@@ -183,21 +183,31 @@ object Form8: TForm8
     FooterAppearanceClassName = 'TListHeaderObjects'
     AlternatingColors = True
     Position.X = 32.000000000000000000
-    Position.Y = 384.000000000000000000
+    Position.Y = 393.000000000000000000
     Size.Width = 185.000000000000000000
     Size.Height = 73.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 7
     OnItemClick = ListaZahteviItemClick
   end
+  object Text5: TText
+    Position.X = 32.000000000000000000
+    Position.Y = 372.000000000000000000
+    Size.Width = 113.000000000000000000
+    Size.Height = 21.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Zahtevi/Ponude:'
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.Font.StyleExt = {00060000000000000004000000}
+  end
   object ADOConnection1: TADOConnection
-    Left = 232
-    Top = 440
+    Left = 240
+    Top = 504
   end
   object ADOQuery1: TADOQuery
     Connection = ADOConnection1
     Parameters = <>
-    Left = 120
-    Top = 464
+    Left = 280
+    Top = 504
   end
 end

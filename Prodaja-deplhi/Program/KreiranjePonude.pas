@@ -7,8 +7,9 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, Data.DB,
   Data.Win.ADODB, FMX.StdCtrls, FMX.Edit, FMX.Controls.Presentation,
   FMX.Memo.Types, FMX.ScrollBox, FMX.Memo, System.IniFiles, FMX.ListBox,
-  FMX.EditBox, FMX.SpinBox, FMX.Objects, System.IOUtils, Winapi.ShellAPI, Winapi.Windows,
-  IdSMTP, IdMessage, IdAttachmentFile, IdExplicitTLSClientServerBase, IdSSLOpenSSL, IdSMTPBase, IdSSLOpenSSLHeaders;
+  FMX.EditBox, FMX.SpinBox, FMX.Objects, System.IOUtils, Winapi.ShellAPI,
+  Winapi.Windows, IdSMTP, IdMessage, IdAttachmentFile, IdExplicitTLSClientServerBase,
+  IdSMTPBase, IdSSLOpenSSL, IdSSLOpenSSLHeaders;
 
 type
   TForm12 = class(TForm)
@@ -53,6 +54,7 @@ uses Detalji, ProdajaTura;
 procedure TForm12.DugmePosaljiPonuduClick(Sender: TObject);
 var
   PutanjaDoPDFa: string;
+  IDNovogStatusa: Integer;
 begin
   if Trim(KlijentEmail) = '' then
   begin
@@ -60,19 +62,38 @@ begin
     Exit;
   end;
 
-  ShowMessage('1. Generišem PDF ponudu automatski u pozadini (bez pitanja)...');
+  IDNovogStatusa := 3;
 
   if GenerisiPDFAutomatski(PutanjaDoPDFa) then
   begin
-    ShowMessage('2. PDF uspešno kreiran pod brojem ' + IntToStr(PonudaID) + '! Šaljem na mejl...');
     if PosaljiMejlSaPonudom(KlijentEmail, PutanjaDoPDFa) then
-      ShowMessage('3. Uspeh! Prava PDF ponuda je poslata klijentu na mejl!')
+    begin
+      try
+        ADOQuery1.Close;
+        ADOQuery1.SQL.Clear;
+        ADOQuery1.SQL.Text := 'UPDATE Zahtevi SET StatusID = :NoviStatusID WHERE [ID zahteva] = :ZahtevID';
+
+        ADOQuery1.Parameters.ParamByName('NoviStatusID').Value := IDNovogStatusa;
+        ADOQuery1.Parameters.ParamByName('ZahtevID').Value := IDZahtevaZaPonudu;
+        ADOQuery1.ExecSQL;
+
+
+        FormShow(Self);
+
+        ShowMessage('PDF ponuda je uspešno poslata klijentu, a status je ažuriran!');
+      except
+        on E: Exception do
+          ShowMessage('Mejl je poslat, ali je puklo ažuriranje StatusID-ja u bazi: ' + E.Message);
+      end;
+    end
     else
-      ShowMessage('Greška: PDF je napravljen, teleskopsko slanje nije uspelo.');
+    begin
+      ShowMessage('Greška: PDF je napravljen, ali slanje na mejl nije uspelo.');
+    end;
   end
   else
   begin
-    ShowMessage('Greška: Windows je blokirao automatsko generisanje PDF-a.');
+    ShowMessage('Greška: Windows sistem je blokirao generisanje PDF fajla.');
   end;
 end;
 
@@ -148,12 +169,18 @@ begin
 end;
 
 procedure TForm12.FormShow(Sender: TObject);
+var
+  TrenutniStatusID: Integer;
 begin
+
   PonudaID := 0;
   PonudaPostoji := False;
   PonudaSacuvana := False;
   DugmePosaljiPonudu.Enabled := False;
+  DugmeSacuvajPonudu.Enabled := True;
   KlijentEmail := '';
+  TrenutniStatusID := 1;
+
 
   ComboValuta.Items.Clear;
   ComboValuta.Items.Add('EUR');
@@ -162,18 +189,30 @@ begin
   ComboValuta.ItemIndex := 0;
 
   EditCena.Text := '';
+  EditCena.ReadOnly := False;
   SpinRokPlacanja.Value := 15;
-  MemoNapomena.Text := '';
+  SpinRokPlacanja.Enabled := True;
+  ComboValuta.Enabled := True;
+  MemoNapomena.Text := 'Napomena';
+  MemoNapomena.ReadOnly := False;
+
+
+  DugmePosaljiPonudu.Text := 'Pošalji ponudu klijentu';
+  DugmePosaljiPonudu.Width := 180;
+  DugmePosaljiPonudu.Position.X := (Self.Width - DugmePosaljiPonudu.Width) / 2;
 
   try
     ADOQuery1.Connection := Form8.ADOConnection1;
 
+
     ADOQuery1.Close;
-    ADOQuery1.SQL.Text :=
-      'SELECT z.MestoUtovara, z.MestoIstovara, z.DatumUtovara, k.nazivKlijenta, k.email ' +
-      'FROM Zahtevi z ' +
-      'INNER JOIN Klijenti k ON z.KlijentID = k.IDKlijenta ' +
-      'WHERE z.[ID zahteva] = :IDzahteva';
+    ADOQuery1.SQL.Clear;
+    ADOQuery1.SQL.Add('SELECT z.MestoUtovara, z.MestoIstovara, z.DatumUtovara, z.StatusID, k.nazivKlijenta, k.email, ');
+    ADOQuery1.SQL.Add('       p.PonudaID, p.Cena, p.Valuta, p.RokPlacanja, p.Napomena ');
+    ADOQuery1.SQL.Add('FROM (Zahtevi z ');
+    ADOQuery1.SQL.Add('INNER JOIN Klijenti k ON z.KlijentID = k.IDKlijenta) ');
+    ADOQuery1.SQL.Add('LEFT JOIN Ponude p ON z.[ID zahteva] = p.ZahtevID ');
+    ADOQuery1.SQL.Add('WHERE z.[ID zahteva] = :IDzahteva');
 
     ADOQuery1.Parameters.ParamByName('IDzahteva').Value := IDZahtevaZaPonudu;
     ADOQuery1.Open;
@@ -185,35 +224,45 @@ begin
                         ' -> ' + ADOQuery1.FieldByName('MestoIstovara').AsString;
       LabelDatum.Text := 'Datum utovara: ' + ADOQuery1.FieldByName('DatumUtovara').AsString;
       KlijentEmail := ADOQuery1.FieldByName('email').AsString;
+
+      TrenutniStatusID := ADOQuery1.FieldByName('StatusID').AsInteger;
+
+      if not ADOQuery1.FieldByName('PonudaID').IsNull then
+      begin
+        PonudaPostoji := True;
+        PonudaSacuvana := True;
+        PonudaID := ADOQuery1.FieldByName('PonudaID').AsInteger;
+
+        EditCena.Text := ADOQuery1.FieldByName('Cena').AsString;
+        SpinRokPlacanja.Value := ADOQuery1.FieldByName('RokPlacanja').AsInteger;
+        MemoNapomena.Text := ADOQuery1.FieldByName('Napomena').AsString;
+
+        ComboValuta.ItemIndex := ComboValuta.Items.IndexOf(ADOQuery1.FieldByName('Valuta').AsString);
+        if ComboValuta.ItemIndex = -1 then ComboValuta.ItemIndex := 0;
+
+        DugmePosaljiPonudu.Enabled := True;
+      end;
     end;
 
-    ADOQuery1.Close;
-    ADOQuery1.SQL.Text :=
-      'SELECT PonudaID, Cena, Valuta, RokPlacanja, Napomena ' +
-      'FROM Ponude WHERE ZahtevID = :ID';
 
-    ADOQuery1.Parameters.ParamByName('ID').Value := IDZahtevaZaPonudu;
-    ADOQuery1.Open;
-
-    if not ADOQuery1.Eof then
+    if TrenutniStatusID = 3 then
     begin
-      PonudaPostoji := True;
-      PonudaSacuvana := True;
-      PonudaID := ADOQuery1.FieldByName('PonudaID').AsInteger;
+      EditCena.ReadOnly := True;
+      SpinRokPlacanja.Enabled := False;
+      ComboValuta.Enabled := False;
+      MemoNapomena.ReadOnly := True;
 
-      EditCena.Text := ADOQuery1.FieldByName('Cena').AsString;
-      SpinRokPlacanja.Value := ADOQuery1.FieldByName('RokPlacanja').AsInteger;
-      MemoNapomena.Text := ADOQuery1.FieldByName('Napomena').AsString;
+      DugmeSacuvajPonudu.Enabled := False;
+      DugmePosaljiPonudu.Enabled := False;
 
-      ComboValuta.ItemIndex := ComboValuta.Items.IndexOf(ADOQuery1.FieldByName('Valuta').AsString);
-      if ComboValuta.ItemIndex = -1 then ComboValuta.ItemIndex := 0;
-
-      DugmePosaljiPonudu.Enabled := True;
+      DugmePosaljiPonudu.Text := 'Ponuda je uspešno poslata klijentu ✔';
+      DugmePosaljiPonudu.Width := 260;
+      DugmePosaljiPonudu.Position.X := (Self.Width - DugmePosaljiPonudu.Width) / 2;
     end;
 
   except
     on E: Exception do
-      ShowMessage('Greška pri otvaranju forme: ' + E.Message);
+      ShowMessage('Greška pri učitavanju forme: ' + E.Message);
   end;
 end;
 
@@ -237,12 +286,11 @@ end;
 
 function TForm12.GenerisiPDFAutomatski(out PutanjaDoPDFa: string): Boolean;
 var
-  FolderZaPonude, PutanjaDoHTMLa, NaredbaArgs: string;
+  FolderZaPonude, PutanjaDoHTMLa: string;
   HTMLSadrzaj: TStringList;
   CenaOsnovica, PdvIznos, Ukupno: Double;
   ValutaStr, NapomenaTekst: string;
-  StartupInfo: TStartupInfo;
-  ProcessInfo: TProcessInformation;
+  BrojacCekanja: Integer;
 begin
   Result := False;
 
@@ -251,9 +299,10 @@ begin
     TDirectory.CreateDirectory(FolderZaPonude);
 
   PutanjaDoPDFa := TPath.Combine(FolderZaPonude, 'Ponuda_' + IntToStr(PonudaID) + '.pdf');
+  PutanjaDoHTMLa := TPath.Combine(TPath.GetTempPath, 'temp_ponuda_' + IntToStr(PonudaID) + '.html');
 
-  // Privremeni HTML stavljamo u osnovni C:\ koren da izbegnemo razmake u putanjama korisnika
-  PutanjaDoHTMLa := 'C:\temp_ponuda.html';
+  if TFile.Exists(PutanjaDoPDFa) then try TFile.Delete(PutanjaDoPDFa); except end;
+  if TFile.Exists(PutanjaDoHTMLa) then try TFile.Delete(PutanjaDoHTMLa); except end;
 
   CenaOsnovica := StrToFloatDef(EditCena.Text, 0);
   PdvIznos := CenaOsnovica * 0.20;
@@ -269,7 +318,9 @@ begin
   try
     HTMLSadrzaj.Add('<!DOCTYPE html><html><head><meta charset="UTF-8">');
     HTMLSadrzaj.Add('<style type="text/css">');
-    HTMLSadrzaj.Add('body { font-family: Arial, sans-serif; color: #333; margin: 40px; line-height: 1.5; }');
+    HTMLSadrzaj.Add('html, body { font-family: Arial, sans-serif; color: #333; margin: 40px; line-height: 1.5; -webkit-print-color-adjust: exact; print-color-adjust: exact; }');
+    HTMLSadrzaj.Add('* { -webkit-user-select: none; user-select: none; }');
+    HTMLSadrzaj.Add('.zastita { display: block; break-inside: avoid; transform: translateZ(0); }');
     HTMLSadrzaj.Add('.header { width: 100%; border-bottom: 3px solid #1a5276; padding-bottom: 15px; margin-bottom: 25px; }');
     HTMLSadrzaj.Add('.company-name { font-size: 22px; font-weight: bold; color: #1a5276; }');
     HTMLSadrzaj.Add('.title { font-size: 26px; color: #2c3e50; font-weight: bold; margin-top: 20px; text-transform: uppercase; text-align: center; }');
@@ -284,6 +335,7 @@ begin
     HTMLSadrzaj.Add('.footer { position: fixed; bottom: 20px; left: 40px; font-size: 11px; color: #7f8c8d; }');
     HTMLSadrzaj.Add('</style></head><body>');
 
+    HTMLSadrzaj.Add('<div class="zastita">');
     HTMLSadrzaj.Add('<div class="header">');
     HTMLSadrzaj.Add('  <span class="company-name">MPM Transport d.o.o.</span><br>');
     HTMLSadrzaj.Add('  <span style="font-size:13px; color:#555;">Sektor prodaje i logistike | Adresa: Bresnički Do 101, Kragujevac<br>PIB: 123456789 | Email: mpmtransport9@gmail.com</span>');
@@ -318,33 +370,25 @@ begin
     HTMLSadrzaj.Add('• Posebne napomene naloga: ' + NapomenaTekst + '</p>');
 
     HTMLSadrzaj.Add('<div class="footer">Ovaj dokument je kompjuterski generisan iz MPM informacionog sistema i punovažan je bez pečata i potpisa.</div>');
+    HTMLSadrzaj.Add('</div>');
     HTMLSadrzaj.Add('</body></html>');
 
     HTMLSadrzaj.SaveToFile(PutanjaDoHTMLa, TEncoding.UTF8);
 
-    // Pretvaramo lokacije u format koji pretraživač savršeno razume
-    var PretraziHTML := PutanjaDoHTMLa.Replace('\', '/');
+    Winapi.ShellAPI.ShellExecute(0, 'open', 'msedge.exe',
+      PChar('--headless --disable-gpu --no-pdf-header-footer --print-to-pdf="' + PutanjaDoPDFa + '" "' + PutanjaDoHTMLa + '"'),
+      nil, SW_HIDE);
 
-    // Pokrećemo zvanični proces Windows komandne linije koji ne otvara prozore već sve radi u mraku
-    NaredbaArgs := '"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --headless --disable-gpu --print-to-pdf="' + PutanjaDoPDFa + '" "file:///' + PretraziHTML + '"';
-
-    FillChar(StartupInfo, SizeOf(TStartupInfo), 0);
-    StartupInfo.dwFlags := STARTF_USESHOWWINDOW;
-    StartupInfo.wShowWindow := SW_HIDE; // Sakrij prozor potpuno!
-
-    // Kreiramo sistemski proces direktno kroz Windows API (nema presretanja od strane Worda)
-    if CreateProcess(nil, PChar(NaredbaArgs), nil, nil, False, 0, nil, nil, StartupInfo, ProcessInfo) then
+    BrojacCekanja := 0;
+    while (not TFile.Exists(PutanjaDoPDFa)) and (BrojacCekanja < 8) do
     begin
-      WaitForSingleObject(ProcessInfo.hProcess, 6000); // Čekamo 6 sekundi da se fajl nečujno završi
-      CloseHandle(ProcessInfo.hProcess);
-      CloseHandle(ProcessInfo.hThread);
+      Sleep(1000);
+      Inc(BrojacCekanja);
     end;
 
-    // Čistimo privremeni HTML sa C diska
     if TFile.Exists(PutanjaDoHTMLa) then
-      TFile.Delete(PutanjaDoHTMLa);
+      try TFile.Delete(PutanjaDoHTMLa); except end;
 
-    // Funkcija vraća True samo ako tvoj NOVI PDF sada uspešno leži u folderu 'Ponude'
     Result := TFile.Exists(PutanjaDoPDFa);
   finally
     HTMLSadrzaj.Free;
