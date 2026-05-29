@@ -155,6 +155,7 @@ begin
 end
 else if SameText(role, 'klijent') then
 begin
+Form6.UlogovaniUser := ADOQuery1.FieldByName('email').AsString;
   Form6.Left := Self.Left;
   Form6.Top := Self.Top;
   Form6.Show;

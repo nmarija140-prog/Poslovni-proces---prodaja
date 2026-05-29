@@ -27,15 +27,15 @@ implementation
 
 {$R *.fmx}
 
-uses UnosPodataka, disp, NoviZahtev, System.IniFiles, ProdajaTura;
+uses UnosPodataka, disp, NoviZahtev, System.IniFiles, ProdajaTura, Klijent;
 
 procedure TForm1.PrijavaBtnClick(Sender: TObject);
 begin
-Form8.Left := Self.Left;
-  Form8.Top := Self.Top;
-  Form8.Width := Self.Width;
-  Form8.Height := Self.Height;
-            Form8.Show;
+Form2.Left := Self.Left;
+  Form2.Top := Self.Top;
+  Form2.Width := Self.Width;
+  Form2.Height := Self.Height;
+            Form2.Show;
             Self.Hide;
 end;
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);

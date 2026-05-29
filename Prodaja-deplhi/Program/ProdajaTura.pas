@@ -8,7 +8,7 @@ uses
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects, FMX.Ani, FMX.Layouts,
   Data.DB, Data.Win.ADODB, System.IniFiles, System.IOUtils, FMX.Edit,
   FMX.ListView.Types, FMX.ListView.Appearances, FMX.ListView.Adapters.Base,
-  FMX.ListView, KreiranjePonude;
+  FMX.ListView, KreiranjePonude, UnosPodataka;
 
 type
   TForm8 = class(TForm)
@@ -46,6 +46,7 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure ListaZahteviItemClick(const Sender: TObject; const AItem: TListViewItem);
     procedure PopuniListuZahteva(AStatusID: Integer; PocetniPrikaz: Boolean = False);
+    procedure OdjavaDugmeClick(Sender: TObject);
   private
   public
   end;
@@ -90,6 +91,10 @@ end;
 procedure TForm8.HambMeni2Click(Sender: TObject);
 begin
   PanelProdaja.Visible := not PanelProdaja.Visible;
+  if PanelProdaja.Visible then
+  begin
+    PanelProdaja.BringToFront;
+  end;
   HambMeni2.BringToFront;
 end;
 
@@ -221,6 +226,12 @@ begin
   Form9.Height := Self.Height;
   Form9.Show;
   Self.Hide;
+end;
+
+procedure TForm8.OdjavaDugmeClick(Sender: TObject);
+begin
+Form2.Show;
+Self.Hide;
 end;
 
 procedure TForm8.FormClose(Sender: TObject; var Action: TCloseAction);
