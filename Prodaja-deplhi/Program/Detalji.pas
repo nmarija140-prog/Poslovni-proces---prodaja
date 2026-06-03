@@ -9,9 +9,8 @@ uses
   FMX.Objects;
 
 type
-  TForm11 = class(TForm)
+  TFormDetalji = class(TForm)
     DugmePonuda: TButton;
-    DugmeKreirajRezervaciju: TButton;
     ADOQuery1: TADOQuery;
     VertScrollBox1: TVertScrollBox;
     MestoIstovara: TLabel;
@@ -33,33 +32,38 @@ type
   end;
 
 var
-  Form11: TForm11;
+  FormDetalji: TFormDetalji;
 
 implementation
-uses ProdajaTura, KreiranjePonude;
+uses ProdajaTura, KreiranjePonude, KreiranjeRezervacije;
 
 {$R *.fmx}
 
-procedure TForm11.DugmePonudaClick(Sender: TObject);
+procedure TFormDetalji.DugmePonudaClick(Sender: TObject);
 begin
 
-  Form12.IDZahtevaZaPonudu := IzabraniID;
+ if not Assigned(Form13) then
+    Application.CreateForm(TForm13, Form13);
+
+  // Prosleđujemo ID zahteva formi za ponudu
+  Form13.IDZahtevaZaPonudu := IzabraniID;
 
   if PonudaPostoji then
     ShowMessage('Otvara se postojeća ponuda')
   else
     ShowMessage('Kreira se nova ponuda');
 
-  Form12.Left := Self.Left;
-  Form12.Top := Self.Top;
-  Form12.Width := Self.Width;
-  Form12.Height := Self.Height;
+  // POPRAVLJENO: Sve je preimenovano na Form13 (ranije je ovde greškom pisalo Form12)
+  Form13.Left := Self.Left;
+  Form13.Top := Self.Top;
+  Form13.Width := Self.Width;
+  Form13.Height := Self.Height;
 
-  Form12.Show;
+  Form13.Show;
   Self.Hide;
 end;
 
-function TForm11.PonudaPostoji: Boolean;
+function TFormDetalji.PonudaPostoji: Boolean;
 begin
   Result := False;
   ADOQuery1.Close;
@@ -69,7 +73,7 @@ begin
   Result := ADOQuery1.FieldByName('C').AsInteger > 0;
 end;
 
-procedure TForm11.FormShow(Sender: TObject);
+procedure TFormDetalji.FormShow(Sender: TObject);
 begin
   try
     ADOQuery1.Connection := Form8.ADOConnection1;

@@ -12,7 +12,7 @@ uses
   IdSMTPBase, IdSSLOpenSSL, IdSSLOpenSSLHeaders;
 
 type
-  TForm12 = class(TForm)
+  TForm13 = class(TForm)
     LabelKlijent: TLabel;
     LabelRuta: TLabel;
     LabelDatum: TLabel;
@@ -33,6 +33,7 @@ type
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
+  KlijentID: Integer;
     PonudaSacuvana: Boolean;
     PonudaID: Integer;
     PonudaPostoji: Boolean;
@@ -44,14 +45,14 @@ type
   end;
 
 var
-  Form12: TForm12;
+  Form13: TForm13;
 
 implementation
 uses Detalji, ProdajaTura;
 
 {$R *.fmx}
 
-procedure TForm12.DugmePosaljiPonuduClick(Sender: TObject);
+procedure TForm13.DugmePosaljiPonuduClick(Sender: TObject);
 var
   PutanjaDoPDFa: string;
   IDNovogStatusa: Integer;
@@ -74,13 +75,14 @@ begin
         ADOQuery1.SQL.Text := 'UPDATE Ponude SET StatusID = :NoviStatusID WHERE PonudaID = :PonudaID';
 
         ADOQuery1.Parameters.ParamByName('NoviStatusID').Value := IDNovogStatusa;
-        ADOQuery1.Parameters.ParamByName('PonudaID').Value := IDZahtevaZaPonudu;
+        ADOQuery1.Parameters.ParamByName('PonudaID').Value := PonudaID;
         ADOQuery1.ExecSQL;
 
 
         FormShow(Self);
 
         ShowMessage('PDF ponuda je uspešno poslata klijentu, a status je ažuriran!');
+        Form8.PopuniListuZahteva(1, True);
       except
         on E: Exception do
           ShowMessage('Mejl je poslat, ali je puklo ažuriranje StatusID-ja u bazi: ' + E.Message);
@@ -97,7 +99,7 @@ begin
   end;
 end;
 
-procedure TForm12.DugmeSacuvajPonuduClick(Sender: TObject);
+procedure TForm13.DugmeSacuvajPonuduClick(Sender: TObject);
 begin
   try
     if EditCena.Text = '' then
@@ -112,11 +114,13 @@ begin
     if not PonudaPostoji then
     begin
       ADOQuery1.SQL.Text :=
-        'INSERT INTO Ponude ' +
-        '(ZahtevID, Cena, Valuta, RokPlacanja, Napomena, DatumPonude) ' +
-        'VALUES (:ZahtevID, :Cena, :Valuta, :RokPlacanja, :Napomena, :DatumPonude)';
+  'INSERT INTO Ponude ' +
+  '(ZahtevID, KlijentID, Cena, Valuta, RokPlacanja, Napomena, DatumPonude) ' +
+  'VALUES (:ZahtevID, :KlijentID, :Cena, :Valuta, :RokPlacanja, :Napomena, :DatumPonude)';
+
 
       ADOQuery1.Parameters.ParamByName('ZahtevID').Value := IDZahtevaZaPonudu;
+      ADOQuery1.Parameters.ParamByName('KlijentID').Value := KlijentID;
       ADOQuery1.Parameters.ParamByName('DatumPonude').Value := Now;
     end
     else
@@ -163,12 +167,12 @@ begin
   end;
 end;
 
-procedure TForm12.FormCreate(Sender: TObject);
+procedure TForm13.FormCreate(Sender: TObject);
 begin
   IdOpenSSLSetLibPath(ExtractFilePath(ParamStr(0)));
 end;
 
-procedure TForm12.FormShow(Sender: TObject);
+procedure TForm13.FormShow(Sender: TObject);
 var
   TrenutniStatusID: Integer;
 begin
@@ -207,7 +211,7 @@ begin
 
     ADOQuery1.Close;
     ADOQuery1.SQL.Clear;
-    ADOQuery1.SQL.Add('SELECT z.MestoUtovara, z.MestoIstovara, z.DatumUtovara, z.StatusID, k.nazivKlijenta, k.email, ');
+    ADOQuery1.SQL.Add('SELECT z.MestoUtovara, z.MestoIstovara, z.DatumUtovara, z.StatusID, k.nazivKlijenta, k.email, k.IDKlijenta ');
     ADOQuery1.SQL.Add('       p.PonudaID, p.Cena, p.Valuta, p.RokPlacanja, p.Napomena ');
     ADOQuery1.SQL.Add('FROM (Zahtevi z ');
     ADOQuery1.SQL.Add('INNER JOIN Klijenti k ON z.KlijentID = k.IDKlijenta) ');
@@ -224,6 +228,7 @@ begin
                         ' -> ' + ADOQuery1.FieldByName('MestoIstovara').AsString;
       LabelDatum.Text := 'Datum utovara: ' + ADOQuery1.FieldByName('DatumUtovara').AsString;
       KlijentEmail := ADOQuery1.FieldByName('email').AsString;
+      KlijentID := ADOQuery1.FieldByName('IDKlijenta').AsInteger;
 
       TrenutniStatusID := ADOQuery1.FieldByName('StatusID').AsInteger;
 
@@ -266,25 +271,25 @@ begin
   end;
 end;
 
-procedure TForm12.MemoNapomenaEnter(Sender: TObject);
+procedure TForm13.MemoNapomenaEnter(Sender: TObject);
 begin
   if MemoNapomena.Text = 'Napomena' then
     MemoNapomena.Text := '';
 end;
 
-procedure TForm12.MemoNapomenaExit(Sender: TObject);
+procedure TForm13.MemoNapomenaExit(Sender: TObject);
 begin
   if Trim(MemoNapomena.Text) = '' then
     MemoNapomena.Text := 'Napomena';
 end;
 
-procedure TForm12.SpeedButton1Click(Sender: TObject);
+procedure TForm13.SpeedButton1Click(Sender: TObject);
 begin
   Form8.Show;
   Self.Hide;
 end;
 
-function TForm12.GenerisiPDFAutomatski(out PutanjaDoPDFa: string): Boolean;
+function TForm13.GenerisiPDFAutomatski(out PutanjaDoPDFa: string): Boolean;
 var
   FolderZaPonude, PutanjaDoHTMLa: string;
   HTMLSadrzaj: TStringList;
@@ -395,7 +400,7 @@ begin
   end;
 end;
 
-function TForm12.PosaljiMejlSaPonudom(const PrimaocEmail, PutanjaDoFajla: string): Boolean;
+function TForm13.PosaljiMejlSaPonudom(const PrimaocEmail, PutanjaDoFajla: string): Boolean;
 var
   IdSMTP: TIdSMTP;
   IdMessage: TIdMessage;

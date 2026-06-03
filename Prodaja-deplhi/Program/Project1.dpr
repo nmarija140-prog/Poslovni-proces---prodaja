@@ -14,8 +14,8 @@ uses
   ProdajaTura in 'ProdajaTura.pas' {Form8},
   NoviZahtev in 'NoviZahtev.pas' {Form9},
   NovKlijent in 'NovKlijent.pas' {Form10},
-  Detalji in 'Detalji.pas' {MestoUtovara},
-  KreiranjePonude in 'KreiranjePonude.pas' {LabelKlijent},
+  Detalji in 'Detalji.pas' {FormDetalji},
+  KreiranjePonude in 'KreiranjePonude.pas' {Form13},
   PonudeKlijenta in 'PonudeKlijenta.pas' {Form11},
   KreiranjeRezervacije in 'KreiranjeRezervacije.pas' {Form12};
 

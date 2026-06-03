@@ -91,12 +91,12 @@
     <Transaction>2026/05/21 00:01:50.000.488,=C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\Unit11.pas</Transaction>
     <Transaction>2026/05/21 00:02:21.000.270,C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\Unit11.fmx=C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\KreiranjePonude.fmx</Transaction>
     <Transaction>2026/05/21 00:02:21.000.270,C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\Unit11.pas=C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\KreiranjePonude.pas</Transaction>
-    <Transaction>2026/06/03 15:19:47.065,=C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\Unit11.pas</Transaction>
-    <Transaction>2026/06/03 15:21:19.678,C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\PonudeKlijenta.fmx=C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\Unit11.fmx</Transaction>
-    <Transaction>2026/06/03 15:21:19.678,C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\PonudeKlijenta.pas=C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\Unit11.pas</Transaction>
-    <Transaction>2026/06/03 17:19:47.945,=C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\Unit12.pas</Transaction>
-    <Transaction>2026/06/03 17:20:30.552,C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\KreiranjeRezervacije.fmx=C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\Unit12.fmx</Transaction>
-    <Transaction>2026/06/03 17:20:30.552,C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\KreiranjeRezervacije.pas=C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\Unit12.pas</Transaction>
+    <Transaction>2026/06/03 15:19:47.000.065,=C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\Unit11.pas</Transaction>
+    <Transaction>2026/06/03 15:21:19.000.678,C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\PonudeKlijenta.fmx=C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\Unit11.fmx</Transaction>
+    <Transaction>2026/06/03 15:21:19.000.678,C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\PonudeKlijenta.pas=C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\Unit11.pas</Transaction>
+    <Transaction>2026/06/03 17:19:47.000.945,=C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\Unit12.pas</Transaction>
+    <Transaction>2026/06/03 17:20:30.000.552,C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\KreiranjeRezervacije.fmx=C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\Unit12.fmx</Transaction>
+    <Transaction>2026/06/03 17:20:30.000.552,C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\KreiranjeRezervacije.pas=C:\Users\Administrator\Documents\GitHub\Poslovni-proces---prodaja\Prodaja-deplhi\Program\Unit12.pas</Transaction>
   </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
     <File Path="pocetna.pas"/>

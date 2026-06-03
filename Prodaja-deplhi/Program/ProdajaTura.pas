@@ -48,6 +48,7 @@ type
     procedure PopuniListuZahteva(AStatusID: Integer; PocetniPrikaz: Boolean = False);
     procedure OdjavaDugmeClick(Sender: TObject);
   private
+  KlijentID: Integer;
   public
   end;
 
@@ -129,21 +130,27 @@ begin
 
     if PocetniPrikaz then
     begin
-      ADOQuery1.SQL.Text :=
-        'SELECT z.[ID Zahteva], z.StatusID, k.nazivKlijenta, g.Grad ' +
-        'FROM (Zahtevi z ' +
-        'INNER JOIN Klijenti k ON z.KlijentID = k.IDKlijenta) ' +
-        'INNER JOIN Gradovi g ON k.GradID = g.GradID ' +
-        'WHERE z.StatusID IN (1, 4)';
+     ADOQuery1.SQL.Text :=
+  'SELECT z.[ID Zahteva], ' +
+  '  IIF(p.StatusID IS NOT NULL, p.StatusID, z.StatusID) AS StatusID, ' +
+  '  k.nazivKlijenta, g.Grad ' +
+  'FROM ((Zahtevi z ' +
+  'INNER JOIN Klijenti k ON z.KlijentID = k.IDKlijenta) ' +
+  'INNER JOIN Gradovi g ON k.GradID = g.GradID) ' +
+  'LEFT JOIN Ponude p ON z.[ID zahteva] = p.ZahtevID ' +
+  'WHERE IIF(p.StatusID IS NOT NULL, p.StatusID, z.StatusID) IN (1, 4)';
     end
     else
     begin
       ADOQuery1.SQL.Text :=
-        'SELECT z.[ID Zahteva], z.StatusID, k.nazivKlijenta, g.Grad ' +
-        'FROM (Zahtevi z ' +
-        'INNER JOIN Klijenti k ON z.KlijentID = k.IDKlijenta) ' +
-        'INNER JOIN Gradovi g ON k.GradID = g.GradID ' +
-        'WHERE z.StatusID = :StatusID';
+  'SELECT z.[ID Zahteva], ' +
+  '  IIF(p.StatusID IS NOT NULL, p.StatusID, z.StatusID) AS StatusID, ' +
+  '  k.nazivKlijenta, g.Grad ' +
+  'FROM ((Zahtevi z ' +
+  'INNER JOIN Klijenti k ON z.KlijentID = k.IDKlijenta) ' +
+  'INNER JOIN Gradovi g ON k.GradID = g.GradID) ' +
+  'LEFT JOIN Ponude p ON z.[ID zahteva] = p.ZahtevID ' +
+  'WHERE IIF(p.StatusID IS NOT NULL, p.StatusID, z.StatusID) = :StatusID';
 
       ADOQuery1.Parameters.ParamByName('StatusID').Value := AStatusID;
     end;
@@ -175,54 +182,40 @@ begin
 
   KliknutiStatusID := StrToInt(AItem.Detail);
 
+
+  if KliknutiStatusID = 1 then
+  begin
+
+    if not Assigned(FormDetalji) then
+      Application.CreateForm(TFormDetalji, FormDetalji);
+
+    FormDetalji.IzabraniID := AItem.Tag;
+    FormDetalji.IzabraniStatusID := KliknutiStatusID;
+
+
+    FormDetalji.DugmePonuda.Visible := True;
+
+
+    FormDetalji.Left := Self.Left;
+    FormDetalji.Top := Self.Top;
+    FormDetalji.Width := Self.Width;
+    FormDetalji.Height := Self.Height;
+
+
+    FormDetalji.Show;
+    Self.Hide;
+  end;
+
+
   if KliknutiStatusID = 3 then
   begin
-    // OSIGURAČ: Ako Form12 nije kreirana u memoriji, kreiraj je sada!
-    if not Assigned(Form12) then
-      Application.CreateForm(TForm12, Form12);
 
-    Form12.IDZahtevaZaPonudu := AItem.Tag;
+  end;
 
-    Form12.Left := Self.Left;
-    Form12.Top := Self.Top;
-    Form12.Width := Self.Width;
-    Form12.Height := Self.Height;
 
-    Form12.Show;
-    Self.Hide;
-  end
-  else
+  if KliknutiStatusID = 4 then
   begin
-    // KLJUČNI OSIGURAČ: Ako Form11 (Detalji) nije kreirana u memoriji, kreiraj je sada!
-    if not Assigned(Form11) then
-      Application.CreateForm(TForm11, Form11);
 
-    Form11.IzabraniID := AItem.Tag;
-    Form11.IzabraniStatusID := KliknutiStatusID;
-
-    if Form11.IzabraniStatusID = 1 then
-    begin
-      Form11.DugmePonuda.Visible := True;
-      Form11.DugmeKreirajRezervaciju.Visible := False;
-    end
-    else if Form11.IzabraniStatusID = 4 then
-    begin
-      Form11.DugmePonuda.Visible := False;
-      Form11.DugmeKreirajRezervaciju.Visible := True;
-    end
-    else
-    begin
-      Form11.DugmePonuda.Visible := False;
-      Form11.DugmeKreirajRezervaciju.Visible := False;
-    end;
-
-    Form11.Left := Self.Left;
-    Form11.Top := Self.Top;
-    Form11.Width := Self.Width;
-    Form11.Height := Self.Height;
-
-    Form11.Show;
-    Self.Hide;
   end;
 end;
 

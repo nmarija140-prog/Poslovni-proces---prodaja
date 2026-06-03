@@ -170,11 +170,11 @@
             <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="Detalji.pas">
-            <Form>MestoUtovara</Form>
+            <Form>FormDetalji</Form>
             <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="KreiranjePonude.pas">
-            <Form>LabelKlijent</Form>
+            <Form>Form13</Form>
             <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="PonudeKlijenta.pas">
@@ -1251,6 +1251,7 @@
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">True</Platform>
             </Platforms>
+            <ModelSupport>False</ModelSupport>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>
