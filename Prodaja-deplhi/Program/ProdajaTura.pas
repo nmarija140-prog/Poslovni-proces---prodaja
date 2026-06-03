@@ -181,19 +181,27 @@ begin
   if AItem = nil then Exit;
 
   KliknutiStatusID := StrToInt(AItem.Detail);
-
-
-  if KliknutiStatusID = 1 then
+  if (KliknutiStatusID = 1) or (KliknutiStatusID = 4) then
   begin
 
     if not Assigned(FormDetalji) then
       Application.CreateForm(TFormDetalji, FormDetalji);
 
+
     FormDetalji.IzabraniID := AItem.Tag;
     FormDetalji.IzabraniStatusID := KliknutiStatusID;
 
 
-    FormDetalji.DugmePonuda.Visible := True;
+    case KliknutiStatusID of
+      1: begin
+           FormDetalji.DugmePonuda.Visible := True;
+           FormDetalji.RezervacijaDugme.Visible := False;
+         end;
+      4: begin
+           FormDetalji.DugmePonuda.Visible := False;
+           FormDetalji.RezervacijaDugme.Visible := True;
+         end;
+    end;
 
 
     FormDetalji.Left := Self.Left;
@@ -201,22 +209,10 @@ begin
     FormDetalji.Width := Self.Width;
     FormDetalji.Height := Self.Height;
 
-
     FormDetalji.Show;
     Self.Hide;
   end;
 
-
-  if KliknutiStatusID = 3 then
-  begin
-
-  end;
-
-
-  if KliknutiStatusID = 4 then
-  begin
-
-  end;
 end;
 
 procedure TForm8.NoviZahtevDugmeClick(Sender: TObject);

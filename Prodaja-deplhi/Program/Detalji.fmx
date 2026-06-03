@@ -149,6 +149,20 @@ object FormDetalji: TFormDetalji
     TextSettings.Font.Size = 14.000000000000000000
     TextSettings.Font.StyleExt = {00060000000000000004000000}
   end
+  object RezervacijaDugme: TButton
+    StyledSettings = [Family, FontColor]
+    Position.X = 96.000000000000000000
+    Position.Y = 449.000000000000000000
+    Size.Width = 129.000000000000000000
+    Size.Height = 38.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    Text = 'Rezervacija'
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.Font.StyleExt = {00060000000000000004000000}
+    TextSettings.Trimming = None
+    OnClick = RezervacijaDugmeClick
+  end
   object ADOQuery1: TADOQuery
     Connection = Form8.ADOConnection1
     Parameters = <>

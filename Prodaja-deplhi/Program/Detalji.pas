@@ -22,10 +22,13 @@ type
     Kolicina: TLabel;
     DatumUtovara: TLabel;
     Text1: TText;
+    RezervacijaDugme: TButton;
     procedure FormShow(Sender: TObject);
     procedure DugmePonudaClick(Sender: TObject);
+    procedure RezervacijaDugmeClick(Sender: TObject);
   private
     function PonudaPostoji: Boolean;
+     function RezervacijaPostoji: Boolean;
   public
     IzabraniID: Integer;
     IzabraniStatusID: Integer;
@@ -45,7 +48,7 @@ begin
  if not Assigned(Form13) then
     Application.CreateForm(TForm13, Form13);
 
-  // Prosleđujemo ID zahteva formi za ponudu
+
   Form13.IDZahtevaZaPonudu := IzabraniID;
 
   if PonudaPostoji then
@@ -53,7 +56,6 @@ begin
   else
     ShowMessage('Kreira se nova ponuda');
 
-  // POPRAVLJENO: Sve je preimenovano na Form13 (ranije je ovde greškom pisalo Form12)
   Form13.Left := Self.Left;
   Form13.Top := Self.Top;
   Form13.Width := Self.Width;
@@ -71,6 +73,38 @@ begin
   ADOQuery1.Parameters.ParamByName('ID').Value := IzabraniID;
   ADOQuery1.Open;
   Result := ADOQuery1.FieldByName('C').AsInteger > 0;
+end;
+function TFormDetalji.RezervacijaPostoji: Boolean;
+begin
+  Result := False;
+  ADOQuery1.Close;
+  ADOQuery1.SQL.Text := 'SELECT COUNT(*) AS C FROM Rezervacije WHERE ZahtevID = :ID';
+  ADOQuery1.Parameters.ParamByName('ID').Value := IzabraniID;
+  ADOQuery1.Open;
+
+  Result := ADOQuery1.FieldByName('C').AsInteger > 0;
+end;
+
+procedure TFormDetalji.RezervacijaDugmeClick(Sender: TObject);
+begin
+ if not Assigned(Form12) then
+    Application.CreateForm(TForm12, Form12);
+
+
+  Form12.IDZahtevaZaPonudu := IzabraniID;
+
+  if RezervacijaPostoji then
+    ShowMessage('Otvara se postojeća rezervacija')
+  else
+    ShowMessage('Kreira se nova rezervacija');
+
+  Form12.Left := Self.Left;
+  Form12.Top := Self.Top;
+  Form12.Width := Self.Width;
+  Form12.Height := Self.Height;
+
+  Form12.Show;
+  Self.Hide;
 end;
 
 procedure TFormDetalji.FormShow(Sender: TObject);

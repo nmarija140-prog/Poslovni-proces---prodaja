@@ -312,7 +312,7 @@ end;
 
 procedure TForm11.SpeedButton1Click(Sender: TObject);
 begin
-  Form6.Show; // Povratak na glavni meni klijenta
+  Form6.Show;
   Self.Hide;
 end;
 

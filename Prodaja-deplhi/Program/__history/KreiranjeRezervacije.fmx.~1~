@@ -1,0 +1,94 @@
+object Form12: TForm12
+  Left = 0
+  Top = 0
+  Caption = 'Form12'
+  ClientHeight = 536
+  ClientWidth = 324
+  Fill.Color = claLightgray
+  Fill.Kind = Solid
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object KlijentLabel: TLabel
+    Position.X = 28.000000000000000000
+    Position.Y = 72.000000000000000000
+    Text = 'KlijentLabel'
+    TabOrder = 1
+  end
+  object RutaLabel: TLabel
+    Position.X = 28.000000000000000000
+    Position.Y = 112.000000000000000000
+    Text = 'RutaLabel'
+    TabOrder = 2
+  end
+  object DatumUtovaraLabel: TLabel
+    Position.X = 28.000000000000000000
+    Position.Y = 152.000000000000000000
+    Text = 'DatumUtovaraLabel'
+    TabOrder = 3
+  end
+  object CenaLabel: TLabel
+    Position.X = 28.000000000000000000
+    Position.Y = 192.000000000000000000
+    Text = 'CenaLabel'
+    TabOrder = 4
+    object Line1: TLine
+      LineType = Bottom
+      Position.X = -28.000000000000000000
+      Position.Y = -26.000000000000000000
+      Size.Width = 325.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+  object ComboBoxVozila: TComboBox
+    Position.X = 28.000000000000000000
+    Position.Y = 313.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 31.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+  end
+  object ComboBoxVozaci: TComboBox
+    Position.X = 28.000000000000000000
+    Position.Y = 248.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 32.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 6
+  end
+  object DugmeSacuvajRezervaciju: TButton
+    Position.X = 104.000000000000000000
+    Position.Y = 392.000000000000000000
+    Size.Width = 105.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 7
+    Text = 'Sacuvaj rezervaciju'
+    TextSettings.Trimming = None
+  end
+  object DugmeOtkaziRez: TButton
+    Position.X = 120.000000000000000000
+    Position.Y = 448.000000000000000000
+    TabOrder = 8
+    Text = 'Otkazi'
+    TextSettings.Trimming = None
+  end
+  object Text1: TText
+    Position.X = 20.000000000000000000
+    Position.Y = 232.000000000000000000
+    Size.Width = 81.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Izaberi vozilo'
+  end
+  object Text2: TText
+    Position.X = 20.000000000000000000
+    Position.Y = 296.000000000000000000
+    Size.Width = 89.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Izaberi vozaca'
+  end
+end
