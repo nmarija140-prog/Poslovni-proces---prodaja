@@ -60,6 +60,7 @@ object Form4: TForm4
       TextSettings.Font.Size = 15.000000000000000000
       TextSettings.Font.StyleExt = {00070000000200000004000000}
       TextSettings.Trimming = None
+      OnClick = btnOtvoriNalogClick
       object btnUpravljajNalozima: TButton
         StyledSettings = [Family]
         Position.Y = 128.000000000000000000

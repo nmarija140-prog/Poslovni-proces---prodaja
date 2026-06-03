@@ -113,8 +113,8 @@ end;
 
   ADOQuery1.SQL.Add(
     'INSERT INTO Klijenti ' +
-    '(nazivKlijenta, adresa, telefon, email, kontaktOsoba, PIB, GradID, KorisnickoIme) ' +
-    'VALUES (:nazivKlijenta, :adresa, :telefon, :email, :kontaktOsoba, :PIB, :GradID, :KorisnickoIme)'
+    '(nazivKlijenta, adresa, telefon, email, kontaktOsoba, PIB, GradID, LoginID) ' +
+    'VALUES (:nazivKlijenta, :adresa, :telefon, :email, :kontaktOsoba, :PIB, :GradID, :LoginID)'
   );
 
   ADOQuery1.Parameters.ParamByName('nazivKlijenta').Value := nazivKlijenta.Text;
@@ -124,12 +124,12 @@ end;
   ADOQuery1.Parameters.ParamByName('kontaktOsoba').Value := kontaktOsoba.Text;
   ADOQuery1.Parameters.ParamByName('PIB').Value := PIB.Text;
 ADOQuery1.Parameters.ParamByName('GradID').Value := GradID;
-ADOQuery1.Parameters.ParamByName('KorisnickoIme').Value := email.Text;
+ADOQuery1.Parameters.ParamByName('LoginID').Value := LoginIDZaUnos;
 
 
   ADOQuery1.ExecSQL;
 
-  ShowMessage('Klijent je uspešno sa?uvan!');
+  ShowMessage('Klijent je uspešno sacuvan!');
   Close;
 end;
 procedure TForm10.GradChangeTracking(Sender: TObject);

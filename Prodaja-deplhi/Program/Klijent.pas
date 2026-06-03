@@ -25,16 +25,18 @@ type
     Label1: TLabel;
     PravougaonikZvonce: TRectangle;
     LayoutZvonce: TLayout;
-    ADOQuery1: TADOQuery; // Komponenta koju dodajemo na formu
+    ADOQuery1: TADOQuery;
+    dugmePonude: TButton; // Osiguravamo da je dugme ispravno deklarisano
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
+    procedure ZvonceClick(Sender: TObject);
+    procedure dugmePonudeClick(Sender: TObject);
   private
-    { Private declarations }
+    PraviIDKlijenta: Integer;
   public
-    { Public declarations }
-  UlogovaniUser: string; // Ovde Login forma upisuje ID klijenta pri ulazu
+    UlogovaniUser: Integer; // Ovde Login forma upisuje ID klijenta pri ulazu
   end;
 
 var
@@ -42,7 +44,7 @@ var
 
 implementation
 
-uses Detalji; // Koristimo tvoje ostale forme gde je konekcija
+uses Detalji, pocetna, PonudeKlijenta; // <-- AKO TI SE CRVENI FORM2, ovde umesto Form2Unit upiši tačan naziv Unita tvoje Login/Glavne forme
 
 {$R *.fmx}
 
@@ -72,7 +74,6 @@ end;
 
 procedure TForm6.FormShow(Sender: TObject);
 var
-  PraviIDKlijenta: Integer;
   BrojPonuda: Integer;
 begin
   try
@@ -82,8 +83,8 @@ begin
     // --- 1. KORAK: Pronalazimo firmu na osnovu ulogovanog e-maila ---
     ADOQuery1.Close;
     ADOQuery1.SQL.Clear;
-    ADOQuery1.SQL.Add('SELECT * FROM Klijenti WHERE KorisnickoIme = :korisnickoime');
-    ADOQuery1.Parameters.ParamByName('korisnickoime').Value := UlogovaniUser;
+    ADOQuery1.SQL.Add('SELECT * FROM Klijenti WHERE LoginID = :LoginID');
+    ADOQuery1.Parameters.ParamByName('LoginID').Value := UlogovaniUser;
     ADOQuery1.Open;
 
     if not ADOQuery1.IsEmpty then
@@ -100,26 +101,24 @@ begin
     end
     else
     begin
-      ShowMessage('Greška: Nisu pronađeni korisnički podaci za nalog: ' + UlogovaniUser);
+      ShowMessage('Greška: Nisu pronađeni korisnički podaci za nalog.');
       Exit;
     end;
-
-    // --- 2. KORAK: Brojanje aktivnih ponuda za zvonce ---
     ADOQuery1.Close;
     ADOQuery1.SQL.Clear;
-    ADOQuery1.SQL.Add('SELECT COUNT(*) AS UkupnoNovih FROM Zahtevi WHERE KlijentID = :KlijentID AND StatusID = 3');
+    ADOQuery1.SQL.Add('SELECT COUNT(*) AS UkupnoNovih FROM Ponude p ');
+    ADOQuery1.SQL.Add('INNER JOIN Zahtevi z ON p.ZahtevID = z.[ID zahteva] ');
+    ADOQuery1.SQL.Add('WHERE z.KlijentID = :KlijentID AND p.StatusID = 3');
     ADOQuery1.Parameters.ParamByName('KlijentID').Value := PraviIDKlijenta;
     ADOQuery1.Open;
 
     BrojPonuda := ADOQuery1.FieldByName('UkupnoNovih').AsInteger;
 
-    // --- 3. KORAK: Vizuelni prikaz zvonca na interfejsu ---
     if BrojPonuda > 0 then
     begin
       Label1.Text := IntToStr(BrojPonuda);
       PravougaonikZvonce.Visible := True;
 
-      // Osiguravamo da se ukrasi iscrtaju ispred svega
       PravougaonikZvonce.BringToFront;
       Label1.BringToFront;
     end
@@ -136,14 +135,38 @@ end;
 
 procedure TForm6.SpeedButton1Click(Sender: TObject);
 begin
-  Form2.Show;
-  Close;
+  if Assigned(Form2) then
+    Form2.Show;
+  Self.Hide;
+end;
+
+procedure TForm6.dugmePonudeClick(Sender: TObject);
+begin
+  Form11.KlijentID := PraviIDKlijenta;
+  Form11.Left := Self.Left;
+  Form11.Top := Self.Top;
+  Form11.Width := Self.Width;
+  Form11.Height := Self.Height;
+  Form11.Show;
+  Self.Hide;
+
 end;
 
 procedure TForm6.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   LastFormX := Left;
   LastFormY := Top;
+end;
+
+procedure TForm6.ZvonceClick(Sender: TObject);
+begin
+  Form11.KlijentID := PraviIDKlijenta;
+  Form11.Left := Self.Left;
+  Form11.Top := Self.Top;
+  Form11.Width := Self.Width;
+  Form11.Height := Self.Height;
+  Form11.Show;
+  Self.Hide;
 end;
 
 end.

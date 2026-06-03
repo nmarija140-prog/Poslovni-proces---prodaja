@@ -1,0 +1,242 @@
+object Form6: TForm6
+  Left = 0
+  Top = 0
+  Caption = 'Form6'
+  ClientHeight = 536
+  ClientWidth = 324
+  Fill.Color = claLightgray
+  Fill.Kind = Solid
+  Position = Designed
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object SpeedButton1: TSpeedButton
+    Position.X = 8.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 33.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'arrowlefttoolbutton'
+    Text = 'SpeedButton1'
+    TextSettings.Trimming = None
+    OnClick = SpeedButton1Click
+  end
+  object Image1: TImage
+    MultiResBitmap = <
+      item
+      end>
+    Position.X = 104.000000000000000000
+    Position.Y = 16.000000000000000000
+    Size.Width = 114.000000000000000000
+    Size.Height = 105.000000000000000000
+    Size.PlatformDefault = False
+    object Text1: TText
+      Position.X = 32.000000000000000000
+      Position.Y = 24.000000000000000000
+      Text = 'Slika klijenta'
+    end
+  end
+  object txtImeKorisnika: TText
+    Position.X = 105.000000000000000000
+    Position.Y = 120.000000000000000000
+    Size.Width = 113.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Slobodnih vozila:'
+    TextSettings.Font.Size = 13.000000000000000000
+    TextSettings.Font.StyleExt = {00070000000000000004000000}
+    TextSettings.FontColor = claDarkblue
+    object txtNazivFirme: TText
+      Position.X = -1.000000000000000000
+      Position.Y = 96.000000000000000000
+      Size.Width = 96.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Text = '--------'
+      TextSettings.Font.Size = 13.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      TextSettings.FontColor = claDarkblue
+      TextSettings.HorzAlign = Leading
+      object TText
+        Position.X = -104.000000000000000000
+        Size.Width = 96.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Naziv firme'
+        TextSettings.Font.Size = 13.000000000000000000
+        TextSettings.Font.StyleExt = {00070000000000000004000000}
+        TextSettings.FontColor = claDarkblue
+      end
+      object txtPIB: TText
+        Position.Y = 33.000000000000000000
+        Size.Width = 96.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = '--------'
+        TextSettings.Font.Size = 13.000000000000000000
+        TextSettings.Font.StyleExt = {00070000000000000004000000}
+        TextSettings.FontColor = claDarkblue
+        TextSettings.HorzAlign = Leading
+        object TText
+          Position.X = -104.000000000000000000
+          Size.Width = 96.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'PIB'
+          TextSettings.Font.Size = 13.000000000000000000
+          TextSettings.Font.StyleExt = {00070000000000000004000000}
+          TextSettings.FontColor = claDarkblue
+        end
+        object txtAdresa: TText
+          Position.Y = 32.000000000000000000
+          Size.Width = 96.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = '--------'
+          TextSettings.Font.Size = 13.000000000000000000
+          TextSettings.Font.StyleExt = {00070000000000000004000000}
+          TextSettings.FontColor = claDarkblue
+          TextSettings.HorzAlign = Leading
+          object TText
+            Position.X = -104.000000000000000000
+            Size.Width = 96.000000000000000000
+            Size.Height = 33.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Adresa'
+            TextSettings.Font.Size = 13.000000000000000000
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+            TextSettings.FontColor = claDarkblue
+          end
+        end
+        object txtEmail: TText
+          Position.Y = 64.000000000000000000
+          Size.Width = 96.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = '--------'
+          TextSettings.Font.Size = 13.000000000000000000
+          TextSettings.Font.StyleExt = {00070000000000000004000000}
+          TextSettings.FontColor = claDarkblue
+          TextSettings.HorzAlign = Leading
+          object TText
+            Position.X = -104.000000000000000000
+            Size.Width = 96.000000000000000000
+            Size.Height = 33.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Email'
+            TextSettings.Font.Size = 13.000000000000000000
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+            TextSettings.FontColor = claDarkblue
+          end
+          object txtBrojTelefona: TText
+            Position.Y = 32.000000000000000000
+            Size.Width = 96.000000000000000000
+            Size.Height = 33.000000000000000000
+            Size.PlatformDefault = False
+            Text = '--------'
+            TextSettings.Font.Size = 13.000000000000000000
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+            TextSettings.FontColor = claDarkblue
+            TextSettings.HorzAlign = Leading
+            object TText
+              Position.X = -104.000000000000000000
+              Size.Width = 96.000000000000000000
+              Size.Height = 33.000000000000000000
+              Size.PlatformDefault = False
+              Text = 'Broj telefona'
+              TextSettings.Font.Size = 13.000000000000000000
+              TextSettings.Font.StyleExt = {00070000000000000004000000}
+              TextSettings.FontColor = claDarkblue
+            end
+          end
+        end
+      end
+    end
+  end
+  object btnOtvoriNalog: TButton
+    StyledSettings = [Family]
+    Position.Y = -64.000000000000000000
+    Size.Width = 185.000000000000000000
+    Size.Height = 47.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'PrijavaBtnStyle1'
+    TabOrder = 0
+    Text = 'Otvori nalog'
+    TextSettings.Font.Size = 15.000000000000000000
+    TextSettings.Font.StyleExt = {00070000000200000004000000}
+    TextSettings.Trimming = None
+    object btnUrediProfil: TButton
+      StyledSettings = [Family]
+      Position.X = 64.000000000000000000
+      Position.Y = 488.000000000000000000
+      Size.Width = 185.000000000000000000
+      Size.Height = 47.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'PrijavaBtnStyle1'
+      TabOrder = 0
+      Text = 'Upravljaj nalozima'
+      TextSettings.Font.Size = 15.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000200000004000000}
+      TextSettings.Trimming = None
+    end
+  end
+  object LayoutZvonce: TLayout
+    Position.X = 252.000000000000000000
+    Position.Y = 216.000000000000000000
+    Size.Width = 32.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    object Zvonce: TPath
+      Align = Client
+      Data.Path = {
+        1F00000000000000000040410000B0410200000051AC51410000B04102000000
+        0000604129D6A84102000000000060410000A04101000000000020410000A041
+        020000000000204129D6A84102000000AF532E410000B0410200000000004041
+        0000B04100000000000090410000804101000000000090410000304102000000
+        000090418FC2FD400200000048E182411F85AB4002000000000058418FC29540
+        01000000000058410000804002000000000058410DFB4A40020000003D414D41
+        0000204002000000000040410000204002000000C3BE32410000204002000000
+        000028410DFB4A4002000000000028410000804001000000000028418FC29540
+        02000000F628F4401F85AB40020000000000C040A470FD40020000000000C040
+        00003041010000000000C0400000804101000000000080400000904101000000
+        0000804000009841010000000000A04100009841010000000000A04100009041
+        010000000000904100008041030000000000904100008041}
+      Size.Width = 32.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object PravougaonikZvonce: TRectangle
+      Fill.Color = claRed
+      Position.X = 22.000000000000000000
+      Position.Y = 22.000000000000000000
+      Size.Width = 18.000000000000000000
+      Size.Height = 18.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      XRadius = 9.000000000000000000
+      YRadius = 9.000000000000000000
+      object Label1: TLabel
+        Align = Center
+        StyledSettings = []
+        Size.Width = 16.000000000000000000
+        Size.Height = 16.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 10.000000000000000000
+        TextSettings.Font.StyleExt = {00060000000000000004000000}
+        TextSettings.FontColor = claWhite
+        TextSettings.HorzAlign = Center
+        Text = '1'
+        TabOrder = 0
+      end
+    end
+  end
+  object ADOQuery1: TADOQuery
+    Parameters = <>
+    Left = 264
+    Top = 360
+  end
+end

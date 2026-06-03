@@ -71,10 +71,10 @@ begin
       try
         ADOQuery1.Close;
         ADOQuery1.SQL.Clear;
-        ADOQuery1.SQL.Text := 'UPDATE Zahtevi SET StatusID = :NoviStatusID WHERE [ID zahteva] = :ZahtevID';
+        ADOQuery1.SQL.Text := 'UPDATE Ponude SET StatusID = :NoviStatusID WHERE PonudaID = :PonudaID';
 
         ADOQuery1.Parameters.ParamByName('NoviStatusID').Value := IDNovogStatusa;
-        ADOQuery1.Parameters.ParamByName('ZahtevID').Value := IDZahtevaZaPonudu;
+        ADOQuery1.Parameters.ParamByName('PonudaID').Value := IDZahtevaZaPonudu;
         ADOQuery1.ExecSQL;
 
 

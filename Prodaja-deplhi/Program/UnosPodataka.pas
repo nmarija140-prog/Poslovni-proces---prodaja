@@ -119,7 +119,7 @@ begin
 
                ADOQuery1.Close;
   ADOQuery1.SQL.Text :=
-    'SELECT role FROM login ' +
+    'SELECT ID, role FROM login ' +
     'WHERE StrComp(korisnickoime, :u, 0)=0'+' AND StrComp(sifra, :p, 0)=0';  ///Case sensitive
 
   ADOQuery1.Parameters.ParamByName('u').Value :=
@@ -155,7 +155,7 @@ begin
 end
 else if SameText(role, 'klijent') then
 begin
-Form6.UlogovaniUser := ADOQuery1.FieldByName('email').AsString;
+Form6.UlogovaniUser := ADOQuery1.FieldByName('ID').AsInteger;
   Form6.Left := Self.Left;
   Form6.Top := Self.Top;
   Form6.Show;

@@ -15,7 +15,9 @@ uses
   NoviZahtev in 'NoviZahtev.pas' {Form9},
   NovKlijent in 'NovKlijent.pas' {Form10},
   Detalji in 'Detalji.pas' {MestoUtovara},
-  KreiranjePonude in 'KreiranjePonude.pas' {LabelKlijent};
+  KreiranjePonude in 'KreiranjePonude.pas' {LabelKlijent},
+  PonudeKlijenta in 'PonudeKlijenta.pas' {Form11},
+  KreiranjeRezervacije in 'KreiranjeRezervacije.pas' {Form12};
 
 {$R *.res}
 
@@ -32,6 +34,8 @@ begin
   Application.CreateForm(TForm8, Form8);
   Application.CreateForm(TForm9, Form9);
   Application.CreateForm(TForm10, Form10);
+  Application.CreateForm(TForm11, Form11);
+  Application.CreateForm(TForm12, Form12);
   Application.CreateForm(TForm11, Form11);
   Application.CreateForm(TForm12, Form12);
   Application.Run;

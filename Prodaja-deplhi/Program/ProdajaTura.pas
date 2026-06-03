@@ -1,4 +1,4 @@
-unit ProdajaTura;
+﻿unit ProdajaTura;
 
 interface
 
@@ -84,7 +84,7 @@ begin
 
   except
     on E: Exception do
-      ShowMessage('Gre�ka pri konekciji sa bazom: ' + E.Message);
+      ShowMessage('Greška pri konekciji sa bazom: ' + E.Message);
   end;
 end;
 
@@ -171,11 +171,16 @@ procedure TForm8.ListaZahteviItemClick(const Sender: TObject; const AItem: TList
 var
   KliknutiStatusID: Integer;
 begin
-  KliknutiStatusID := StrToInt(AItem.Detail);
+  if AItem = nil then Exit;
 
+  KliknutiStatusID := StrToInt(AItem.Detail);
 
   if KliknutiStatusID = 3 then
   begin
+    // OSIGURAČ: Ako Form12 nije kreirana u memoriji, kreiraj je sada!
+    if not Assigned(Form12) then
+      Application.CreateForm(TForm12, Form12);
+
     Form12.IDZahtevaZaPonudu := AItem.Tag;
 
     Form12.Left := Self.Left;
@@ -186,9 +191,12 @@ begin
     Form12.Show;
     Self.Hide;
   end
-
   else
   begin
+    // KLJUČNI OSIGURAČ: Ako Form11 (Detalji) nije kreirana u memoriji, kreiraj je sada!
+    if not Assigned(Form11) then
+      Application.CreateForm(TForm11, Form11);
+
     Form11.IzabraniID := AItem.Tag;
     Form11.IzabraniStatusID := KliknutiStatusID;
 

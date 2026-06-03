@@ -208,6 +208,7 @@ object Form6: TForm6
       Size.Width = 32.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
+      OnClick = ZvonceClick
     end
     object PravougaonikZvonce: TRectangle
       Fill.Color = claRed
@@ -233,6 +234,14 @@ object Form6: TForm6
         TabOrder = 0
       end
     end
+  end
+  object dugmePonude: TButton
+    Position.X = 48.000000000000000000
+    Position.Y = 136.000000000000000000
+    TabOrder = 6
+    Text = 'dugmePonude'
+    TextSettings.Trimming = None
+    OnClick = dugmePonudeClick
   end
   object ADOQuery1: TADOQuery
     Parameters = <>

@@ -177,6 +177,14 @@
             <Form>LabelKlijent</Form>
             <FormType>fmx</FormType>
         </DCCReference>
+        <DCCReference Include="PonudeKlijenta.pas">
+            <Form>Form11</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
+        <DCCReference Include="KreiranjeRezervacije.pas">
+            <Form>Form12</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

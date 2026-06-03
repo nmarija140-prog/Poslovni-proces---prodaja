@@ -1,4 +1,4 @@
-unit Admin;
+﻿unit Admin;
 
 interface
 
@@ -31,6 +31,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure DugmeUdjiAdminClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnOtvoriNalogClick(Sender: TObject);
   private
     procedure PopuniComboKorisnike;
   public
@@ -41,7 +42,7 @@ var
   Form4: TForm4;
 
 implementation
-       uses Klijent;
+       uses Klijent, NovKlijent;
 {$R *.fmx}
 procedure TForm4.PopuniComboKorisnike;
 begin
@@ -58,6 +59,27 @@ begin
     );
     ADOQuery1.Next;
   end;
+end;
+
+procedure TForm4.btnOtvoriNalogClick(Sender: TObject);
+var
+  IzabraniLoginID: Integer;
+begin
+  // 1. Provera da li je admin uopšte izabrao nalog iz ComboBox-a
+  if ComboKorisniciAdmin.ItemIndex = -1 then
+  begin
+    ShowMessage('Molimo Vas da prvo izaberete nalog iz liste za koji otvarate profil klijenta.');
+    Exit;
+  end;
+
+  // 2. Izvlačimo ID naloženog korisnika iz objekta ComboBox-a
+  IzabraniLoginID := Integer(ComboKorisniciAdmin.Items.Objects[ComboKorisniciAdmin.ItemIndex]);
+
+  // 3. Prosleđujemo taj ID formi za unos klijenta (Form10) u njenu javnu promenljivu
+  Form10.LoginIDZaUnos := IzabraniLoginID;
+
+  // 4. Otvaramo formu za unos klijenta
+  Form10.Show;
 end;
 
 procedure TForm4.DugmeUdjiAdminClick(Sender: TObject);
