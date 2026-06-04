@@ -123,7 +123,7 @@ begin
     ADOQuery1.Parameters.ParamByName('VozacID').Value := RezVozacID;
     ADOQuery1.ExecSQL;
 
-    Form8.PopuniListuZahteva(1, True);
+    Form8.PopuniListuZahteva(4);
     ShowMessage('Rezervacija je uspešno otkazana!');
     OcistiLabele;
     Form8.Show;
@@ -190,10 +190,10 @@ ADOQuery1.Parameters.ParamByName('StatusID').Value := StatusVozacaID;
 ADOQuery1.Parameters.ParamByName('VozacID').Value := IzabraniVozacID;
 ADOQuery1.ExecSQL;
 
-    Form8.PopuniListuZahteva(1, True);
     ShowMessage('Rezervacija je uspešno sačuvana!');
     OcistiLabele;
     Form8.Show;
+    Form8.PopuniListuZahteva(5);
     Self.Hide;
 
   except
@@ -332,8 +332,14 @@ end;
 
 procedure TForm12.DugmeNazadClick(Sender: TObject);
 begin
-OcistiLabele;
-  FormDetalji.Show;
+  OcistiLabele;
+  if not Assigned(Form8) then
+    Application.CreateForm(TForm8, Form8);
+  Form8.Left := Self.Left;
+  Form8.Top := Self.Top;
+  Form8.Width := Self.Width;
+  Form8.Height := Self.Height;
+  Form8.Show;
   Self.Hide;
 end;
 

@@ -42,13 +42,13 @@ object Form8: TForm8
       TextSettings.Font.Size = 15.000000000000000000
     end
   end
-  object KarticaOdbijenePonude: TRectangle
+  object KarticaZakazaneTure: TRectangle
     Position.X = 172.000000000000000000
     Position.Y = 256.000000000000000000
     Size.Width = 120.000000000000000000
     Size.Height = 100.000000000000000000
     Size.PlatformDefault = False
-    OnClick = KarticaOdbijenePonudeClick
+    OnClick = KarticaZakazaneTureClick
     object RectAnimation2: TRectAnimation
       Duration = 0.200000002980232200
     end
@@ -57,7 +57,7 @@ object Form8: TForm8
       Size.Width = 121.000000000000000000
       Size.Height = 50.000000000000000000
       Size.PlatformDefault = False
-      Text = #55357#56628' Odbijene ponude'
+      Text = #55357#57315' Zakazane     ture'
       TextSettings.Font.Size = 15.000000000000000000
     end
     object KarticaPoslatePonude: TRectangle

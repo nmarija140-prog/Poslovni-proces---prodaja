@@ -82,7 +82,7 @@ begin
         FormShow(Self);
 
         ShowMessage('PDF ponuda je uspešno poslata klijentu, a status je ažuriran!');
-        Form8.PopuniListuZahteva(1, True);
+        Form8.PopuniListuZahteva(3);
       except
         on E: Exception do
           ShowMessage('Mejl je poslat, ali je puklo ažuriranje StatusID-ja u bazi: ' + E.Message);

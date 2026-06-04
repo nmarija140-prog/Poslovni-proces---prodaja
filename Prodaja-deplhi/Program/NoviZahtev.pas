@@ -253,7 +253,7 @@ begin
 
     ADOQuery1.ExecSQL;
     ShowMessage('Zahtev uspešno sačuvan!');
-    Form8.PopuniListuZahteva(1, False);
+    Form8.PopuniListuZahteva(1);
     OcistiPolja;
 
     Form8.Left := Self.Left;
