@@ -8,7 +8,7 @@ uses
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects, FMX.Ani, FMX.Layouts,
   Data.DB, Data.Win.ADODB, System.IniFiles, System.IOUtils, FMX.Edit,
   FMX.ListView.Types, FMX.ListView.Appearances, FMX.ListView.Adapters.Base,
-  FMX.ListView, KreiranjePonude, UnosPodataka;
+  FMX.ListView, UnosPodataka;
 
 type
   TForm8 = class(TForm)
@@ -56,7 +56,7 @@ var
   Form8: TForm8;
 
 implementation
-uses NoviZahtev, Detalji, KreiranjeRezervacije;
+uses NoviZahtev, Detalji, KreiranjeRezervacije, KreiranjePonude;
 {$R *.fmx}
 
 procedure TForm8.FormCreate(Sender: TObject);
@@ -186,21 +186,18 @@ begin
     Self.Hide;
   end;
 
-  if KliknutiStatusID = 3 then
-  begin
-    if not Assigned(FormDetalji) then
-      Application.CreateForm(TFormDetalji, FormDetalji);
-    FormDetalji.IzabraniID := AItem.Tag;
-    FormDetalji.IzabraniStatusID := KliknutiStatusID;
-    FormDetalji.DugmePonuda.Visible := False;
-    FormDetalji.RezervacijaDugme.Visible := False;
-    FormDetalji.Left := Self.Left;
-    FormDetalji.Top := Self.Top;
-    FormDetalji.Width := Self.Width;
-    FormDetalji.Height := Self.Height;
-    FormDetalji.Show;
-    Self.Hide;
-  end;
+if KliknutiStatusID = 3 then
+begin
+  if not Assigned(Form13) then
+    Application.CreateForm(TForm13, Form13);
+  Form13.IDZahtevaZaPonudu := AItem.Tag;
+  Form13.Left := Self.Left;
+  Form13.Top := Self.Top;
+  Form13.Width := Self.Width;
+  Form13.Height := Self.Height;
+  Form13.Show;
+  Self.Hide;
+end;
 
   if KliknutiStatusID = 4 then
   begin

@@ -17,7 +17,10 @@ uses
   Detalji in 'Detalji.pas' {FormDetalji},
   KreiranjePonude in 'KreiranjePonude.pas' {Form13},
   PonudeKlijenta in 'PonudeKlijenta.pas' {Form11},
-  KreiranjeRezervacije in 'KreiranjeRezervacije.pas' {Form12};
+  KreiranjeRezervacije in 'KreiranjeRezervacije.pas' {Form12},
+  KlijentPrihvatanje in 'KlijentPrihvatanje.pas' {Form14},
+  VozacPonude in 'VozacPonude.pas' {Form15},
+  VozacPrihvatanje in 'VozacPrihvatanje.pas' {Form16};
 
 {$R *.res}
 
@@ -38,5 +41,8 @@ begin
   Application.CreateForm(TForm12, Form12);
   Application.CreateForm(TForm11, Form11);
   Application.CreateForm(TForm12, Form12);
+  Application.CreateForm(TForm14, Form14);
+  Application.CreateForm(TForm15, Form15);
+  Application.CreateForm(TForm16, Form16);
   Application.Run;
 end.

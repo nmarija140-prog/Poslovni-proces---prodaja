@@ -136,9 +136,10 @@ begin
 end;
 
 procedure TForm12.DugmeSacuvajRezervacijuClick(Sender: TObject);
-var IzabranoVoziloID, IzabraniVozacID: Integer;
+var
+  IzabranoVoziloID, IzabraniVozacID: Integer;
 begin
-if ComboBoxVozila.ItemIndex = -1 then
+  if ComboBoxVozila.ItemIndex = -1 then
   begin
     ShowMessage('Molimo vas, izaberite vozilo.');
     Exit;
@@ -148,10 +149,11 @@ if ComboBoxVozila.ItemIndex = -1 then
     ShowMessage('Molimo vas, izaberite vozača.');
     Exit;
   end;
-IzabranoVoziloID := Integer(ComboBoxVozila.Items.Objects[ComboBoxVozila.ItemIndex]);
-  IzabraniVozacID := Integer(ComboBoxVozaci.Items.Objects[ComboBoxVozaci.ItemIndex]);
- try
 
+  IzabranoVoziloID := Integer(ComboBoxVozila.Items.Objects[ComboBoxVozila.ItemIndex]);
+  IzabraniVozacID := Integer(ComboBoxVozaci.Items.Objects[ComboBoxVozaci.ItemIndex]);
+
+  try
     ADOQuery1.Close;
     ADOQuery1.SQL.Text :=
       'INSERT INTO Rezervacije (ZahtevID, VoziloID, VozacID, DatumRezervacije) ' +
@@ -162,38 +164,10 @@ IzabranoVoziloID := Integer(ComboBoxVozila.Items.Objects[ComboBoxVozila.ItemInde
     ADOQuery1.Parameters.ParamByName('DatumRezervacije').Value := Now;
     ADOQuery1.ExecSQL;
 
-
-    ADOQuery1.Close;
-    ADOQuery1.SQL.Text :=
-      'UPDATE Zahtevi SET StatusID = 5 WHERE [ID Zahteva] = :ZahtevID';
-    ADOQuery1.Parameters.ParamByName('ZahtevID').Value := IDZahtevaZaPonudu;
-    ADOQuery1.ExecSQL;
-    ADOQuery1.Close;
-ADOQuery1.SQL.Text := 'SELECT idStatusa FROM statusVozila WHERE status = ''U voznji''';
-ADOQuery1.Open;
-var StatusVozilaID := ADOQuery1.FieldByName('idStatusa').AsInteger;
-
-    ADOQuery1.Close;
-ADOQuery1.SQL.Text := 'UPDATE Vozila SET status = :StatusID WHERE ID = :VoziloID';
-ADOQuery1.Parameters.ParamByName('StatusID').Value := StatusVozilaID;
-ADOQuery1.Parameters.ParamByName('VoziloID').Value := IzabranoVoziloID;
-ADOQuery1.ExecSQL;
-
-    ADOQuery1.Close;
-ADOQuery1.SQL.Text := 'SELECT IDStatusa FROM statusVozaca WHERE StatusVozaca = ''Zauzet''';
-ADOQuery1.Open;
-var StatusVozacaID := ADOQuery1.FieldByName('IDStatusa').AsInteger;
-
-    ADOQuery1.Close;
-ADOQuery1.SQL.Text := 'UPDATE Vozaci SET Status = :StatusID WHERE IDVozaca = :VozacID';
-ADOQuery1.Parameters.ParamByName('StatusID').Value := StatusVozacaID;
-ADOQuery1.Parameters.ParamByName('VozacID').Value := IzabraniVozacID;
-ADOQuery1.ExecSQL;
-
-    ShowMessage('Rezervacija je uspešno sačuvana!');
+    ShowMessage('Rezervacija je kreirana, čeka se potvrda vozača!');
     OcistiLabele;
     Form8.Show;
-    Form8.PopuniListuZahteva(5);
+    Form8.PopuniListuZahteva(4);
     Self.Hide;
 
   except

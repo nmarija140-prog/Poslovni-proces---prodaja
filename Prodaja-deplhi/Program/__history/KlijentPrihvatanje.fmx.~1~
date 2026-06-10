@@ -1,0 +1,90 @@
+object Form14: TForm14
+  Left = 0
+  Top = 0
+  Caption = 'Form14'
+  ClientHeight = 536
+  ClientWidth = 324
+  Fill.Color = claLightgray
+  Fill.Kind = Solid
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object LabelRuta: TLabel
+    Position.X = 16.000000000000000000
+    Position.Y = 88.000000000000000000
+    Size.Width = 300.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'LabelRuta'
+    TabOrder = 1
+  end
+  object LabelDatum: TLabel
+    Position.X = 16.000000000000000000
+    Position.Y = 144.000000000000000000
+    Size.Width = 300.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'LabelDatum'
+    TabOrder = 2
+  end
+  object LabelCena: TLabel
+    Position.X = 16.000000000000000000
+    Position.Y = 200.000000000000000000
+    Size.Width = 300.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'LabelCena'
+    TabOrder = 3
+  end
+  object LabelRokPlacanja: TLabel
+    Position.X = 16.000000000000000000
+    Position.Y = 256.000000000000000000
+    Size.Width = 300.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'LabelRokPlacanja'
+    TabOrder = 4
+  end
+  object MemoNapomena: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Position.X = 16.000000000000000000
+    Position.Y = 312.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 65.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    Viewport.Width = 120.000000000000000000
+    Viewport.Height = 65.000000000000000000
+  end
+  object SpeedButtonNazad: TSpeedButton
+    Position.X = 8.000000000000000000
+    Position.Y = 16.000000000000000000
+    Size.Width = 33.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'arrowlefttoolbutton'
+    Text = 'SpeedButtonNazad'
+    TextSettings.Trimming = None
+  end
+  object ButtonPrihvati: TButton
+    Position.X = 56.000000000000000000
+    Position.Y = 448.000000000000000000
+    TabOrder = 7
+    Text = 'Prihvati'
+    TextSettings.Trimming = None
+  end
+  object ButtonOdbij: TButton
+    Position.X = 208.000000000000000000
+    Position.Y = 448.000000000000000000
+    TabOrder = 8
+    Text = 'Odbij'
+    TextSettings.Trimming = None
+  end
+  object ADOQuery1: TADOQuery
+    Parameters = <>
+    Left = 256
+    Top = 56
+  end
+end

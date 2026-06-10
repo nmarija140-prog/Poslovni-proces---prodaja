@@ -1,0 +1,44 @@
+﻿unit PonudeKlijenta;
+
+interface
+
+uses
+  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
+  FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
+  FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects, FMX.Layouts,
+  Data.DB, Data.Win.ADODB, FMX.ScrollBox;
+
+type
+  TForm11 = class(TForm)
+    VertScrollBox1: TVertScrollBox;
+    SpeedButton1: TSpeedButton;
+    Text1: TText;
+    ADOQuery1: TADOQuery;
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+
+  public
+        PraviIDKlijenta: Integer;
+  end;
+
+var
+  Form11: TForm11;
+
+implementation
+
+
+uses Klijent, ProdajaTura;
+
+{$R *.fmx}
+
+
+
+
+
+procedure TForm11.SpeedButton1Click(Sender: TObject);
+begin
+  Form6.Show;
+  Self.Hide;
+end;
+
+end.

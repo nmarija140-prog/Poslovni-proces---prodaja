@@ -32,7 +32,7 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure ZvonceClick(Sender: TObject);
-    procedure dugmePonudeClick(Sender: TObject);
+procedure dugmePonudeClick(Sender: TObject);
   private
     PraviIDKlijenta: Integer;
   public
@@ -140,27 +140,17 @@ begin
   Self.Hide;
 end;
 
-procedure TForm6.dugmePonudeClick(Sender: TObject);
-begin
-  Form11.KlijentID := PraviIDKlijenta;
-  Form11.Left := Self.Left;
-  Form11.Top := Self.Top;
-  Form11.Width := Self.Width;
-  Form11.Height := Self.Height;
-  Form11.Show;
-  Self.Hide;
-
-end;
 
 procedure TForm6.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   LastFormX := Left;
   LastFormY := Top;
 end;
-
 procedure TForm6.ZvonceClick(Sender: TObject);
 begin
-  Form11.KlijentID := PraviIDKlijenta;
+  if not Assigned(Form11) then
+    Application.CreateForm(TForm11, Form11);
+  Form11.PraviIDKlijenta := PraviIDKlijenta;
   Form11.Left := Self.Left;
   Form11.Top := Self.Top;
   Form11.Width := Self.Width;
@@ -168,5 +158,20 @@ begin
   Form11.Show;
   Self.Hide;
 end;
+
+procedure TForm6.dugmePonudeClick(Sender: TObject);
+begin
+  if not Assigned(Form11) then
+    Application.CreateForm(TForm11, Form11);
+  Form11.PraviIDKlijenta := PraviIDKlijenta;
+  Form11.Left := Self.Left;
+  Form11.Top := Self.Top;
+  Form11.Width := Self.Width;
+  Form11.Height := Self.Height;
+  Form11.Show;
+  Self.Hide;
+end;
+
+
 
 end.

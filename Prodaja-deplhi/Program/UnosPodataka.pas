@@ -162,6 +162,7 @@ Form6.UlogovaniUser := ADOQuery1.FieldByName('ID').AsInteger;
 end
 else if SameText(role, 'vozac') then
 begin
+  Form7.UlogovaniVozac := ADOQuery1.FieldByName('ID').AsInteger;
   Form7.Left := Self.Left;
   Form7.Top := Self.Top;
   Form7.Show;

@@ -211,7 +211,7 @@ begin
 
     ADOQuery1.Close;
     ADOQuery1.SQL.Clear;
-    ADOQuery1.SQL.Add('SELECT z.MestoUtovara, z.MestoIstovara, z.DatumUtovara, z.StatusID, k.nazivKlijenta, k.email, k.IDKlijenta ');
+    ADOQuery1.SQL.Add('SELECT z.MestoUtovara, z.MestoIstovara, z.DatumUtovara, z.StatusID, k.nazivKlijenta, k.email, k.IDKlijenta, ');
     ADOQuery1.SQL.Add('       p.PonudaID, p.Cena, p.Valuta, p.RokPlacanja, p.Napomena ');
     ADOQuery1.SQL.Add('FROM (Zahtevi z ');
     ADOQuery1.SQL.Add('INNER JOIN Klijenti k ON z.KlijentID = k.IDKlijenta) ');
@@ -230,7 +230,10 @@ begin
       KlijentEmail := ADOQuery1.FieldByName('email').AsString;
       KlijentID := ADOQuery1.FieldByName('IDKlijenta').AsInteger;
 
-      TrenutniStatusID := ADOQuery1.FieldByName('StatusID').AsInteger;
+    if not ADOQuery1.FieldByName('PonudaID').IsNull then
+  TrenutniStatusID := 3
+else
+  TrenutniStatusID := ADOQuery1.FieldByName('StatusID').AsInteger;
 
       if not ADOQuery1.FieldByName('PonudaID').IsNull then
       begin

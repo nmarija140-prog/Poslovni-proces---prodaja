@@ -185,6 +185,18 @@
             <Form>Form12</Form>
             <FormType>fmx</FormType>
         </DCCReference>
+        <DCCReference Include="KlijentPrihvatanje.pas">
+            <Form>Form14</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
+        <DCCReference Include="VozacPonude.pas">
+            <Form>Form15</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
+        <DCCReference Include="VozacPrihvatanje.pas">
+            <Form>Form16</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
