@@ -13,6 +13,7 @@ type
     VertScrollBox1: TVertScrollBox;
     SpeedButton1: TSpeedButton;
     ADOQuery1: TADOQuery;
+    Text1: TText;
     procedure FormShow(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure KarticaClick(Sender: TObject);
@@ -41,7 +42,7 @@ begin
   YPozicija := 10;
 
   try
-    ADOQuery1.Connection := Form8.ADOConnection1;
+    ADOQuery1.Connection := Form7.ADOConnection1;
     ADOQuery1.Close;
   ADOQuery1.SQL.Text :=
   'SELECT r.IDRezervacije, z.[ID zahteva], ' +

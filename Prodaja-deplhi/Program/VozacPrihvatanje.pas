@@ -78,12 +78,15 @@ var
 begin
   try
   ADOQuery1.Connection := Form7.ADOConnection1;
-    ShowMessage('ZahtevID = ' + IntToStr(ZahtevID)); // ← privremeno
     ADOQuery1.Close;
-    ADOQuery1.SQL.Text := 'UPDATE Zahtevi SET StatusID = 5 WHERE [ID zahteva] = :ZahtevID';
+    ADOQuery1.SQL.Text := 'UPDATE Ponude SET StatusID = 5 WHERE [ZahtevID] = :ZahtevID';
     ADOQuery1.Parameters.ParamByName('ZahtevID').Value := ZahtevID;
     ADOQuery1.ExecSQL;
-    ShowMessage('Posle UPDATE, ExecSQL = ' + IntToStr(ADOQuery1.RowsAffected)); // ← privremeno
+
+   ADOQuery1.Close;
+   ADOQuery1.SQL.Text := 'UPDATE Zahtevi SET StatusID = 5 WHERE [ID zahteva] = :ZahtevID';
+   ADOQuery1.Parameters.ParamByName('ZahtevID').Value := ZahtevID;
+   ADOQuery1.ExecSQL;
 
     ADOQuery1.Close;
     ADOQuery1.SQL.Text := 'SELECT VoziloID FROM Rezervacije WHERE ZahtevID = :ZahtevID';
@@ -92,9 +95,10 @@ begin
     VoziloID := ADOQuery1.FieldByName('VoziloID').AsInteger;
 
     ADOQuery1.Close;
-    ADOQuery1.SQL.Text := 'SELECT idStatusa FROM statusVozila WHERE status = ''U voznji''';
-    ADOQuery1.Open;
-    StatusVozilaID := ADOQuery1.FieldByName('idStatusa').AsInteger;
+ADOQuery1.SQL.Text := 'SELECT idStatusa FROM statusVozila WHERE status = ''U voznji''';
+ADOQuery1.Open;
+ShowMessage('IsEmpty = ' + BoolToStr(ADOQuery1.IsEmpty, True) + ', StatusVozilaID = ' + ADOQuery1.FieldByName('idStatusa').AsString); // privremeno
+StatusVozilaID := ADOQuery1.FieldByName('idStatusa').AsInteger;
 
     ADOQuery1.Close;
     ADOQuery1.SQL.Text := 'UPDATE Vozila SET status = :StatusID WHERE ID = :VoziloID';
@@ -134,7 +138,7 @@ begin
     ADOQuery1.ExecSQL;
 
     ADOQuery1.Close;
-    ADOQuery1.SQL.Text := 'UPDATE Zahtevi SET StatusID = 4 WHERE [ID zahteva] = :ZahtevID';
+    ADOQuery1.SQL.Text := 'UPDATE Ponude SET StatusID = 4 WHERE ZahtevID = :ZahtevID';
     ADOQuery1.Parameters.ParamByName('ZahtevID').Value := ZahtevID;
     ADOQuery1.ExecSQL;
 
