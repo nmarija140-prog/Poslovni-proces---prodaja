@@ -141,7 +141,6 @@ begin
       Self.Napomena.TextSettings.WordWrap := True;
       Self.Napomena.AutoSize := True;
 
-      // DODATI OSIGURAČI: Ako je polje NULL u bazi, ispisujemo bezbedan tekst
 
       if ADOQuery1.FieldByName('nazivKlijenta').IsNull then
         Self.Klijent.Text := 'Klijent: Nepoznato'

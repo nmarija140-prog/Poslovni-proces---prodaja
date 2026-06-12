@@ -249,11 +249,16 @@ begin
     end;
     ComboBoxVozaci.Items.Clear;
     ADOQuery1.Close;
-    ADOQuery1.SQL.Text :=
-      'SELECT v.IDVozaca, v.ImePrezime ' +
-      'FROM Vozaci v ' +
-      'INNER JOIN statusVozaca s ON v.Status = s.IDStatusa ' +
-      'WHERE s.StatusVozaca = ''Slobodan''';
+  ADOQuery1.SQL.Text :=
+  'SELECT v.IDVozaca, v.ImePrezime ' +
+  'FROM Vozaci v ' +
+  'INNER JOIN statusVozaca s ON v.Status = s.IDStatusa ' +
+  'WHERE s.StatusVozaca = ''Slobodan'' ' +
+  'AND v.IDVozaca NOT IN (' +
+  '  SELECT r.VozacID FROM Rezervacije r ' +
+  '  INNER JOIN Zahtevi z ON r.ZahtevID = z.[ID zahteva] ' +
+  '  WHERE z.DatumUtovara = (SELECT DatumUtovara FROM Zahtevi WHERE [ID zahteva] = ' + IntToStr(IDZahtevaZaPonudu) + ')' +
+  ')';
     ADOQuery1.Open;
 
     while not ADOQuery1.Eof do

@@ -10,7 +10,6 @@ uses
 
 type
   TForm6 = class(TForm)
-    SpeedButton1: TSpeedButton;
     Image1: TImage;
     Text1: TText;
     txtImeKorisnika: TText;
@@ -26,17 +25,27 @@ type
     PravougaonikZvonce: TRectangle;
     LayoutZvonce: TLayout;
     ADOQuery1: TADOQuery;
-    dugmePonude: TButton; // Osiguravamo da je dugme ispravno deklarisano
-    procedure SpeedButton1Click(Sender: TObject);
+    Panel1: TPanel;
+    mojProfil: TButton;
+    chat: TButton;
+    istorijaIsporuke: TButton;
+    Fakture: TButton;
+    Pomoc: TButton;
+    odjava: TButton;
+    Ponude: TButton;
+    HambMeni2: TSpeedButton;
+    procedure HambMeni2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure ZvonceClick(Sender: TObject);
-procedure dugmePonudeClick(Sender: TObject);
+    procedure PonudeClick(Sender: TObject);
+
+
   private
     PraviIDKlijenta: Integer;
   public
-    UlogovaniUser: Integer; // Ovde Login forma upisuje ID klijenta pri ulazu
+    UlogovaniUser: Integer;
   end;
 
 var
@@ -44,7 +53,7 @@ var
 
 implementation
 
-uses Detalji, pocetna, PonudeKlijenta; // <-- AKO TI SE CRVENI FORM2, ovde umesto Form2Unit upiši tačan naziv Unita tvoje Login/Glavne forme
+uses Detalji, pocetna, PonudeKlijenta;
 
 {$R *.fmx}
 
@@ -52,11 +61,11 @@ procedure TForm6.FormCreate(Sender: TObject);
 begin
   LayoutZvonce.Align := TAlignLayout.None;
 
-  // Pozicioniramo CELO ZVONCE u gornji desni ugao forme
+
   LayoutZvonce.Position.X := Self.Width - LayoutZvonce.Width - 25;
   LayoutZvonce.Position.Y := 10;
 
-  // Podešavamo sidra kroz kod da prati desnu ivicu ako se forma širi
+
   LayoutZvonce.Anchors := [TAnchorKind.akTop, TAnchorKind.akRight];
 
   PravougaonikZvonce.Position.X := 22;
@@ -77,10 +86,10 @@ var
   BrojPonuda: Integer;
 begin
   try
-    // Povezujemo Query sa postojećom konekcijom sa Form8
+
     ADOQuery1.Connection := Form8.ADOConnection1;
 
-    // --- 1. KORAK: Pronalazimo firmu na osnovu ulogovanog e-maila ---
+
     ADOQuery1.Close;
     ADOQuery1.SQL.Clear;
     ADOQuery1.SQL.Add('SELECT * FROM Klijenti WHERE LoginID = :LoginID');
@@ -91,7 +100,7 @@ begin
     begin
       PraviIDKlijenta := ADOQuery1.FieldByName('IDKlijenta').AsInteger;
 
-      // Popunjavamo tekstualna polja na interfejsu
+
       txtNazivFirme.Text := ADOQuery1.FieldByName('nazivKlijenta').AsString;
       txtImeKorisnika.Text := ADOQuery1.FieldByName('kontaktOsoba').AsString;
       txtPIB.Text := 'PIB: ' + ADOQuery1.FieldByName('PIB').AsString;
@@ -133,13 +142,30 @@ begin
   end;
 end;
 
-procedure TForm6.SpeedButton1Click(Sender: TObject);
+procedure TForm6.HambMeni2Click(Sender: TObject);
 begin
-  if Assigned(Form2) then
-    Form2.Show;
-  Self.Hide;
+  Panel1.Visible := not Panel1.Visible;
+  if Panel1.Visible then
+  begin
+    Panel1.BringToFront;
+  end;
+  HambMeni2.BringToFront;
 end;
 
+
+procedure TForm6.PonudeClick(Sender: TObject);
+begin
+  if not Assigned(Form11) then
+    Application.CreateForm(TForm11, Form11);
+  Form11.PraviIDKlijenta := PraviIDKlijenta;
+  Form11.Left := Self.Left;
+  Form11.Top := Self.Top;
+  Form11.Width := Self.Width;
+  Form11.Height := Self.Height;
+  Form11.Show;
+  Self.Hide;
+
+end;
 
 procedure TForm6.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
@@ -158,20 +184,4 @@ begin
   Form11.Show;
   Self.Hide;
 end;
-
-procedure TForm6.dugmePonudeClick(Sender: TObject);
-begin
-  if not Assigned(Form11) then
-    Application.CreateForm(TForm11, Form11);
-  Form11.PraviIDKlijenta := PraviIDKlijenta;
-  Form11.Left := Self.Left;
-  Form11.Top := Self.Top;
-  Form11.Width := Self.Width;
-  Form11.Height := Self.Height;
-  Form11.Show;
-  Self.Hide;
-end;
-
-
-
 end.

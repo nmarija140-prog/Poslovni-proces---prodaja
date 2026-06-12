@@ -38,7 +38,7 @@ var
   LabelRuta, LabelDatum, LabelCena, LabelNovo: TLabel;
   YPozicija: Single;
 begin
-  // Obrisi stare kartice
+
   VertScrollBox1.Content.DeleteChildren;
   YPozicija := 10;
 

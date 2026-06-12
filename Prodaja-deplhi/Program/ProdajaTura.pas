@@ -47,6 +47,7 @@ type
     procedure ListaZahteviItemClick(const Sender: TObject; const AItem: TListViewItem);
    procedure PopuniListuZahteva(AStatusID: Integer);
     procedure OdjavaDugmeClick(Sender: TObject);
+
   private
   KlijentID: Integer;
   public
@@ -120,6 +121,8 @@ procedure TForm8.KarticaZakazaneTureClick(Sender: TObject);
 begin
   PopuniListuZahteva(5);
 end;
+
+
 
 procedure TForm8.PopuniListuZahteva(AStatusID: Integer);
 var
