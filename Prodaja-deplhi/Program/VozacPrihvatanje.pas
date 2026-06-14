@@ -95,10 +95,9 @@ begin
     VoziloID := ADOQuery1.FieldByName('VoziloID').AsInteger;
 
     ADOQuery1.Close;
-ADOQuery1.SQL.Text := 'SELECT idStatusa FROM statusVozila WHERE status = ''U voznji''';
-ADOQuery1.Open;
-ShowMessage('IsEmpty = ' + BoolToStr(ADOQuery1.IsEmpty, True) + ', StatusVozilaID = ' + ADOQuery1.FieldByName('idStatusa').AsString); // privremeno
-StatusVozilaID := ADOQuery1.FieldByName('idStatusa').AsInteger;
+    ADOQuery1.SQL.Text := 'SELECT idStatusa FROM statusVozila WHERE status = ''U voznji''';
+    ADOQuery1.Open;
+    StatusVozilaID := ADOQuery1.FieldByName('idStatusa').AsInteger;
 
     ADOQuery1.Close;
     ADOQuery1.SQL.Text := 'UPDATE Vozila SET status = :StatusID WHERE ID = :VoziloID';

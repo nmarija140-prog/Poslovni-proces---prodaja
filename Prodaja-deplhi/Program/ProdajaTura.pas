@@ -80,16 +80,19 @@ begin
       'Provider=Microsoft.Jet.OLEDB.4.0;' +
       'Data Source=' + dbPath + ';';
     ADOConnection1.Connected := True;
+
     PopuniListuZahteva(1);
+
+    ADOQuery1.Close;
+    ADOQuery1.SQL.Text :=
+      'UPDATE Zahtevi SET StatusID = 6 ' +
+      'WHERE StatusID = 5 AND DatumUtovara <= Now()';
+    ADOQuery1.ExecSQL;
+
   except
     on E: Exception do
       ShowMessage('Greška pri konekciji sa bazom: ' + E.Message);
   end;
-  ADOQuery1.Close;
-ADOQuery1.SQL.Text :=
-  'UPDATE Zahtevi SET StatusID = 6 ' +
-  'WHERE StatusID = 5 AND DatumUtovara <= Now()';
-ADOQuery1.ExecSQL;
 end;
 
 procedure TForm8.HambMeni2Click(Sender: TObject);

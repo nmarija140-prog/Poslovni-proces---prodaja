@@ -16,8 +16,6 @@ type
     txtNazivFirme: TText;
     txtPIB: TText;
     txtAdresa: TText;
-    btnOtvoriNalog: TButton;
-    btnUrediProfil: TButton;
     txtEmail: TText;
     txtBrojTelefona: TText;
     Zvonce: TPath;
@@ -40,6 +38,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure ZvonceClick(Sender: TObject);
     procedure PonudeClick(Sender: TObject);
+    procedure odjavaClick(Sender: TObject);
 
 
   private
@@ -153,19 +152,31 @@ begin
 end;
 
 
+procedure TForm6.odjavaClick(Sender: TObject);
+begin
+Form2.Show;
+Self.Hide;
+end;
+
+
 procedure TForm6.PonudeClick(Sender: TObject);
 begin
   if not Assigned(Form11) then
     Application.CreateForm(TForm11, Form11);
   Form11.PraviIDKlijenta := PraviIDKlijenta;
+  Form11.Text1.Text := 'Ponude';
+  Form11.DugmeNove.Visible := True;
+  Form11.DugmePrihvacene.Visible := True;
+  Form11.DugmeOdbijene.Visible := True;
+  Form11.VertScrollBox1.Position.Y := 160;
   Form11.Left := Self.Left;
   Form11.Top := Self.Top;
   Form11.Width := Self.Width;
   Form11.Height := Self.Height;
   Form11.Show;
   Self.Hide;
-
 end;
+
 
 procedure TForm6.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
@@ -177,6 +188,11 @@ begin
   if not Assigned(Form11) then
     Application.CreateForm(TForm11, Form11);
   Form11.PraviIDKlijenta := PraviIDKlijenta;
+  Form11.Text1.Text := 'Obaveštenja';
+  Form11.DugmeNove.Visible := False;
+  Form11.DugmePrihvacene.Visible := False;
+  Form11.DugmeOdbijene.Visible := False;
+  Form11.VertScrollBox1.Position.Y := 75;
   Form11.Left := Self.Left;
   Form11.Top := Self.Top;
   Form11.Width := Self.Width;

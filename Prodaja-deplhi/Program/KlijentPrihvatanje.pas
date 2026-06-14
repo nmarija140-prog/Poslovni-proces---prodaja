@@ -83,7 +83,7 @@ procedure TForm14.ButtonPrihvatiClick(Sender: TObject);
 begin
   try
     ADOQuery1.Close;
-    ADOQuery1.SQL.Text := 'UPDATE Ponude SET StatusID = 4 WHERE PonudaID = :PonudaID';
+    ADOQuery1.SQL.Text := 'UPDATE Ponude SET OdgovorKlijenta = 1, StatusID = 4 WHERE PonudaID = :PonudaID';
     ADOQuery1.Parameters.ParamByName('PonudaID').Value := PonudaID;
     ADOQuery1.ExecSQL;
 
@@ -95,6 +95,7 @@ begin
     ShowMessage('Ponuda je prihvaćena!');
     Form11.Show;
     Self.Hide;
+
   except
     on E: Exception do
       ShowMessage('Greška: ' + E.Message);
@@ -105,7 +106,7 @@ procedure TForm14.ButtonOdbijClick(Sender: TObject);
 begin
   try
     ADOQuery1.Close;
-    ADOQuery1.SQL.Text := 'UPDATE Ponude SET StatusID = 2 WHERE PonudaID = :PonudaID';
+    ADOQuery1.SQL.Text := 'UPDATE Ponude SET OdgovorKlijenta = 2 WHERE PonudaID = :PonudaID';
     ADOQuery1.Parameters.ParamByName('PonudaID').Value := PonudaID;
     ADOQuery1.ExecSQL;
 

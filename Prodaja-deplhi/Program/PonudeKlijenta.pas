@@ -14,13 +14,20 @@ type
     SpeedButton1: TSpeedButton;
     Text1: TText;
     ADOQuery1: TADOQuery;
+    DugmeNove: TButton;
+    DugmePrihvacene: TButton;
+    DugmeOdbijene: TButton;
+    Line1: TLine;
     procedure SpeedButton1Click(Sender: TObject);
     procedure KarticaClick(Sender: TObject);
-procedure FormShow(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure DugmeNoveClick(Sender: TObject);
+    procedure DugmePrihvaceneClick(Sender: TObject);
+    procedure DugmOdbijeneClick(Sender: TObject);
   private
-
+    procedure PopuniKartice(AStatusID: Integer);
   public
-        PraviIDKlijenta: Integer;
+    PraviIDKlijenta: Integer;
   end;
 
 var
@@ -28,35 +35,44 @@ var
 
 implementation
 
-
 uses Klijent, ProdajaTura, KlijentPrihvatanje;
 
 {$R *.fmx}
-procedure TForm11.FormShow(Sender: TObject);
+
+procedure TForm11.PopuniKartice(AStatusID: Integer);
 var
   Kartica: TRectangle;
-  LabelRuta, LabelDatum, LabelCena, LabelNovo: TLabel;
+  LabelRuta, LabelDatum, LabelCena, LabelStatus: TLabel;
   YPozicija: Single;
+  StatusTekst: string;
+  StatusBoja: TAlphaColor;
 begin
+  while VertScrollBox1.Content.ChildrenCount > 0 do
+    VertScrollBox1.Content.Children[0].Free;
 
-  VertScrollBox1.Content.DeleteChildren;
   YPozicija := 10;
 
   try
     ADOQuery1.Connection := Form8.ADOConnection1;
     ADOQuery1.Close;
-    ADOQuery1.SQL.Text :=
-      'SELECT p.PonudaID, p.Cena, p.Valuta, p.RokPlacanja, ' +
-      '       z.MestoUtovara, z.MestoIstovara, z.DatumUtovara ' +
-      'FROM Ponude p ' +
-      'INNER JOIN Zahtevi z ON p.ZahtevID = z.[ID zahteva] ' +
-      'WHERE p.KlijentID = :KlijentID AND p.StatusID = 3';
-    ADOQuery1.Parameters.ParamByName('KlijentID').Value := PraviIDKlijenta;
+   ADOQuery1.SQL.Text :=
+   'SELECT p.PonudaID, p.Cena, p.Valuta, p.RokPlacanja, ' +
+  '       z.MestoUtovara, z.MestoIstovara, z.DatumUtovara ' +
+  'FROM Ponude p ' +
+  'INNER JOIN Zahtevi z ON p.ZahtevID = z.[ID zahteva] ' +
+  'WHERE p.KlijentID = :KlijentID AND p.OdgovorKlijenta = :StatusID';
+   ADOQuery1.Parameters.ParamByName('KlijentID').Value := PraviIDKlijenta;
+    ADOQuery1.Parameters.ParamByName('StatusID').Value := AStatusID;
     ADOQuery1.Open;
+
+    case AStatusID of
+      0: begin StatusTekst := '● NOVO'; StatusBoja := TAlphaColorRec.Crimson; end;
+      1: begin StatusTekst := '✔ PRIHVAĆENO'; StatusBoja := TAlphaColorRec.Green; end;
+      2: begin StatusTekst := '✖ ODBIJENO'; StatusBoja := TAlphaColorRec.Gray; end;
+    end;
 
     while not ADOQuery1.Eof do
     begin
-      // Kreiraj karticu
       Kartica := TRectangle.Create(VertScrollBox1);
       Kartica.Parent := VertScrollBox1;
       Kartica.Width := VertScrollBox1.Width - 20;
@@ -68,18 +84,18 @@ begin
       Kartica.XRadius := 8;
       Kartica.YRadius := 8;
       Kartica.Tag := ADOQuery1.FieldByName('PonudaID').AsInteger;
-      Kartica.OnClick := KarticaClick;
 
-      // Label "NOVO"
-      LabelNovo := TLabel.Create(Kartica);
-      LabelNovo.Parent := Kartica;
-      LabelNovo.Text := '● NOVO';
-      LabelNovo.FontColor := TAlphaColorRec.Crimson;
-      LabelNovo.Position.X := 10;
-      LabelNovo.Position.Y := 8;
-      LabelNovo.Font.Size := 11;
+      if AStatusID = 0 then
+        Kartica.OnClick := KarticaClick;
 
-      // Ruta
+      LabelStatus := TLabel.Create(Kartica);
+      LabelStatus.Parent := Kartica;
+      LabelStatus.Text := StatusTekst;
+      LabelStatus.FontColor := StatusBoja;
+      LabelStatus.Position.X := 10;
+      LabelStatus.Position.Y := 8;
+      LabelStatus.Font.Size := 11;
+
       LabelRuta := TLabel.Create(Kartica);
       LabelRuta.Parent := Kartica;
       LabelRuta.Text := '🚛 ' + ADOQuery1.FieldByName('MestoUtovara').AsString +
@@ -89,7 +105,6 @@ begin
       LabelRuta.Font.Size := 14;
       LabelRuta.Font.Style := [TFontStyle.fsBold];
 
-      // Datum
       LabelDatum := TLabel.Create(Kartica);
       LabelDatum.Parent := Kartica;
       LabelDatum.Text := '📅 ' + ADOQuery1.FieldByName('DatumUtovara').AsString;
@@ -97,7 +112,6 @@ begin
       LabelDatum.Position.Y := 55;
       LabelDatum.Font.Size := 12;
 
-      // Cena
       LabelCena := TLabel.Create(Kartica);
       LabelCena.Parent := Kartica;
       LabelCena.Text := '💰 ' + ADOQuery1.FieldByName('Cena').AsString +
@@ -116,6 +130,27 @@ begin
       ShowMessage('Greška: ' + E.Message);
   end;
 end;
+
+procedure TForm11.FormShow(Sender: TObject);
+begin
+  PopuniKartice(0);
+end;
+
+procedure TForm11.DugmeNoveClick(Sender: TObject);
+begin
+  PopuniKartice(0);
+end;
+
+procedure TForm11.DugmePrihvaceneClick(Sender: TObject);
+begin
+  PopuniKartice(1);
+end;
+
+procedure TForm11.DugmOdbijeneClick(Sender: TObject);
+begin
+  PopuniKartice(2);
+end;
+
 procedure TForm11.KarticaClick(Sender: TObject);
 var
   KliknutiPonudaID: Integer;
@@ -133,10 +168,6 @@ begin
   Form14.Show;
   Self.Hide;
 end;
-
-
-
-
 
 procedure TForm11.SpeedButton1Click(Sender: TObject);
 begin

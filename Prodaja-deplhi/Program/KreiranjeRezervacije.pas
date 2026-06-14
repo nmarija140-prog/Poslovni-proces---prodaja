@@ -231,22 +231,27 @@ begin
         CenaLabel.Text := 'Cena: ' + ADOQuery1.FieldByName('Cena').AsString + ' EUR';
 
     end;
-    ComboBoxVozila.Items.Clear;
-    ADOQuery1.Close;
-    ADOQuery1.SQL.Text :=
-      'SELECT v.ID, v.naziv, v.registarski_broj ' +
-      'FROM Vozila v ' +
-      'INNER JOIN statusVozila s ON v.status = s.idStatusa ' +
-      'WHERE s.status = ''Slobodan''';
-    ADOQuery1.Open;
-    while not ADOQuery1.Eof do
-    begin
-      ComboBoxVozila.Items.AddObject(
-        ADOQuery1.FieldByName('naziv').AsString + ' (' + ADOQuery1.FieldByName('registarski_broj').AsString + ')',
-        TObject(ADOQuery1.FieldByName('ID').AsInteger)
-      );
-      ADOQuery1.Next;
-    end;
+   ComboBoxVozila.Items.Clear;
+ADOQuery1.Close;
+ADOQuery1.SQL.Text :=
+  'SELECT v.ID, v.naziv, v.registarski_broj ' +
+  'FROM Vozila v ' +
+  'INNER JOIN statusVozila s ON v.status = s.idStatusa ' +
+  'WHERE s.status = ''Slobodan'' ' +
+  'AND v.ID NOT IN (' +
+  '  SELECT r.VoziloID FROM Rezervacije r ' +
+  '  INNER JOIN Zahtevi z ON r.ZahtevID = z.[ID zahteva] ' +
+  '  WHERE z.DatumUtovara = (SELECT DatumUtovara FROM Zahtevi WHERE [ID zahteva] = ' + IntToStr(IDZahtevaZaPonudu) + ')' +
+  ')';
+ADOQuery1.Open;
+while not ADOQuery1.Eof do
+begin
+  ComboBoxVozila.Items.AddObject(
+    ADOQuery1.FieldByName('naziv').AsString + ' (' + ADOQuery1.FieldByName('registarski_broj').AsString + ')',
+    TObject(ADOQuery1.FieldByName('ID').AsInteger)
+  );
+  ADOQuery1.Next;
+end;
     ComboBoxVozaci.Items.Clear;
     ADOQuery1.Close;
   ADOQuery1.SQL.Text :=
