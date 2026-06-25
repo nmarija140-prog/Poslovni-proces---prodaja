@@ -20,7 +20,8 @@ uses
   KreiranjeRezervacije in 'KreiranjeRezervacije.pas' {Form12},
   KlijentPrihvatanje in 'KlijentPrihvatanje.pas' {Form14},
   VozacPonude in 'VozacPonude.pas' {Form15},
-  VozacPrihvatanje in 'VozacPrihvatanje.pas' {Form16};
+  VozacPrihvatanje in 'VozacPrihvatanje.pas' {Form16},
+  Faktura in 'Faktura.pas' {Form17};
 
 {$R *.res}
 
@@ -44,5 +45,6 @@ begin
   Application.CreateForm(TForm14, Form14);
   Application.CreateForm(TForm15, Form15);
   Application.CreateForm(TForm16, Form16);
+  Application.CreateForm(TForm17, Form17);
   Application.Run;
 end.

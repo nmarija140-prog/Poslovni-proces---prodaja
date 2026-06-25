@@ -197,6 +197,10 @@
             <Form>Form16</Form>
             <FormType>fmx</FormType>
         </DCCReference>
+        <DCCReference Include="Faktura.pas">
+            <Form>Form17</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

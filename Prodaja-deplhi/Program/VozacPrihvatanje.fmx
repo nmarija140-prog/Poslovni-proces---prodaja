@@ -65,12 +65,15 @@ object Form16: TForm16
     Size.Height = 65.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 5
-    Viewport.Width = 141.000000000000000000
-    Viewport.Height = 61.000000000000000000
+    Viewport.Width = 145.000000000000000000
+    Viewport.Height = 65.000000000000000000
   end
   object DugmePrihvati: TButton
     Position.X = 48.000000000000000000
     Position.Y = 448.000000000000000000
+    Size.Width = 80.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
     TabOrder = 6
     Text = 'Prihvati'
     TextSettings.Trimming = None
@@ -79,6 +82,9 @@ object Form16: TForm16
   object DugmeOdbij: TButton
     Position.X = 192.000000000000000000
     Position.Y = 448.000000000000000000
+    Size.Width = 80.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
     TabOrder = 7
     Text = 'Odbij'
     TextSettings.Trimming = None

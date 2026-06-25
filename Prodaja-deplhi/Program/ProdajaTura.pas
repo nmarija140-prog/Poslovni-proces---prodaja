@@ -45,11 +45,10 @@ type
     procedure NoviZahtevDugmeClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure ListaZahteviItemClick(const Sender: TObject; const AItem: TListViewItem);
-   procedure PopuniListuZahteva(AStatusID: Integer);
+    procedure PopuniListuZahteva(AStatusID: Integer);
     procedure OdjavaDugmeClick(Sender: TObject);
-
   private
-  KlijentID: Integer;
+    KlijentID: Integer;
   public
   end;
 
@@ -57,7 +56,8 @@ var
   Form8: TForm8;
 
 implementation
-uses NoviZahtev, Detalji, KreiranjeRezervacije, KreiranjePonude;
+uses NoviZahtev, Detalji, KreiranjeRezervacije, KreiranjePonude, Faktura;
+
 {$R *.fmx}
 
 procedure TForm8.FormCreate(Sender: TObject);
@@ -81,13 +81,21 @@ begin
       'Data Source=' + dbPath + ';';
     ADOConnection1.Connected := True;
 
-    PopuniListuZahteva(1);
-
+    // Zakazana → U toku
     ADOQuery1.Close;
     ADOQuery1.SQL.Text :=
       'UPDATE Zahtevi SET StatusID = 6 ' +
       'WHERE StatusID = 5 AND DatumUtovara <= Now()';
     ADOQuery1.ExecSQL;
+
+    // U toku → Završena
+    ADOQuery1.Close;
+    ADOQuery1.SQL.Text :=
+      'UPDATE Zahtevi SET StatusID = 7 ' +
+      'WHERE StatusID = 6 AND DatumIstovara <= Now()';
+    ADOQuery1.ExecSQL;
+
+    PopuniListuZahteva(1);
 
   except
     on E: Exception do
@@ -99,9 +107,7 @@ procedure TForm8.HambMeni2Click(Sender: TObject);
 begin
   PanelProdaja.Visible := not PanelProdaja.Visible;
   if PanelProdaja.Visible then
-  begin
     PanelProdaja.BringToFront;
-  end;
   HambMeni2.BringToFront;
 end;
 
@@ -122,43 +128,66 @@ end;
 
 procedure TForm8.KarticaZakazaneTureClick(Sender: TObject);
 begin
-  PopuniListuZahteva(5);
+
+  PopuniListuZahteva(-1);
 end;
-
-
 
 procedure TForm8.PopuniListuZahteva(AStatusID: Integer);
 var
-  Stavka: TListViewItem;Krug:String;
+  Stavka: TListViewItem;
+  Krug: String;
 begin
   ListaZahtevi.Items.BeginUpdate;
   try
     ListaZahtevi.Items.Clear;
     ADOQuery1.Close;
-    ADOQuery1.SQL.Text :=
-  'SELECT z.[ID Zahteva], ' +
-  '  IIF(z.StatusID >= 5, z.StatusID, IIF(p.StatusID IS NOT NULL, p.StatusID, z.StatusID)) AS StatusID, ' +
-  '  k.nazivKlijenta, g.Grad ' +
-  'FROM ((Zahtevi z ' +
-  'INNER JOIN Klijenti k ON z.KlijentID = k.IDKlijenta) ' +
-  'INNER JOIN Gradovi g ON k.GradID = g.GradID) ' +
-  'LEFT JOIN Ponude p ON z.[ID zahteva] = p.ZahtevID ' +
-  'WHERE IIF(z.StatusID >= 5, z.StatusID, IIF(p.StatusID IS NOT NULL, p.StatusID, z.StatusID)) = :StatusID';
-    ADOQuery1.Parameters.ParamByName('StatusID').Value := AStatusID;
+
+    if AStatusID = -1 then
+    begin
+
+      ADOQuery1.SQL.Text :=
+        'SELECT z.[ID Zahteva], ' +
+        '  IIF(z.StatusID >= 5, z.StatusID, IIF(p.StatusID IS NOT NULL, p.StatusID, z.StatusID)) AS StatusID, ' +
+        '  k.nazivKlijenta, g.Grad ' +
+        'FROM ((Zahtevi z ' +
+        'INNER JOIN Klijenti k ON z.KlijentID = k.IDKlijenta) ' +
+        'INNER JOIN Gradovi g ON k.GradID = g.GradID) ' +
+        'LEFT JOIN Ponude p ON z.[ID zahteva] = p.ZahtevID ' +
+        'WHERE IIF(z.StatusID >= 5, z.StatusID, IIF(p.StatusID IS NOT NULL, p.StatusID, z.StatusID)) IN (5, 6, 7)';
+    end
+    else
+    begin
+      ADOQuery1.SQL.Text :=
+        'SELECT z.[ID Zahteva], ' +
+        '  IIF(z.StatusID >= 5, z.StatusID, IIF(p.StatusID IS NOT NULL, p.StatusID, z.StatusID)) AS StatusID, ' +
+        '  k.nazivKlijenta, g.Grad ' +
+        'FROM ((Zahtevi z ' +
+        'INNER JOIN Klijenti k ON z.KlijentID = k.IDKlijenta) ' +
+        'INNER JOIN Gradovi g ON k.GradID = g.GradID) ' +
+        'LEFT JOIN Ponude p ON z.[ID zahteva] = p.ZahtevID ' +
+        'WHERE IIF(z.StatusID >= 5, z.StatusID, IIF(p.StatusID IS NOT NULL, p.StatusID, z.StatusID)) = :StatusID';
+      ADOQuery1.Parameters.ParamByName('StatusID').Value := AStatusID;
+    end;
+
     ADOQuery1.Open;
+
     while not ADOQuery1.Eof do
     begin
       Stavka := ListaZahtevi.Items.Add;
       case ADOQuery1.FieldByName('StatusID').AsInteger of
-    1: Krug := '🟡 ';
-    3: Krug := '🔵 ';
-    4: Krug := '🟢 ';
-    5: Krug := '🟣 ';
-  else
-    Krug := '⚪ ';
-  end;
-       Stavka.Text := Krug + ADOQuery1.FieldByName('nazivKlijenta').AsString +
-                 ' (' + ADOQuery1.FieldByName('Grad').AsString + ')';
+        1: Krug := '🟡 ';
+        3: Krug := '🔵 ';
+        4: Krug := '🟢 ';
+        5: Krug := '🟣 ';
+        6: Krug := '🚛 ';
+        7: Krug := '✅ ';
+        8: Krug := '❌ ';
+      else
+        Krug := '⚪ ';
+      end;
+
+      Stavka.Text := Krug + ADOQuery1.FieldByName('nazivKlijenta').AsString +
+                    ' (' + ADOQuery1.FieldByName('Grad').AsString + ')';
       Stavka.Tag := ADOQuery1.FieldByName('ID Zahteva').AsInteger;
       Stavka.Detail := ADOQuery1.FieldByName('StatusID').AsString;
       ADOQuery1.Next;
@@ -192,18 +221,18 @@ begin
     Self.Hide;
   end;
 
-if KliknutiStatusID = 3 then
-begin
-  if not Assigned(Form13) then
-    Application.CreateForm(TForm13, Form13);
-  Form13.IDZahtevaZaPonudu := AItem.Tag;
-  Form13.Left := Self.Left;
-  Form13.Top := Self.Top;
-  Form13.Width := Self.Width;
-  Form13.Height := Self.Height;
-  Form13.Show;
-  Self.Hide;
-end;
+  if KliknutiStatusID = 3 then
+  begin
+    if not Assigned(Form13) then
+      Application.CreateForm(TForm13, Form13);
+    Form13.IDZahtevaZaPonudu := AItem.Tag;
+    Form13.Left := Self.Left;
+    Form13.Top := Self.Top;
+    Form13.Width := Self.Width;
+    Form13.Height := Self.Height;
+    Form13.Show;
+    Self.Hide;
+  end;
 
   if KliknutiStatusID = 4 then
   begin
@@ -233,6 +262,37 @@ end;
     Form12.Show;
     Self.Hide;
   end;
+
+
+  if KliknutiStatusID = 6 then
+  begin
+    if not Assigned(FormDetalji) then
+      Application.CreateForm(TFormDetalji, FormDetalji);
+    FormDetalji.IzabraniID := AItem.Tag;
+    FormDetalji.IzabraniStatusID := KliknutiStatusID;
+    FormDetalji.DugmePonuda.Visible := False;
+    FormDetalji.RezervacijaDugme.Visible := False;
+    FormDetalji.Left := Self.Left;
+    FormDetalji.Top := Self.Top;
+    FormDetalji.Width := Self.Width;
+    FormDetalji.Height := Self.Height;
+    FormDetalji.Show;
+    Self.Hide;
+  end;
+
+
+  if KliknutiStatusID = 7 then
+  begin
+    if not Assigned(Form17) then
+      Application.CreateForm(TForm17, Form17);
+    Form17.IDZahtevaZaFakturu := AItem.Tag;
+    Form17.Left := Self.Left;
+    Form17.Top := Self.Top;
+    Form17.Width := Self.Width;
+    Form17.Height := Self.Height;
+    Form17.Show;
+    Self.Hide;
+  end;
 end;
 
 procedure TForm8.NoviZahtevDugmeClick(Sender: TObject);
@@ -247,8 +307,8 @@ end;
 
 procedure TForm8.OdjavaDugmeClick(Sender: TObject);
 begin
-Form2.Show;
-Self.Hide;
+  Form2.Show;
+  Self.Hide;
 end;
 
 procedure TForm8.FormClose(Sender: TObject; var Action: TCloseAction);

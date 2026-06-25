@@ -416,7 +416,7 @@ begin
   IdMessage := TIdMessage.Create(nil);
   IdSSL := TIdSSLIOHandlerSocketOpenSSL.Create(nil);
   try
-    IdMessage.From.Address := 'mpmtransport9@gmail.com';
+    IdMessage.From.Address := 'nmarija140@gmail.com';
     IdMessage.From.Name := 'MPM Transport';
     IdMessage.ReplyTo.EMailAddresses := IdMessage.From.Address;
 
@@ -442,8 +442,8 @@ begin
     IdSMTP.Port := 587;
     IdSMTP.UseTLS := utUseExplicitTLS;
 
-    IdSMTP.Username := 'mpmtransport9@gmail.com';
-    IdSMTP.Password := 'ymfnudftsybjadjh';
+    IdSMTP.Username := 'nmarija140@gmail.com';
+    IdSMTP.Password := 'xfuycgmsauyopqmo';
 
     IdSMTP.Connect;
     try
